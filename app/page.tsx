@@ -1,34 +1,48 @@
-// app/page.tsx
-"use client";
+import Link from "next/link";
 
-import { useSession } from "next-auth/react";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
-export default function HomePage() {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/login");
-    }
-  }, [status, router]);
-
-  if (status === "loading") {
-    return <p>Loading...</p>;
-  }
-
-  if (status === "authenticated") {
-    return (
-      <main className="flex items-center justify-center md:h-screen">
-        <div className="relative mx-auto flex w-full flex-col space-y-2.5 p-4 md:-mt-32">
-          <h1>Welcome to the GiftList App</h1>
-          <p>You are logged in as {session.user?.email}</p>
+export default function Home() {
+  return (
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      <header className="bg-white shadow">
+        <div className="container mx-auto px-4 py-6">
+          <h1 className="text-2xl font-bold text-gray-900">GiftList App</h1>
         </div>
-      </main>
-    );
-  }
+      </header>
 
-  return null;
+      <main className="flex-grow container mx-auto px-4 py-12">
+        <section className="text-center">
+          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            Bienvenido a GiftList App
+          </h2>
+          <p className="text-lg text-gray-700 mb-8">
+            Organiza y gestiona tus listas de regalos con facilidad. Crea,
+            comparte y lleva un seguimiento de todas tus ocasiones especiales en
+            un solo lugar.
+          </p>
+          <div className="flex justify-center space-x-4">
+            <Link
+              href="/register"
+              className="bg-blue-600 text-white px-4 py-2 rounded-md text-lg hover:bg-blue-700 transition"
+            >
+              Comenzar
+            </Link>
+            <Link
+              href="/login"
+              className="bg-gray-600 text-white px-4 py-2 rounded-md text-lg hover:bg-gray-700 transition"
+            >
+              Iniciar Sesión
+            </Link>
+          </div>
+        </section>
+      </main>
+
+      <footer className="bg-white shadow">
+        <div className="container mx-auto px-4 py-6 text-center">
+          <p className="text-gray-700">
+            © 2024 GiftList App. Todos los derechos reservados.
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
 }

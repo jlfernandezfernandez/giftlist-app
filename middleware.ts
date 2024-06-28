@@ -1,31 +1,19 @@
-// middleware.ts
-import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { authMiddleware } from "next-firebase-auth-edge";
+import { clientConfig, serverConfig } from "@/config";
 
-export default function middleware(req: {
-  nextUrl: { pathname: any };
-  cookies: { get: (arg0: string) => any };
-  url: string | URL | undefined;
-}) {
-  const { pathname } = req.nextUrl;
-  const isAuthPage = pathname.startsWith("/login");
-  const isProtectedRoute = pathname.startsWith("/profile");
-
-  if (isAuthPage) {
-    if (req.cookies.get("next-auth.session-token")) {
-      return NextResponse.redirect(new URL("/profile", req.url));
-    }
-    return NextResponse.next();
-  }
-
-  if (isProtectedRoute) {
-    if (!req.cookies.get("next-auth.session-token")) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-  }
-
-  return NextResponse.next();
+export async function middleware(request: NextRequest) {
+  return authMiddleware(request, {
+    loginPath: "/api/login",
+    logoutPath: "/api/logout",
+    apiKey: clientConfig.apiKey,
+    cookieName: serverConfig.cookieName,
+    cookieSignatureKeys: serverConfig.cookieSignatureKeys,
+    cookieSerializeOptions: serverConfig.cookieSerializeOptions,
+    serviceAccount: serverConfig.serviceAccount,
+  });
 }
 
 export const config = {
-  matcher: ["/profile/:path*", "/login"],
+  matcher: ["/", "/((?!_next|api|.*\\.).*)", "/api/login", "/api/logout"],
 };

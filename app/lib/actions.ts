@@ -4,35 +4,33 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
+  createUserWithEmailAndPassword,
+  updateProfile,
 } from "firebase/auth";
 import { auth } from "@/firebase.config";
-import { User } from "@/types/user"; // Importa la interfaz User
+import { User } from "@/types/user";
 
 export async function authenticateWithCredentials(
   email: string,
   password: string
 ): Promise<User | null> {
   try {
-    const result = await signInWithEmailAndPassword(auth, email, password);
-
-    if (!result.user) {
-      throw new Error("Invalid credentials");
-    }
-
-    const user = result.user;
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    const user = credential.user;
 
     return {
       uid: user.uid,
       displayName: user.displayName,
       email: user.email,
+      idToken: await user.getIdToken(),
     };
   } catch (error) {
     console.error("Error al iniciar sesión con correo/contraseña: ", error);
-    throw error;
+    throw new Error("Failed to sign in with credentials");
   }
 }
 
-export async function authenticateWithGoogle(): Promise<User | null> {
+export async function authenticateWithGoogle() {
   try {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
@@ -43,9 +41,39 @@ export async function authenticateWithGoogle(): Promise<User | null> {
       uid: user.uid,
       displayName: user.displayName,
       email: user.email,
+      idToken: await user.getIdToken(),
     };
   } catch (error) {
     console.error("Error al iniciar sesión con Google: ", error);
     throw new Error("Failed to sign in with Google");
+  }
+}
+
+export async function registerWithEmailAndPassword(
+  name: string,
+  email: string,
+  password: string
+): Promise<User | null> {
+  try {
+    const credential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = credential.user;
+
+    await updateProfile(user, {
+      displayName: name,
+    });
+
+    return {
+      uid: user.uid,
+      displayName: user.displayName,
+      email: user.email,
+      idToken: await user.getIdToken(),
+    };
+  } catch (error) {
+    console.error("Error al registrar usuario: ", error);
+    throw new Error("Failed to register user");
   }
 }
