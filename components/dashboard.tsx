@@ -36,16 +36,21 @@ export function Dashboard({ user }: DashboardProps) {
     // Mocking ChatGPT API response
     const giftDetails = {
       name: "Mock Gift Name",
-      price: 99.99,
+      prize: 99.99,
+      currency: "EUR",
       website: "Amazon",
+      url: "https://www.amazon.es",
+      status: "Pendiente",
     };
 
     const newGift = {
       id: currentList ? currentList.gifts.length + 1 : 1,
       name: giftDetails.name,
-      prize: giftDetails.price,
+      prize: giftDetails.prize,
+      currency: giftDetails.currency,
       website: giftDetails.website,
-      status: "Pending",
+      url: giftDetails.url,
+      status: giftDetails.status,
       assignedTo: [],
     };
 
