@@ -15,11 +15,11 @@ interface GiftRowProps {
 export function GiftRow({ gift, listId, handleRemoveGift }: GiftRowProps) {
   const badgeVariant = (status: string) => {
     switch (status) {
-      case "Pending":
+      case "Pendiente":
         return "secondary";
-      case "Reserved":
+      case "Reservado":
         return "warning"; // Amarillo
-      case "Purchased":
+      case "Comprado":
         return "success"; // Verde
       default:
         return "default";

@@ -15,9 +15,9 @@ const badgeVariants = cva(
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
         warning:
-          "border-transparent bg-yellow-400 text-yellow-900 hover:bg-yellow-500", // Reserved (Amarillo)
+          "border-transparent bg-yellow-400 text-yellow-900 hover:bg-yellow-500", // Reservado (Amarillo)
         success:
-          "border-transparent bg-green-400 text-green-900 hover:bg-green-500", // Purchased (Verde)
+          "border-transparent bg-green-400 text-green-900 hover:bg-green-500", // Comprado (Verde)
       },
     },
     defaultVariants: {
