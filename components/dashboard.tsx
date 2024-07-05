@@ -5,6 +5,7 @@ import { User } from "@/types/user";
 import { GiftList } from "@/types/gift-list";
 import { GiftTable } from "@/components/dashboard/gift-table";
 import { Sidebar } from "@/components/dashboard/sidebar";
+import { useRouter } from "next/navigation"; // Import useRouter
 
 interface DashboardProps {
   user: User;
@@ -14,6 +15,7 @@ export function Dashboard({ user }: DashboardProps) {
   const [giftLists, setGiftLists] = useState<GiftList[]>([]);
   const [currentListId, setCurrentListId] = useState<number | null>(null);
   const [showEditListModal, setShowEditListModal] = useState(false);
+  const router = useRouter(); // Initialize useRouter
 
   useEffect(() => {
     const fetchGiftLists = async () => {
@@ -91,6 +93,11 @@ export function Dashboard({ user }: DashboardProps) {
     console.log("Sharing gift list:", currentList?.name);
   };
 
+  const handleLogout = async () => {
+    await fetch("/api/logout");
+    router.push("/");
+  };
+
   return (
     <div className="flex min-h-screen w-full">
       <Sidebar
@@ -99,6 +106,7 @@ export function Dashboard({ user }: DashboardProps) {
         currentListId={currentListId}
         setCurrentListId={setCurrentListId}
         handleEditList={handleEditList}
+        handleLogout={handleLogout}
       />
       <main className="flex-1 p-6">
         {currentList && (
