@@ -14,6 +14,7 @@ const giftLists: GiftList[] = [
         name: "Wireless Headphones",
         prize: 99.99,
         website: "Amazon",
+        url: "https://www.amazon.com",
         status: "Pending",
         assignedTo: [
           {
@@ -35,6 +36,7 @@ const giftLists: GiftList[] = [
         name: "Instant Pot",
         prize: 79.99,
         website: "Amazon",
+        url: "https://www.amazon.com",
         status: "Reserved",
         assignedTo: [
           {
@@ -59,6 +61,7 @@ const giftLists: GiftList[] = [
         name: "Smartwatch",
         prize: 199.99,
         website: "Amazon",
+        url: "https://www.amazon.com",
         status: "Purchased",
         assignedTo: [
           {
@@ -86,6 +89,7 @@ const giftLists: GiftList[] = [
         name: "Noise-Cancelling Headphones",
         prize: 149.99,
         website: "Amazon",
+        url: "https://www.amazon.com",
         status: "Pending",
         assignedTo: [
           {
@@ -110,6 +114,7 @@ const giftLists: GiftList[] = [
         name: "Espresso Machine",
         prize: 249.99,
         website: "Amazon",
+        url: "https://www.amazon.com",
         status: "Reserved",
         assignedTo: [
           {

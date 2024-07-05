@@ -13,7 +13,6 @@ interface GiftRowProps {
 }
 
 export function GiftRow({ gift, listId, handleRemoveGift }: GiftRowProps) {
-  // Mapeo para convertir el estado en un valor permitido para el componente Badge
   const badgeVariant = (status: string) => {
     switch (status) {
       case "Pending":
@@ -31,7 +30,12 @@ export function GiftRow({ gift, listId, handleRemoveGift }: GiftRowProps) {
     <TableRow>
       <TableCell>
         <div className="font-medium">
-          <Link href="#" className="underline" prefetch={false}>
+          <Link
+            href={gift.url}
+            target="_blank"
+            className="underline"
+            prefetch={false}
+          >
             {gift.name}
           </Link>
         </div>
