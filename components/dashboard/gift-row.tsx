@@ -13,15 +13,15 @@ interface GiftRowProps {
 }
 
 export function GiftRow({ gift, listId, handleRemoveGift }: GiftRowProps) {
-  // Mapeo para convertir "success" en un valor permitido
+  // Mapeo para convertir el estado en un valor permitido para el componente Badge
   const badgeVariant = (status: string) => {
     switch (status) {
       case "Pending":
         return "secondary";
       case "Reserved":
-        return "default";
+        return "warning"; // Amarillo
       case "Purchased":
-        return "destructive"; // Puedes elegir el que más se ajuste
+        return "success"; // Verde
       default:
         return "default";
     }
