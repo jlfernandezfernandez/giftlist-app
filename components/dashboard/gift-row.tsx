@@ -2,9 +2,9 @@ import { TableRow, TableCell } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Gift } from "@/types/gift";
 import { TrashIcon, FilePenIcon } from "@/components/icons";
+import { InitialAvatar } from "../ui/initial-avatar";
 
 interface GiftRowProps {
   gift: Gift;
@@ -26,6 +26,19 @@ export function GiftRow({ gift, listId, handleRemoveGift }: GiftRowProps) {
     }
   };
 
+  const currencySymbol = (currency: string) => {
+    switch (currency) {
+      case "USD":
+        return "$";
+      case "EUR":
+        return "€";
+      case "GBP":
+        return "£";
+      default:
+        return "";
+    }
+  };
+
   return (
     <TableRow>
       <TableCell>
@@ -41,7 +54,10 @@ export function GiftRow({ gift, listId, handleRemoveGift }: GiftRowProps) {
         </div>
       </TableCell>
       <TableCell>
-        <div className="font-medium">${gift.prize.toFixed(2)}</div>
+        <div className="font-medium">
+          {currencySymbol(gift.currency)}
+          {gift.prize.toFixed(2)}
+        </div>
       </TableCell>
       <TableCell>
         <div className="font-medium">{gift.website}</div>
@@ -52,12 +68,7 @@ export function GiftRow({ gift, listId, handleRemoveGift }: GiftRowProps) {
       <TableCell>
         <div className="flex items-center gap-2">
           {gift.assignedTo.map((assignee) => (
-            <Avatar key={assignee.uid} className="w-6 h-6">
-              <AvatarImage src="/placeholder-user.jpg" />
-              <AvatarFallback>
-                {assignee.displayName ? assignee.displayName[0] : "U"}
-              </AvatarFallback>
-            </Avatar>
+            <InitialAvatar key={assignee.uid} name={assignee.displayName} />
           ))}
         </div>
       </TableCell>

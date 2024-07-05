@@ -7,6 +7,7 @@ export interface Gift {
   url: string;
   name: string;
   prize: number;
+  currency: string;
   website: string;
   status: string;
   assignedTo: User[];
