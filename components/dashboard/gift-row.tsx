@@ -74,12 +74,11 @@ export function GiftRow({ gift, listId, handleRemoveGift }: GiftRowProps) {
       </TableCell>
       <TableCell>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon">
+          <Button size="icon">
             <FilePenIcon className="h-4 w-4" />
             <span className="sr-only">Edit</span>
           </Button>
           <Button
-            variant="outline"
             size="icon"
             color="destructive"
             onClick={() => handleRemoveGift(listId, gift.id)}

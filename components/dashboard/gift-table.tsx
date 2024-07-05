@@ -12,7 +12,6 @@ import {
   TableRow,
   TableHead,
   TableBody,
-  TableCell,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { GiftList } from "@/types/gift-list";
@@ -54,14 +53,11 @@ export function GiftTable({
             </CardDescription>
           </div>
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              onClick={() => setShowEditListModal(true)}
-            >
+            <Button onClick={() => setShowEditListModal(true)}>
               <FilePenIcon className="h-4 w-4 mr-2" />
               Edit List
             </Button>
-            <Button variant="outline" onClick={handleShareList}>
+            <Button onClick={handleShareList}>
               <ShareIcon className="h-4 w-4 mr-2" />
               Share
             </Button>

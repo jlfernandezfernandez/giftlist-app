@@ -80,7 +80,6 @@ export function Sidebar({
             </Link>
           ))}
           <Button
-            variant="outline"
             className="mt-4"
             onClick={() => alert("Add Gift List functionality not implemented")}
           >
@@ -88,7 +87,7 @@ export function Sidebar({
           </Button>
         </nav>
       </div>
-      <Button variant="outline" className="mt-4" onClick={handleLogout}>
+      <Button className="mt-4" onClick={handleLogout}>
         Logout
       </Button>
     </aside>
