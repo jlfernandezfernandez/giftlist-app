@@ -87,11 +87,11 @@ export default function LoginForm({
         <Button
           type="submit"
           variant="default"
+          alignment="left"
           className="w-full"
           aria-disabled={isPending}
         >
           Iniciar sesión
-          <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
       </div>
       <div className="text-center mt-6">

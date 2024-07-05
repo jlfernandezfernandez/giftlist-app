@@ -19,6 +19,7 @@ import { AICircleIcon, FilePenIcon, ShareIcon } from "../icons";
 import { GiftRow } from "./gift-row";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import SmallSpinner from "../ui/small-spinner";
 
 interface GiftTableProps {
   currentList: GiftList;
@@ -36,10 +37,15 @@ export function GiftTable({
   handleAddGift,
 }: GiftTableProps) {
   const [newGiftUrl, setNewGiftUrl] = useState("");
+  const [isAddingGift, setIsAddingGift] = useState(false);
 
-  const handleAddGiftClick = () => {
-    handleAddGift(newGiftUrl);
-    setNewGiftUrl("");
+  const handleAddGiftClick = async () => {
+    setIsAddingGift(true);
+    setTimeout(() => {
+      handleAddGift(newGiftUrl);
+      setIsAddingGift(false);
+      setNewGiftUrl("");
+    }, 2000);
   };
 
   return (
@@ -96,10 +102,15 @@ export function GiftTable({
             onChange={(e) => setNewGiftUrl(e.target.value)}
             placeholder="Paste url to add with AI"
             className="flex-grow"
+            disabled={isAddingGift}
           />
-          <Button onClick={handleAddGiftClick}>
-            <AICircleIcon className="h-4 w-4 mr-2" />
-            Add Gift
+          <Button onClick={handleAddGiftClick} disabled={isAddingGift}>
+            {isAddingGift ? (
+              <SmallSpinner />
+            ) : (
+              <AICircleIcon className="h-4 w-4 mr-2" />
+            )}
+            {isAddingGift ? "Adding..." : "Add Gift"}
           </Button>
         </div>
       </CardFooter>

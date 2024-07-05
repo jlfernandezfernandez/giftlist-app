@@ -44,52 +44,60 @@ export function Sidebar({
   }, {});
 
   return (
-    <aside className="bg-background border-r border-border p-4 hidden md:flex flex-col justify-between">
-      <div>
-        <AvatarSection user={user} />
-        <nav className="flex flex-col gap-2">
-          {Object.keys(groupedInvitedLists).map((owner) => (
-            <div key={owner} className="grid gap-2">
-              <div className="font-medium text-muted-foreground">{owner}</div>
-              {groupedInvitedLists[owner].map((list) => (
-                <Link
-                  key={list.id}
-                  href="#"
-                  onClick={() => handleEditList(list.id)}
-                  className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
-                    list.id === currentListId ? "bg-muted text-foreground" : ""
-                  }`}
-                  prefetch={false}
-                >
-                  {list.name}
-                </Link>
-              ))}
-            </div>
-          ))}
-          {userGiftLists.map((list) => (
-            <Link
-              key={list.id}
-              href="#"
-              onClick={() => handleEditList(list.id)}
-              className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
-                list.id === currentListId ? "bg-muted text-foreground" : ""
-              }`}
-              prefetch={false}
+    <>
+      <aside className="bg-background border-r border-border p-4 hidden md:flex flex-col justify-between">
+        <div>
+          <AvatarSection user={user} />
+          <nav className="flex flex-col gap-2">
+            {Object.keys(groupedInvitedLists).map((owner) => (
+              <div key={owner} className="grid gap-2">
+                <div className="font-medium text-muted-foreground">{owner}</div>
+                {groupedInvitedLists[owner].map((list) => (
+                  <Link
+                    key={list.id}
+                    href="#"
+                    onClick={() => handleEditList(list.id)}
+                    className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
+                      list.id === currentListId
+                        ? "bg-muted text-foreground"
+                        : ""
+                    }`}
+                    prefetch={false}
+                  >
+                    {list.name}
+                  </Link>
+                ))}
+              </div>
+            ))}
+            {userGiftLists.map((list) => (
+              <Link
+                key={list.id}
+                href="#"
+                onClick={() => handleEditList(list.id)}
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
+                  list.id === currentListId ? "bg-muted text-foreground" : ""
+                }`}
+                prefetch={false}
+              >
+                {list.name}
+              </Link>
+            ))}
+            <Button
+              className="mt-4"
+              onClick={() =>
+                alert("Add Gift List functionality not implemented")
+              }
             >
-              {list.name}
-            </Link>
-          ))}
-          <Button
-            className="mt-4"
-            onClick={() => alert("Add Gift List functionality not implemented")}
-          >
-            Add Gift List
+              Add Gift List
+            </Button>
+          </nav>
+        </div>
+        <div className="mt-4">
+          <Button className="w-full" onClick={handleLogout}>
+            Logout
           </Button>
-        </nav>
-      </div>
-      <Button className="mt-4" onClick={handleLogout}>
-        Logout
-      </Button>
-    </aside>
+        </div>
+      </aside>
+    </>
   );
 }

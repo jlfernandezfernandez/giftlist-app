@@ -7,7 +7,7 @@ const giftLists: GiftList[] = [
     name: "Cumpleaños",
     description: "Regalos para mi cumpleaños",
     date: "2023-06-01",
-    owner: "Mío",
+    owner: "Mis listas",
     gifts: [
       {
         id: 1,

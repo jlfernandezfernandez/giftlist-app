@@ -1,3 +1,5 @@
+// app/dashboard/page.tsx
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -5,7 +7,8 @@ import { User } from "@/types/user";
 import { GiftList } from "@/types/gift-list";
 import { GiftTable } from "@/components/dashboard/gift-table";
 import { Sidebar } from "@/components/dashboard/sidebar";
-import { useRouter } from "next/navigation"; // Import useRouter
+import Spinner from "@/components/ui/spinner";
+import { useRouter } from "next/navigation";
 
 interface DashboardProps {
   user: User;
@@ -15,14 +18,17 @@ export function Dashboard({ user }: DashboardProps) {
   const [giftLists, setGiftLists] = useState<GiftList[]>([]);
   const [currentListId, setCurrentListId] = useState<number | null>(null);
   const [showEditListModal, setShowEditListModal] = useState(false);
-  const router = useRouter(); // Initialize useRouter
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchGiftLists = async () => {
+      setIsLoading(true);
       const response = await fetch("/api/gift-lists");
       const data: GiftList[] = await response.json();
       setGiftLists(data);
-      if (data.length > 0) setCurrentListId(data[0].id); // Set the first list as the current one
+      if (data.length > 0) setCurrentListId(data[0].id);
+      setIsLoading(false);
     };
 
     fetchGiftLists();
@@ -32,26 +38,19 @@ export function Dashboard({ user }: DashboardProps) {
 
   const handleAddGift = async (url: string) => {
     if (currentListId === null || !url) return;
+    const response = await fetch("/api/get-gift-details", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url }),
+    });
 
-    // Mocking ChatGPT API response
-    const giftDetails = {
-      name: "Mock Gift Name",
-      prize: 99.99,
-      currency: "EUR",
-      website: "Amazon",
-      url: "https://www.amazon.es",
-      status: "Pendiente",
-    };
+    const giftDetails = await response.json();
 
     const newGift = {
       id: currentList ? currentList.gifts.length + 1 : 1,
-      name: giftDetails.name,
-      prize: giftDetails.prize,
-      currency: giftDetails.currency,
-      website: giftDetails.website,
-      url: giftDetails.url,
-      status: giftDetails.status,
-      assignedTo: [],
+      ...giftDetails,
     };
 
     setGiftLists((prevLists) => {
@@ -99,12 +98,17 @@ export function Dashboard({ user }: DashboardProps) {
   };
 
   const handleLogout = async () => {
+    setIsLoading(true);
     await fetch("/api/logout");
-    router.push("/");
+    setTimeout(() => {
+      setIsLoading(false);
+      router.push("/");
+    }, 500);
   };
 
   return (
     <div className="flex min-h-screen w-full">
+      {isLoading && <Spinner />}
       <Sidebar
         user={user}
         giftLists={giftLists}

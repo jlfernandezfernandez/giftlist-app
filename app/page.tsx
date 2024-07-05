@@ -1,36 +1,14 @@
 "use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { authenticateWithGoogle } from "@/app/lib/actions";
-import { useState } from "react";
+import { useAuth } from "@/app/lib/auth";
+import Spinner from "@/components/ui/spinner";
 
 export default function Home() {
-  const router = useRouter();
-  const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleGoogleSignIn = async () => {
-    setError("");
-    setIsPending(true);
-    try {
-      const user = await authenticateWithGoogle();
-      if (user) {
-        console.log("Usuario autenticado con Google:", user.email);
-        await fetch("/api/login", {
-          headers: {
-            Authorization: `Bearer ${user.idToken}`,
-          },
-        });
-        router.push("/dashboard");
-      }
-    } catch (error) {
-      setError("Failed to sign in with Google");
-    }
-    setIsPending(false);
-  };
+  const { error, isPending, handleGoogleSignIn } = useAuth();
 
   return (
     <div className="relative flex flex-col min-h-screen bg-animated-gradient">
+      {isPending && <Spinner />}
       <header className="relative bg-transparent p-6 z-10">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-xl font-bold text-white">GiftList AI</h1>
