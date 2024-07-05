@@ -2,8 +2,19 @@ import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
-const inter = Inter({ subsets: ["latin"] });
+const fontHeading = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-heading",
+});
+
+const fontBody = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-body",
+});
 
 export const metadata: Metadata = {
   title: "GiftList",
@@ -17,7 +28,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body
+        className={cn("antialiased", fontHeading.variable, fontBody.variable)}
+      >
+        {" "}
         <SessionProvider>{children}</SessionProvider>
       </body>
     </html>

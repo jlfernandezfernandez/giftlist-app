@@ -2,8 +2,9 @@ import { getTokens } from "next-firebase-auth-edge";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { clientConfig, serverConfig } from "@/config";
+import { Dashboard } from "@/components/dashboard";
 
-export default async function Dashboard() {
+export default async function DashboardPage() {
   const tokens = await getTokens(cookies(), {
     apiKey: clientConfig.apiKey,
     cookieName: serverConfig.cookieName,
@@ -16,12 +17,8 @@ export default async function Dashboard() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-xl mb-4">Panel de control súper seguro</h1>
-      <p>
-        Solo <strong>{tokens?.decodedToken.email}</strong> tiene la llave mágica
-        para este reino!
-      </p>
-    </main>
+    <div>
+      <Dashboard />
+    </div>
   );
 }
