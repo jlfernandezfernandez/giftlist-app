@@ -22,7 +22,7 @@ export default async function DashboardPage() {
   const user = {
     uid: decodedToken.uid,
     displayName: decodedToken.name,
-    email: decodedToken.email,
+    email: decodedToken.email || "",
     idToken: tokens.token,
   };
 

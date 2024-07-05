@@ -45,7 +45,7 @@ export default function LoginPage() {
     setError("");
     setIsPending(true);
     try {
-      const user: User | null = await authenticateWithGoogle();
+      const user: User = await authenticateWithGoogle();
       if (user) {
         console.log("Usuario autenticado con Google:", user.email);
         await fetch("/api/login", {

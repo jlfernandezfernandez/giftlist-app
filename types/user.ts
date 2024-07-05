@@ -2,7 +2,7 @@
 
 export interface User {
   uid: string;
-  displayName: string;
+  displayName: string | null;
   email: string;
   idToken: string;
 }

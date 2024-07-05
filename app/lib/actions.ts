@@ -20,8 +20,8 @@ export async function authenticateWithCredentials(
 
     return {
       uid: user.uid,
-      displayName: user.displayName,
-      email: user.email,
+      displayName: user.displayName ?? "", // Add null check and provide a default value
+      email: user.email ?? "",
       idToken: await user.getIdToken(),
     };
   } catch (error) {
@@ -40,7 +40,7 @@ export async function authenticateWithGoogle() {
     return {
       uid: user.uid,
       displayName: user.displayName,
-      email: user.email,
+      email: user.email ?? "",
       idToken: await user.getIdToken(),
     };
   } catch (error) {
@@ -68,8 +68,8 @@ export async function registerWithEmailAndPassword(
 
     return {
       uid: user.uid,
-      displayName: user.displayName,
-      email: user.email,
+      displayName: user.displayName ?? "",
+      email: user.email ?? "",
       idToken: await user.getIdToken(),
     };
   } catch (error) {
