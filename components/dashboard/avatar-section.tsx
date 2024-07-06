@@ -12,7 +12,7 @@ export function AvatarSection({ user }: AvatarSectionProps) {
         <Avatar className="w-8 h-8">
           <AvatarImage src="/placeholder-user.jpg" />
           <AvatarFallback>
-            {user.displayName ? user.displayName[0] : "U"}
+            {user.displayName ? user.displayName[0] : user.email[0]}
           </AvatarFallback>
         </Avatar>
         <div>

@@ -43,7 +43,7 @@ export function GiftRow({ gift, listId, handleRemoveGift }: GiftRowProps) {
 
   return (
     <TableRow>
-      <TableCell>
+      <TableCell className="whitespace-nowrap">
         <div className="font-medium truncate">
           <Link
             href={gift.url}
@@ -55,26 +55,26 @@ export function GiftRow({ gift, listId, handleRemoveGift }: GiftRowProps) {
           </Link>
         </div>
       </TableCell>
-      <TableCell>
+      <TableCell className="whitespace-nowrap">
         <div className="font-medium">
           {currencySymbol(gift.currency)}
           {gift.prize.toFixed(2)}
         </div>
       </TableCell>
-      <TableCell>
+      <TableCell className="whitespace-nowrap">
         <div className="font-medium truncate">{gift.website}</div>
       </TableCell>
-      <TableCell>
+      <TableCell className="whitespace-nowrap">
         <Badge variant={badgeVariant(gift.status)}>{gift.status}</Badge>
       </TableCell>
-      <TableCell>
+      <TableCell className="whitespace-nowrap">
         <div className="flex items-center gap-2">
           {gift.assignedTo.map((assignee) => (
             <InitialAvatar key={assignee.uid} name={assignee.displayName} />
           ))}
         </div>
       </TableCell>
-      <TableCell>
+      <TableCell className="whitespace-nowrap">
         <div className="flex items-center gap-2">
           <Button size="icon">
             <FilePenIcon className="h-4 w-4" />

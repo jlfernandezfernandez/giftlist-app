@@ -1,11 +1,9 @@
-// app/components/dashboard/sidebar.tsx
-
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { GiftList } from "@/types/gift-list";
 import { User } from "@/types/user";
 import { AvatarSection } from "./avatar-section";
-import { MenuIcon, XIcon } from "lucide-react";
+import { MenuIcon, XIcon, GiftIcon, UserIcon } from "lucide-react";
 
 interface SidebarProps {
   user: User;
@@ -64,60 +62,73 @@ export function Sidebar({
         )}
       </button>
       <aside
-        className={`bg-background border-r border-border p-4 fixed md:relative z-20 h-full overflow-y-auto transition-transform transform ${
+        className={`bg-background border-r border-border p-4 fixed md:relative z-20 h-full md:h-screen transition-transform transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 w-64`}
+        } md:translate-x-0 w-64 overflow-hidden`}
       >
-        <div>
-          <AvatarSection user={user} />
-          <nav className="flex flex-col gap-2">
-            {Object.keys(groupedInvitedLists).map((owner) => (
-              <div key={owner} className="grid gap-2">
-                <div className="font-medium text-muted-foreground">{owner}</div>
-                {groupedInvitedLists[owner].map((list) => (
-                  <Link
-                    key={list.id}
-                    href="#"
-                    onClick={() => handleEditList(list.id)}
-                    className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
-                      list.id === currentListId
-                        ? "bg-muted text-foreground"
-                        : ""
-                    }`}
-                    prefetch={false}
-                  >
+        <div className="flex flex-col h-full justify-between">
+          <div className="flex-grow">
+            <AvatarSection user={user} />
+            <nav className="flex flex-col gap-4">
+              {Object.keys(groupedInvitedLists).map((owner) => (
+                <div key={owner} className="grid gap-2">
+                  <div className="flex items-center font-medium text-muted-foreground">
+                    <UserIcon className="h-4 w-4 mr-1 flex-shrink-0" />
+                    <span className="truncate" title={owner}>
+                      {owner}
+                    </span>
+                  </div>
+                  {groupedInvitedLists[owner].map((list) => (
+                    <Link
+                      key={list.id}
+                      href="#"
+                      onClick={() => handleEditList(list.id)}
+                      className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
+                        list.id === currentListId
+                          ? "bg-muted text-foreground"
+                          : ""
+                      }`}
+                      prefetch={false}
+                    >
+                      <GiftIcon className="h-4 w-4 mr-1 flex-shrink-0" />
+                      <span className="truncate" title={list.name}>
+                        {list.name}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              ))}
+              {userGiftLists.map((list) => (
+                <Link
+                  key={list.id}
+                  href="#"
+                  onClick={() => handleEditList(list.id)}
+                  className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
+                    list.id === currentListId ? "bg-muted text-foreground" : ""
+                  }`}
+                  prefetch={false}
+                >
+                  <GiftIcon className="h-4 w-4 mr-1 flex-shrink-0" />
+                  <span className="truncate" title={list.name}>
                     {list.name}
-                  </Link>
-                ))}
-              </div>
-            ))}
-            {userGiftLists.map((list) => (
-              <Link
-                key={list.id}
-                href="#"
-                onClick={() => handleEditList(list.id)}
-                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
-                  list.id === currentListId ? "bg-muted text-foreground" : ""
-                }`}
-                prefetch={false}
+                  </span>
+                </Link>
+              ))}
+              <Button
+                className="mt-4"
+                onClick={() =>
+                  alert("Add Gift List functionality not implemented")
+                }
               >
-                {list.name}
-              </Link>
-            ))}
-            <Button
-              className="mt-4"
-              onClick={() =>
-                alert("Add Gift List functionality not implemented")
-              }
-            >
-              Add Gift List
+                Add Gift List
+              </Button>
+            </nav>
+          </div>
+          <div className="mt-4">
+            <Button className="w-full" onClick={handleLogout}>
+              Logout
             </Button>
-          </nav>
-        </div>
-        <div className="mt-4">
-          <Button className="w-full" onClick={handleLogout}>
-            Logout
-          </Button>
+          </div>
         </div>
       </aside>
     </>
