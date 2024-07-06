@@ -63,9 +63,10 @@ export function GiftTable({
         <div className="flex items-center justify-between">
           <div>
             <CardTitle>{currentList?.name} Gifts</CardTitle>
-            <CardDescription>
-              View and manage your recent {currentList?.name} gifts.
-            </CardDescription>
+            <CardDescription>{currentList?.description}</CardDescription>
+            <div className="text-sm text-muted-foreground mt-1">
+              {new Date(currentList.date).toLocaleDateString()}
+            </div>
           </div>
           {isOwner && (
             <div className="flex items-center gap-2">

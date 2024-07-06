@@ -11,6 +11,7 @@ import {
   ShoppingCartIcon,
   UserPlusIcon,
   UserMinusIcon,
+  GlobeIcon,
 } from "@/components/icons";
 import { InitialAvatar } from "../ui/initial-avatar";
 import { badgeVariant, currencySymbol } from "@/lib/gift-utils";
@@ -66,7 +67,7 @@ export function GiftRow({
 
   return (
     <TableRow>
-      <TableCell className="whitespace-nowrap">
+      <TableCell className="w-1/3 whitespace-nowrap">
         <div className="font-medium truncate">
           <Link
             href={gift.link}
@@ -78,26 +79,26 @@ export function GiftRow({
           </Link>
         </div>
       </TableCell>
-      <TableCell className="whitespace-nowrap">
+      <TableCell className="w-1/8 whitespace-nowrap">
         <div className="font-medium">
           {currencySymbol(gift.currency)}
           {gift.price.toFixed(2)}
         </div>
       </TableCell>
-      <TableCell className="whitespace-nowrap">
-        <div className="font-medium truncate">{gift.link}</div>
+      <TableCell className="w-1/6 whitespace-nowrap">
+        <div className="font-medium truncate">{gift.website}</div>
       </TableCell>
-      <TableCell className="whitespace-nowrap">
+      <TableCell className="w-1/10 whitespace-nowrap">
         <Badge variant={badgeVariant(gift.state)}>{gift.state}</Badge>
       </TableCell>
-      <TableCell className="whitespace-nowrap">
+      <TableCell className="w-1/4 whitespace-nowrap">
         <div className="flex items-center gap-2">
           {gift.assignedUsers.map((assignee) => (
             <InitialAvatar key={assignee.userId} name={assignee.displayName} />
           ))}
         </div>
       </TableCell>
-      <TableCell className="whitespace-nowrap">
+      <TableCell className="w-1/10 whitespace-nowrap">
         <div className="flex items-center gap-2">
           {isOwner ? (
             <>
@@ -117,17 +118,29 @@ export function GiftRow({
             </>
           ) : (
             <>
-              <Button
-                size="icon"
-                onClick={() => window.open(gift.link, "_blank")}
-                title="Buy Gift"
-              >
-                <ShoppingCartIcon className="h-4 w-4" />
-                <span className="sr-only">Buy</span>
-              </Button>
+              {gift.state === "bought" ? (
+                <Button
+                  size="icon"
+                  onClick={() => window.open(gift.link, "_blank")}
+                  title="View Product"
+                >
+                  <GlobeIcon className="h-4 w-4" />
+                  <span className="sr-only">View</span>
+                </Button>
+              ) : (
+                <Button
+                  size="icon"
+                  onClick={() => window.open(gift.link, "_blank")}
+                  title="Buy Gift"
+                >
+                  <ShoppingCartIcon className="h-4 w-4" />
+                  <span className="sr-only">Buy</span>
+                </Button>
+              )}
               {isAssigned ? (
                 <Button
                   size="icon"
+                  variant="destructive"
                   onClick={handleUnassignGift}
                   disabled={isAssigning}
                   title="Unassign Gift"

@@ -7,6 +7,7 @@ export interface Gift {
   name: string;
   description: string;
   link: string;
+  website: string;
   price: number;
   currency: string;
   state: string;

@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
     name: "mock gift name",
     description: "mock gift description",
     link: url,
+    website: "mock website",
     price: 99.99,
     currency: "eur",
     state: "pending",
