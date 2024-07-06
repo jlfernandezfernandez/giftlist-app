@@ -2,8 +2,8 @@ import { getTokens } from "next-firebase-auth-edge";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import { clientConfig, serverConfig } from "@/config";
-import { Dashboard } from "@/components/dashboard";
 import { DecodedIdToken } from "next-firebase-auth-edge/lib/auth/token-verifier";
+import Dashboard from "@/components/dashboard";
 
 export default async function DashboardPage() {
   const tokens = await getTokens(cookies(), {

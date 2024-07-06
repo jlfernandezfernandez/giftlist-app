@@ -1,3 +1,5 @@
+// app/components/dashboard/gift-table.tsx
+
 import {
   Card,
   CardHeader,
@@ -71,28 +73,30 @@ export function GiftTable({
         </div>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Gift</TableHead>
-              <TableHead>Prize</TableHead>
-              <TableHead>Website</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Assigned To</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {currentList?.gifts.map((gift) => (
-              <GiftRow
-                key={gift.id}
-                gift={gift}
-                listId={currentList.id}
-                handleRemoveGift={handleRemoveGift}
-              />
-            ))}
-          </TableBody>
-        </Table>
+        <div className="overflow-x-auto">
+          <Table className="min-w-full">
+            <TableHeader>
+              <TableRow>
+                <TableHead>Gift</TableHead>
+                <TableHead>Prize</TableHead>
+                <TableHead>Website</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Assigned To</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {currentList?.gifts.map((gift) => (
+                <GiftRow
+                  key={gift.id}
+                  gift={gift}
+                  listId={currentList.id}
+                  handleRemoveGift={handleRemoveGift}
+                />
+              ))}
+            </TableBody>
+          </Table>
+        </div>
       </CardContent>
       <CardFooter>
         <div className="flex items-center space-x-2 w-full">

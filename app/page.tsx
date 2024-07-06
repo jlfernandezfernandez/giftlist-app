@@ -29,7 +29,7 @@ export default function Home() {
           comparte y lleva un seguimiento de todas tus ocasiones especiales en
           un solo lugar.
         </p>
-        <div className="space-x-4">
+        <div className="space-y-4 sm:space-y-0 sm:space-x-4 flex flex-col sm:flex-row">
           <Link
             href="/register"
             className="bg-black text-white px-6 py-3 rounded-full text-lg hover:bg-gray-800 transition"

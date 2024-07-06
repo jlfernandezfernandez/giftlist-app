@@ -1,3 +1,5 @@
+// app/components/dashboard/gift-row.tsx
+
 import { TableRow, TableCell } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -42,7 +44,7 @@ export function GiftRow({ gift, listId, handleRemoveGift }: GiftRowProps) {
   return (
     <TableRow>
       <TableCell>
-        <div className="font-medium">
+        <div className="font-medium truncate">
           <Link
             href={gift.url}
             target="_blank"
@@ -60,7 +62,7 @@ export function GiftRow({ gift, listId, handleRemoveGift }: GiftRowProps) {
         </div>
       </TableCell>
       <TableCell>
-        <div className="font-medium">{gift.website}</div>
+        <div className="font-medium truncate">{gift.website}</div>
       </TableCell>
       <TableCell>
         <Badge variant={badgeVariant(gift.status)}>{gift.status}</Badge>
@@ -80,7 +82,7 @@ export function GiftRow({ gift, listId, handleRemoveGift }: GiftRowProps) {
           </Button>
           <Button
             size="icon"
-            color="destructive"
+            variant="destructive"
             onClick={() => handleRemoveGift(listId, gift.id)}
           >
             <TrashIcon className="h-4 w-4" />

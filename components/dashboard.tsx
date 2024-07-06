@@ -14,11 +14,12 @@ interface DashboardProps {
   user: User;
 }
 
-export function Dashboard({ user }: DashboardProps) {
+export default function DashboardPage({ user }: DashboardProps) {
   const [giftLists, setGiftLists] = useState<GiftList[]>([]);
   const [currentListId, setCurrentListId] = useState<number | null>(null);
   const [showEditListModal, setShowEditListModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -106,8 +107,12 @@ export function Dashboard({ user }: DashboardProps) {
     }, 500);
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className="flex min-h-screen w-full">
+    <div className="flex min-h-screen w-full flex-col md:flex-row">
       {isLoading && <Spinner />}
       <Sidebar
         user={user}
@@ -116,8 +121,10 @@ export function Dashboard({ user }: DashboardProps) {
         setCurrentListId={setCurrentListId}
         handleEditList={handleEditList}
         handleLogout={handleLogout}
+        isOpen={isSidebarOpen}
+        toggleSidebar={toggleSidebar}
       />
-      <main className="flex-1 p-6">
+      <main className="flex-1 p-6 ml-auto">
         {currentList && (
           <GiftTable
             currentList={currentList}

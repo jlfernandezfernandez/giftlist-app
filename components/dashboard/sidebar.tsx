@@ -1,8 +1,11 @@
+// app/components/dashboard/sidebar.tsx
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { GiftList } from "@/types/gift-list";
 import { User } from "@/types/user";
 import { AvatarSection } from "./avatar-section";
+import { MenuIcon, XIcon } from "lucide-react";
 
 interface SidebarProps {
   user: User;
@@ -11,6 +14,8 @@ interface SidebarProps {
   setCurrentListId: (id: number) => void;
   handleEditList: (listId: number) => void;
   handleLogout: () => void;
+  isOpen: boolean;
+  toggleSidebar: () => void;
 }
 
 export function Sidebar({
@@ -20,6 +25,8 @@ export function Sidebar({
   setCurrentListId,
   handleEditList,
   handleLogout,
+  isOpen,
+  toggleSidebar,
 }: SidebarProps) {
   const userGiftLists = giftLists.filter((list) =>
     list.gifts.some((gift) =>
@@ -45,7 +52,22 @@ export function Sidebar({
 
   return (
     <>
-      <aside className="bg-background border-r border-border p-4 hidden md:flex flex-col justify-between">
+      <button
+        className="md:hidden p-4"
+        onClick={toggleSidebar}
+        aria-label="Toggle sidebar"
+      >
+        {isOpen ? (
+          <XIcon className="h-6 w-6" />
+        ) : (
+          <MenuIcon className="h-6 w-6" />
+        )}
+      </button>
+      <aside
+        className={`bg-background border-r border-border p-4 fixed md:relative z-20 h-full overflow-y-auto transition-transform transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } md:translate-x-0 w-64`}
+      >
         <div>
           <AvatarSection user={user} />
           <nav className="flex flex-col gap-2">
