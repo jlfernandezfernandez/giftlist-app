@@ -11,7 +11,9 @@ export default function Home() {
       {isPending && <Spinner />}
       <header className="relative bg-transparent p-6 z-10">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold text-white">GiftList AI</h1>
+          <h1 className="bg-gradient-to-r from-green-400 via-blue-500 to-purple-600 bg-clip-text text-transparent animate-text text-3xl font-bold p-2">
+            GiftList AI
+          </h1>
           <Link
             href="/login"
             className="bg-white text-black px-4 py-2 rounded-full text-base hover:bg-gray-800 transition"
@@ -38,7 +40,7 @@ export default function Home() {
           </Link>
           <button
             onClick={handleGoogleSignIn}
-            className="bg-blue-600 text-white px-6 py-2 rounded-full text-lg hover:bg-blue-700 transition"
+            className="bg-blue-600 text-white px-6 py-3 rounded-full text-lg hover:bg-blue-700 transition"
             disabled={isPending}
           >
             {isPending ? "Cargando..." : "Empezar con Google"}
