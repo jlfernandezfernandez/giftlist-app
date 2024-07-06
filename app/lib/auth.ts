@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "@/types/user";
+import { AuthenticatedUser } from "@/types/authenticated-user";
 import {
   authenticateWithCredentials,
   authenticateWithGoogle,
@@ -34,7 +34,7 @@ export function useAuth() {
     setError("");
     setIsPending(true);
     try {
-      const user: User | null = await authenticateWithCredentials(
+      const user: AuthenticatedUser | null = await authenticateWithCredentials(
         email,
         password
       );
@@ -59,7 +59,7 @@ export function useAuth() {
     setError("");
     setIsPending(true);
     try {
-      const user: User = await authenticateWithGoogle();
+      const user: AuthenticatedUser = await authenticateWithGoogle();
       if (user) {
         console.log("Usuario autenticado con Google:", user.email);
         await fetch("/api/login", {

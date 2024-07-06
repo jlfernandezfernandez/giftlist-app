@@ -3,142 +3,188 @@ import { GiftList } from "@/types/gift-list";
 
 const giftLists: GiftList[] = [
   {
-    id: 1,
-    name: "Cumpleaños",
-    description: "Regalos para mi cumpleaños",
+    id: "1",
+    name: "birthday",
+    description: "Gifts for my birthday",
     date: "2023-06-01",
-    owner: "Mis listas",
+    privacy: "private",
+    users: [
+      {
+        userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+        role: "owner",
+        displayName: "Jordi",
+        email: "jordi@example.com",
+      },
+      {
+        userId: "2",
+        role: "guest",
+        displayName: "Aldara",
+        email: "aldara@example.com",
+      },
+    ],
     gifts: [
       {
-        id: 1,
-        name: "Auriculares Inalámbricos",
-        prize: 99.99,
-        currency: "EUR",
-        website: "Amazon",
-        url: "https://www.amazon.es",
-        status: "Pendiente",
-        assignedTo: [
+        id: "1",
+        name: "wireless headphones",
+        description: "High quality Bluetooth headphones",
+        link: "https://www.amazon.es",
+        price: 99.99,
+        currency: "eur",
+        state: "pending",
+        assignedUsers: [
           {
-            uid: "1",
-            displayName: "Juan",
-            email: "juan@ejemplo.com",
-            idToken: "token",
-          },
-          {
-            uid: "2",
-            displayName: "María",
-            email: "maria@ejemplo.com",
-            idToken: "token",
+            userId: "2",
+            displayName: "Aldara",
+            email: "aldara@example.com",
           },
         ],
       },
       {
-        id: 2,
-        name: "Olla a Presión Instantánea",
-        prize: 79.99,
-        currency: "EUR",
-        website: "Amazon",
-        url: "https://www.amazon.es",
-        status: "Reservado",
-        assignedTo: [
+        id: "2",
+        name: "instant pressure cooker",
+        description: "Multi-function pressure cooker",
+        link: "https://www.amazon.es",
+        price: 79.99,
+        currency: "eur",
+        state: "reserved",
+        assignedUsers: [
           {
-            uid: "3",
-            displayName: "Miguel",
-            email: "miguel@ejemplo.com",
-            idToken: "token",
+            userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+            displayName: "Jordi",
+            email: "jordi@example.com",
           },
         ],
       },
     ],
   },
   {
-    id: 2,
-    name: "Boda",
-    description: "Regalos para la boda de María y Juan",
+    id: "2",
+    name: "wedding",
+    description: "Gifts for Aldara and Jordi's wedding",
     date: "2023-09-15",
-    owner: "María",
+    privacy: "private",
+    users: [
+      {
+        userId: "2",
+        role: "owner",
+        displayName: "Aldara",
+        email: "aldara@example.com",
+      },
+      {
+        userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+        role: "owner",
+        displayName: "Jordi",
+        email: "jordi@example.com",
+      },
+      {
+        userId: "3",
+        role: "guest",
+        displayName: "Juan",
+        email: "juan@example.com",
+      },
+    ],
     gifts: [
       {
-        id: 3,
-        name: "Reloj Inteligente",
-        prize: 199.99,
-        currency: "EUR",
-        website: "Amazon",
-        url: "https://www.amazon.es",
-        status: "Comprado",
-        assignedTo: [
+        id: "3",
+        name: "smart watch",
+        description: "High quality smart watch",
+        link: "https://www.amazon.es",
+        price: 199.99,
+        currency: "eur",
+        state: "bought",
+        assignedUsers: [
           {
-            uid: "1",
+            userId: "3",
             displayName: "Juan",
-            email: "juan@ejemplo.com",
-            idToken: "token",
-          },
-          {
-            uid: "2",
-            displayName: "María",
-            email: "maria@ejemplo.com",
-            idToken: "token",
-          },
-          {
-            uid: "3",
-            displayName: "Miguel",
-            email: "miguel@ejemplo.com",
-            idToken: "token",
+            email: "juan@example.com",
           },
         ],
       },
       {
-        id: 4,
-        name: "Auriculares con Cancelación de Ruido",
-        prize: 149.99,
-        currency: "EUR",
-        website: "Amazon",
-        url: "https://www.amazon.es",
-        status: "Pendiente",
-        assignedTo: [
+        id: "4",
+        name: "noise-cancelling headphones",
+        description: "High quality noise-cancelling headphones",
+        link: "https://www.amazon.es",
+        price: 149.99,
+        currency: "eur",
+        state: "pending",
+        assignedUsers: [],
+      },
+    ],
+  },
+  {
+    id: "3",
+    name: "housewarming",
+    description: "Gifts for Jordi's new house",
+    date: "2023-08-01",
+    privacy: "private",
+    users: [
+      {
+        userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+        role: "guest",
+        displayName: "Jordi",
+        email: "jordi@example.com",
+      },
+      {
+        userId: "4",
+        role: "owner",
+        displayName: "Ana",
+        email: "ana@example.com",
+      },
+    ],
+    gifts: [
+      {
+        id: "5",
+        name: "espresso machine",
+        description: "High quality espresso machine",
+        link: "https://www.amazon.es",
+        price: 249.99,
+        currency: "eur",
+        state: "reserved",
+        assignedUsers: [
           {
-            uid: "1",
-            displayName: "Juan",
-            email: "juan@ejemplo.com",
-            idToken: "token",
+            userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+            displayName: "Jordi",
+            email: "jordi@example.com",
           },
         ],
       },
     ],
   },
   {
-    id: 3,
-    name: "Inauguración de la Casa Nueva",
-    description: "Regalos para la nueva casa de Miguel",
+    id: "4",
+    name: "bithday",
+    description: "Gifts for Aldara",
     date: "2023-08-01",
-    owner: "Miguel",
+    privacy: "private",
+    users: [
+      {
+        userId: "2",
+        role: "owner",
+        displayName: "Aldara",
+        email: "aldara@example.com",
+      },
+      {
+        userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+        role: "guest",
+        displayName: "Jordi",
+        email: "jordi@example.com",
+      },
+    ],
     gifts: [
       {
-        id: 5,
-        name: "Máquina de Espresso",
-        prize: 249.99,
-        currency: "EUR",
-        website: "Amazon",
-        url: "https://www.amazon.es",
-        status: "Reservado",
-        assignedTo: [
+        id: "6",
+        name: "Apple Watch",
+        description: "Apple Watch Series 7",
+        link: "https://www.amazon.es",
+        price: 450.0,
+        currency: "eur",
+        state: "pending",
+        assignedUsers: [
           {
-            uid: "2",
-            displayName: "María",
-            email: "maria@ejemplo.com",
-            idToken: "token",
-          },
-          {
-            uid: "3",
-            displayName: "Miguel",
-            email: "miguel@ejemplo.com",
-            idToken: "token",
-          },
-          {
-            uid: "4",
-            displayName: null,
-            email: "miguel@ejemplo.com",
-            idToken: "token",
+            userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+            displayName: "Jordi",
+            email: "jordi@example.com",
           },
         ],
       },
@@ -146,6 +192,10 @@ const giftLists: GiftList[] = [
   },
 ];
 
-export async function GET() {
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const userId = url.searchParams.get("userId");
+  console.log(`GET gift lists for user ${userId}`);
+
   return NextResponse.json(giftLists);
 }

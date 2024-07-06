@@ -13,14 +13,14 @@ export async function POST(req: NextRequest) {
   // Aquí se haría la llamada a ChatGPT o la lógica para obtener los detalles del regalo
   // De momento, devolveremos un mock
   const mockGift: Gift = {
-    id: randomInt(100),
-    name: "Mock Gift Name",
-    prize: 99.99,
-    currency: "EUR",
-    website: "Amazon",
-    url: url,
-    status: "Pendiente",
-    assignedTo: [],
+    id: randomInt(100).toString(),
+    name: "mock gift name",
+    description: "mock gift description",
+    link: url,
+    price: 99.99,
+    currency: "eur",
+    state: "pending",
+    assignedUsers: [],
   };
 
   return NextResponse.json(mockGift);

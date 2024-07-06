@@ -1,8 +1,8 @@
 // types/user.ts
 
 export interface User {
-  uid: string;
-  displayName: string | null;
+  userId: string;
+  displayName: string;
   email: string;
-  idToken: string;
+  role?: string; // Opcional, solo se usará en `GiftList`
 }

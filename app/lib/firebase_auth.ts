@@ -8,12 +8,12 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "@/firebase.config";
-import { User } from "@/types/user";
+import { AuthenticatedUser } from "@/types/authenticated-user";
 
 export async function authenticateWithCredentials(
   email: string,
   password: string
-): Promise<User | null> {
+): Promise<AuthenticatedUser | null> {
   try {
     const credential = await signInWithEmailAndPassword(auth, email, password);
     const user = credential.user;
@@ -53,7 +53,7 @@ export async function registerWithEmailAndPassword(
   name: string,
   email: string,
   password: string
-): Promise<User | null> {
+): Promise<AuthenticatedUser | null> {
   try {
     const credential = await createUserWithEmailAndPassword(
       auth,

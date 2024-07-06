@@ -1,8 +1,8 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { User } from "@/types/user";
+import { AuthenticatedUser } from "@/types/authenticated-user";
 
 interface AvatarSectionProps {
-  user: User;
+  user: AuthenticatedUser;
 }
 
 export function AvatarSection({ user }: AvatarSectionProps) {

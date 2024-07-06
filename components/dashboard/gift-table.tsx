@@ -22,12 +22,14 @@ import { GiftRow } from "./gift-row";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import SmallSpinner from "../ui/small-spinner";
+import { AuthenticatedUser } from "@/types/authenticated-user";
 
 interface GiftTableProps {
+  user: AuthenticatedUser;
   currentList: GiftList;
   setShowEditListModal: (show: boolean) => void;
   handleShareList: () => void;
-  handleRemoveGift: (listId: number, giftId: number) => void;
+  handleRemoveGift: (listId: string, giftId: string) => void;
   handleAddGift: (url: string) => void;
 }
 
@@ -37,6 +39,7 @@ export function GiftTable({
   handleShareList,
   handleRemoveGift,
   handleAddGift,
+  user,
 }: GiftTableProps) {
   const [newGiftUrl, setNewGiftUrl] = useState("");
   const [isAddingGift, setIsAddingGift] = useState(false);
@@ -50,6 +53,10 @@ export function GiftTable({
     }, 2000);
   };
 
+  const isOwner = currentList.users.some(
+    (listUser) => listUser.userId === user.uid && listUser.role === "owner"
+  );
+
   return (
     <Card>
       <CardHeader>
@@ -60,16 +67,18 @@ export function GiftTable({
               View and manage your recent {currentList?.name} gifts.
             </CardDescription>
           </div>
-          <div className="flex items-center gap-2">
-            <Button onClick={() => setShowEditListModal(true)}>
-              <FilePenIcon className="h-4 w-4 mr-2" />
-              Edit List
-            </Button>
-            <Button onClick={handleShareList}>
-              <ShareIcon className="h-4 w-4 mr-2" />
-              Share
-            </Button>
-          </div>
+          {isOwner && (
+            <div className="flex items-center gap-2">
+              <Button onClick={() => setShowEditListModal(true)}>
+                <FilePenIcon className="h-4 w-4 mr-2" />
+                Edit List
+              </Button>
+              <Button onClick={handleShareList}>
+                <ShareIcon className="h-4 w-4 mr-2" />
+                Share
+              </Button>
+            </div>
+          )}
         </div>
       </CardHeader>
       <CardContent>
@@ -78,7 +87,7 @@ export function GiftTable({
             <TableHeader>
               <TableRow>
                 <TableHead>Gift</TableHead>
-                <TableHead>Prize</TableHead>
+                <TableHead>Price</TableHead>
                 <TableHead>Website</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Assigned To</TableHead>
@@ -88,36 +97,40 @@ export function GiftTable({
             <TableBody>
               {currentList?.gifts.map((gift) => (
                 <GiftRow
+                  user={user}
                   key={gift.id}
                   gift={gift}
                   listId={currentList.id}
                   handleRemoveGift={handleRemoveGift}
+                  isOwner={isOwner}
                 />
               ))}
             </TableBody>
           </Table>
         </div>
       </CardContent>
-      <CardFooter>
-        <div className="flex items-center space-x-2 w-full">
-          <Input
-            id="new-gift-url"
-            value={newGiftUrl}
-            onChange={(e) => setNewGiftUrl(e.target.value)}
-            placeholder="Paste url to add with AI"
-            className="flex-grow"
-            disabled={isAddingGift}
-          />
-          <Button onClick={handleAddGiftClick} disabled={isAddingGift}>
-            {isAddingGift ? (
-              <SmallSpinner />
-            ) : (
-              <AICircleIcon className="h-4 w-4 mr-2" />
-            )}
-            {isAddingGift ? "Adding..." : "Add Gift"}
-          </Button>
-        </div>
-      </CardFooter>
+      {isOwner && (
+        <CardFooter>
+          <div className="flex items-center space-x-2 w-full">
+            <Input
+              id="new-gift-url"
+              value={newGiftUrl}
+              onChange={(e) => setNewGiftUrl(e.target.value)}
+              placeholder="Paste url to add with AI"
+              className="flex-grow"
+              disabled={isAddingGift}
+            />
+            <Button onClick={handleAddGiftClick} disabled={isAddingGift}>
+              {isAddingGift ? (
+                <SmallSpinner />
+              ) : (
+                <AICircleIcon className="h-4 w-4 mr-2" />
+              )}
+              {isAddingGift ? "Adding..." : "Add Gift"}
+            </Button>
+          </div>
+        </CardFooter>
+      )}
     </Card>
   );
 }

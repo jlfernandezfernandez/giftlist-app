@@ -1,13 +1,14 @@
-
 // types/gift-list.ts
 
 import { Gift } from "./gift";
+import { User } from "./user";
 
 export interface GiftList {
-  id: number;
+  id: string;
   name: string;
   description: string;
   date: string;
-  owner: string;
+  privacy: string;
+  users: User[];
   gifts: Gift[];
 }

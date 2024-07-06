@@ -3,7 +3,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { User } from "@/types/user";
+import { AuthenticatedUser } from "@/types/authenticated-user";
 import { GiftList } from "@/types/gift-list";
 import { GiftTable } from "@/components/dashboard/gift-table";
 import { Sidebar } from "@/components/dashboard/sidebar";
@@ -11,12 +11,12 @@ import Spinner from "@/components/ui/spinner";
 import { useRouter } from "next/navigation";
 
 interface DashboardProps {
-  user: User;
+  user: AuthenticatedUser;
 }
 
 export default function DashboardPage({ user }: DashboardProps) {
   const [giftLists, setGiftLists] = useState<GiftList[]>([]);
-  const [currentListId, setCurrentListId] = useState<number | null>(null);
+  const [currentListId, setCurrentListId] = useState<string | null>(null);
   const [showEditListModal, setShowEditListModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -25,7 +25,7 @@ export default function DashboardPage({ user }: DashboardProps) {
   useEffect(() => {
     const fetchGiftLists = async () => {
       setIsLoading(true);
-      const response = await fetch("/api/gift-lists");
+      const response = await fetch(`/api/gift-lists?userId=${user.uid}`);
       const data: GiftList[] = await response.json();
       setGiftLists(data);
       if (data.length > 0) setCurrentListId(data[0].id);
@@ -33,7 +33,7 @@ export default function DashboardPage({ user }: DashboardProps) {
     };
 
     fetchGiftLists();
-  }, []);
+  }, [user.uid]);
 
   const currentList = giftLists.find((list) => list.id === currentListId);
 
@@ -68,7 +68,7 @@ export default function DashboardPage({ user }: DashboardProps) {
     });
   };
 
-  const handleEditList = (listId: number) => {
+  const handleEditList = (listId: string) => {
     setCurrentListId(listId);
     setShowEditListModal(true);
   };
@@ -80,7 +80,7 @@ export default function DashboardPage({ user }: DashboardProps) {
     setShowEditListModal(false);
   };
 
-  const handleRemoveGift = (listId: number, giftId: number) => {
+  const handleRemoveGift = (listId: string, giftId: string) => {
     setGiftLists((prevLists) =>
       prevLists.map((list) => {
         if (list.id === listId) {
@@ -127,6 +127,7 @@ export default function DashboardPage({ user }: DashboardProps) {
       <main className="flex-1 p-6 ml-auto">
         {currentList && (
           <GiftTable
+            user={user}
             currentList={currentList}
             setShowEditListModal={setShowEditListModal}
             handleShareList={handleShareList}
