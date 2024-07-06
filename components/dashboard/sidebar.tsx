@@ -66,7 +66,7 @@ export function Sidebar({
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 w-64 overflow-hidden`}
       >
-        <div className="flex flex-col h-full justify-between">
+        <div className="flex flex-col justify-between">
           <div className="flex-grow">
             <AvatarSection user={user} />
             <nav className="flex flex-col gap-4">
@@ -124,8 +124,14 @@ export function Sidebar({
               </Button>
             </nav>
           </div>
+          <hr className="border-t border-border mt-8" />
           <div className="mt-4">
-            <Button className="w-full" onClick={handleLogout}>
+            <Button
+              variant={"ghost"}
+              alignment={"left"}
+              className="w-full text-gray-500"
+              onClick={handleLogout}
+            >
               Logout
             </Button>
           </div>
