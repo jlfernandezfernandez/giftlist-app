@@ -108,7 +108,7 @@ const giftLists: GiftList[] = [
   },
   {
     id: 3,
-    name: "Inauguración de la Casa",
+    name: "Inauguración de la Casa Nueva",
     description: "Regalos para la nueva casa de Miguel",
     date: "2023-08-01",
     owner: "Miguel",
