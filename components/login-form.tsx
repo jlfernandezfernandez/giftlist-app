@@ -2,8 +2,11 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import { AtSymbolIcon, KeyIcon } from "@heroicons/react/24/outline";
-import { ArrowRightIcon } from "@heroicons/react/20/solid";
+import {
+  AtSymbolIcon,
+  KeyIcon,
+  ArrowRightIcon,
+} from "@heroicons/react/24/outline";
 import { Button } from "./ui/button";
 
 interface LoginFormProps {
@@ -19,12 +22,22 @@ export default function LoginForm({
   error,
   isPending,
 }: LoginFormProps) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    await onSubmit(email, password);
+    await onSubmit(form.email, form.password);
   };
 
   return (
@@ -34,14 +47,14 @@ export default function LoginForm({
           htmlFor="email"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Your email
+          Tu email
         </label>
         <div className="mt-1 relative rounded-md shadow-sm">
           <input
             type="email"
             name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={form.email}
+            onChange={handleChange}
             id="email"
             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="name@company.com"
@@ -57,14 +70,14 @@ export default function LoginForm({
           htmlFor="password"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Password
+          Contraseña
         </label>
         <div className="mt-1 relative rounded-md shadow-sm">
           <input
             type="password"
             name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={form.password}
+            onChange={handleChange}
             id="password"
             placeholder="••••••••"
             className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

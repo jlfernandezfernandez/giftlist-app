@@ -30,7 +30,7 @@ export async function authenticateWithCredentials(
   }
 }
 
-export async function authenticateWithGoogle() {
+export async function authenticateWithGoogle(): Promise<AuthenticatedUser | null> {
   try {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);

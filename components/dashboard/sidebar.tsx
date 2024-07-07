@@ -1,9 +1,12 @@
-import Link from "next/link";
+// components/dashboard/Sidebar.tsx
 import { Button } from "@/components/ui/button";
 import { GiftList } from "@/types/gift-list";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { AvatarSection } from "./avatar-section";
-import { MenuIcon, XIcon, GiftIcon, UserIcon } from "lucide-react";
+import { MenuIcon, XIcon } from "lucide-react";
+import { useGiftLists } from "@/hooks/use-gift-lists";
+import { SidebarOwnList } from "./sidebar-own-list";
+import { SidebarSharedList } from "./sidebar-shared-list";
 
 interface SidebarProps {
   user: AuthenticatedUser;
@@ -26,31 +29,7 @@ export function Sidebar({
   isOpen,
   toggleSidebar,
 }: SidebarProps) {
-  const userGiftLists = giftLists.filter((list) =>
-    list.users.some(
-      (userItem) => userItem.userId === user.uid && userItem.role === "owner"
-    )
-  );
-
-  const invitedGiftLists = giftLists.filter((list) =>
-    list.users.some(
-      (userItem) => userItem.userId === user.uid && userItem.role === "guest"
-    )
-  );
-
-  const groupedInvitedLists = invitedGiftLists.reduce<{
-    [key: string]: GiftList[];
-  }>((acc, list) => {
-    list.users.forEach((userItem) => {
-      if (userItem.role === "owner") {
-        if (!acc[userItem.displayName]) {
-          acc[userItem.displayName] = [];
-        }
-        acc[userItem.displayName].push(list);
-      }
-    });
-    return acc;
-  }, {});
+  const { userGiftLists, groupedInvitedLists } = useGiftLists(giftLists, user);
 
   return (
     <>
@@ -78,24 +57,11 @@ export function Sidebar({
                 <div className="flex items-center font-medium text-muted-foreground mb-2">
                   Mis Listas
                 </div>
-                {userGiftLists.map((list) => (
-                  <Link
-                    key={list.id}
-                    href="#"
-                    onClick={() => handleEditList(list.id)}
-                    className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
-                      list.id === currentListId
-                        ? "bg-muted text-foreground"
-                        : ""
-                    }`}
-                    prefetch={false}
-                  >
-                    <GiftIcon className="h-4 w-4 mr-1 flex-shrink-0" />
-                    <span className="truncate" title={list.name}>
-                      {list.name}
-                    </span>
-                  </Link>
-                ))}
+                <SidebarOwnList
+                  giftLists={userGiftLists}
+                  currentListId={currentListId}
+                  handleEditList={handleEditList}
+                />
                 <Button
                   className="mt-2 w-full"
                   onClick={() =>
@@ -106,36 +72,11 @@ export function Sidebar({
                 </Button>
               </div>
               {Object.keys(groupedInvitedLists).length > 0 && (
-                <div>
-                  {Object.keys(groupedInvitedLists).map((owner) => (
-                    <div key={owner} className="mt-4">
-                      <div className="flex items-center font-medium text-muted-foreground">
-                        <UserIcon className="h-4 w-4 mr-1 flex-shrink-0" />
-                        <span className="truncate" title={owner}>
-                          {owner}
-                        </span>
-                      </div>
-                      {groupedInvitedLists[owner].map((list) => (
-                        <Link
-                          key={list.id}
-                          href="#"
-                          onClick={() => handleEditList(list.id)}
-                          className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
-                            list.id === currentListId
-                              ? "bg-muted text-foreground"
-                              : ""
-                          }`}
-                          prefetch={false}
-                        >
-                          <GiftIcon className="h-4 w-4 mr-1 flex-shrink-0" />
-                          <span className="truncate" title={list.name}>
-                            {list.name}
-                          </span>
-                        </Link>
-                      ))}
-                    </div>
-                  ))}
-                </div>
+                <SidebarSharedList
+                  groupedSharedLists={groupedInvitedLists}
+                  currentListId={currentListId}
+                  handleEditList={handleEditList}
+                />
               )}
             </nav>
           </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import { Button } from "@/components/ui/button";
 
 export interface RegisterFormProps {
@@ -15,20 +14,30 @@ export default function RegisterForm({
   error,
   isPending,
 }: RegisterFormProps) {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmation, setConfirmation] = useState("");
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmation: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setForm({
+      ...form,
+      [name]: value,
+    });
+  };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    if (password !== confirmation) {
+    if (form.password !== form.confirmation) {
       alert("Passwords don't match");
       return;
     }
 
-    await onSubmit(name, email, password);
+    await onSubmit(form.name, form.email, form.password);
   };
 
   return (
@@ -43,8 +52,8 @@ export default function RegisterForm({
         <input
           type="text"
           name="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={form.name}
+          onChange={handleChange}
           id="name"
           className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Tu nombre"
@@ -61,8 +70,8 @@ export default function RegisterForm({
         <input
           type="email"
           name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={form.email}
+          onChange={handleChange}
           id="email"
           className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="name@company.com"
@@ -79,8 +88,8 @@ export default function RegisterForm({
         <input
           type="password"
           name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={form.password}
+          onChange={handleChange}
           id="password"
           placeholder="••••••••"
           className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -89,17 +98,17 @@ export default function RegisterForm({
       </div>
       <div>
         <label
-          htmlFor="confirm-password"
+          htmlFor="confirmation"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
           Repite la contraseña
         </label>
         <input
           type="password"
-          name="confirm-password"
-          value={confirmation}
-          onChange={(e) => setConfirmation(e.target.value)}
-          id="confirm-password"
+          name="confirmation"
+          value={form.confirmation}
+          onChange={handleChange}
+          id="confirmation"
           placeholder="••••••••"
           className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           required

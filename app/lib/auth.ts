@@ -1,3 +1,4 @@
+// app/lib/auth.ts
 "use client";
 
 import { AuthenticatedUser } from "@/types/authenticated-user";
@@ -59,7 +60,7 @@ export function useAuth() {
     setError("");
     setIsPending(true);
     try {
-      const user: AuthenticatedUser = await authenticateWithGoogle();
+      const user: AuthenticatedUser | null = await authenticateWithGoogle();
       if (user) {
         console.log("Usuario autenticado con Google:", user.email);
         await fetch("/api/login", {
@@ -68,6 +69,8 @@ export function useAuth() {
           },
         });
         router.push("/dashboard");
+      } else {
+        setError("Failed to sign in with Google");
       }
     } catch (error) {
       setError("Failed to sign in with Google");
