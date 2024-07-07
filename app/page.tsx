@@ -11,7 +11,7 @@ export default function Home() {
       {isPending && <Spinner />}
       <header className="relative bg-transparent p-6 z-10">
         <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold text-white">GiftList AI</h1>
+          <h1 className="text-2xl font-bold text-white">GiftList AI</h1>
           <Link
             href="/login"
             className="bg-white text-black px-4 py-2 rounded-full text-base hover:bg-gray-800 transition"
