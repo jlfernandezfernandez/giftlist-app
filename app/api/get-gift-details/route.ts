@@ -10,19 +10,65 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "URL is required" }, { status: 400 });
   }
 
-  // Aquí se haría la llamada a ChatGPT o la lógica para obtener los detalles del regalo
-  // De momento, devolveremos un mock
-  const mockGift: Gift = {
-    id: randomInt(100).toString(),
-    name: "mock gift name",
-    description: "mock gift description",
-    link: url,
-    website: "mock website",
-    price: 99.99,
-    currency: "eur",
-    state: "pending",
-    assignedUsers: [],
-  };
+  const mockGifts: Gift[] = [
+    {
+      id: randomInt(100).toString(),
+      name: "Running Shoes",
+      description: "Size: 10, Color: Black",
+      link: url,
+      website: "SportStore",
+      price: 59.99,
+      currency: "eur",
+      state: "pending",
+      assignedUsers: [],
+    },
+    {
+      id: randomInt(100).toString(),
+      name: "Luxury Perfume",
+      description: "Volume: 50ml, Fragrance: Floral",
+      link: url,
+      website: "BeautyShop",
+      price: 120.0,
+      currency: "eur",
+      state: "pending",
+      assignedUsers: [],
+    },
+    {
+      id: randomInt(100).toString(),
+      name: "Smartphone",
+      description: "Brand: TechBrand, Storage: 128GB",
+      link: url,
+      website: "ElectroMart",
+      price: 699.99,
+      currency: "eur",
+      state: "pending",
+      assignedUsers: [],
+    },
+    {
+      id: randomInt(100).toString(),
+      name: "Designer Jacket",
+      description: "Size: L, Material: Leather",
+      link: url,
+      website: "FashionHub",
+      price: 250.0,
+      currency: "eur",
+      state: "pending",
+      assignedUsers: [],
+    },
+    {
+      id: randomInt(100).toString(),
+      name: "Smart Watch",
+      description: "Brand: WatchCo, Features: GPS, Heart-rate monitor",
+      link: url,
+      website: "GadgetStore",
+      price: 199.99,
+      currency: "eur",
+      state: "pending",
+      assignedUsers: [],
+    },
+  ];
 
-  return NextResponse.json(mockGift);
+  const selectedGift = mockGifts[randomInt(mockGifts.length)];
+
+  return NextResponse.json(selectedGift);
 }
