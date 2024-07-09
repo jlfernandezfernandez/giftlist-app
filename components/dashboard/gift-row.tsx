@@ -83,14 +83,16 @@ export function GiftRow({
         </div>
       </TableCell>
       <TableCell className="w-1/12 whitespace-nowrap">
-        <Tooltip text={gift.description}>
-          <InfoIcon className="h-4 w-4 ml-2 inline-block" />
-        </Tooltip>
+        {gift.description && (
+          <Tooltip text={gift.description}>
+            <InfoIcon className="h-4 w-4 ml-2 inline-block" />
+          </Tooltip>
+        )}
       </TableCell>
       <TableCell className="w-1/8 whitespace-nowrap">
         <div className="font-medium">
-          {currencySymbol(gift.currency)}
-          {gift.price.toFixed(2)}
+          {gift.currency ? currencySymbol(gift.currency) : "-"}
+          {gift.price ? gift.price.toFixed(2) : "-"}
         </div>
       </TableCell>
       <TableCell className="w-1/6 whitespace-nowrap">

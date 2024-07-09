@@ -26,7 +26,7 @@ const giftLists: GiftList[] = [
       {
         id: "1",
         name: "wireless headphones",
-        description: "High quality Bluetooth headphones",
+        description: null,
         link: "https://www.amazon.es",
         website: "Amazon",
         price: 99.99,
@@ -100,7 +100,7 @@ const giftLists: GiftList[] = [
       {
         id: "4",
         name: "noise-cancelling headphones",
-        description: "High quality noise-cancelling headphones",
+        description: null,
         link: "https://www.amazon.es",
         website: "Amazon",
         price: 149.99,
@@ -231,7 +231,7 @@ const giftLists: GiftList[] = [
       {
         id: "8",
         name: "baby stroller",
-        description: "Lightweight baby stroller",
+        description: null,
         link: "https://www.amazon.es",
         website: "Amazon",
         price: 200.0,
@@ -342,7 +342,7 @@ const giftLists: GiftList[] = [
       {
         id: "10",
         name: "coffee maker",
-        description: "High-end coffee maker",
+        description: null,
         link: "https://www.amazon.es",
         website: "Amazon",
         price: 299.99,
@@ -439,7 +439,7 @@ const giftLists: GiftList[] = [
       {
         id: "11",
         name: "office chair",
-        description: "Ergonomic office chair",
+        description: null,
         link: "https://www.amazon.es",
         website: "Amazon",
         price: 150.0,
@@ -522,15 +522,15 @@ const giftLists: GiftList[] = [
         description: "High-end stand mixer",
         link: "https://www.amazon.es",
         website: "Amazon",
-        price: 350.0,
-        currency: "eur",
+        price: null,
+        currency: null,
         state: "pending",
         assignedUsers: [],
       },
       {
         id: "15",
         name: "baking pans set",
-        description: "Non-stick baking pans set",
+        description: null,
         link: "https://www.amazon.es",
         website: "Amazon",
         price: 60.0,
