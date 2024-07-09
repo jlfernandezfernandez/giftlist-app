@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Gift } from "@/types/gift";
+import { Tooltip } from "@geist-ui/core";
+
 import {
   TrashIcon,
   FilePenIcon,
@@ -12,6 +14,7 @@ import {
   UserPlusIcon,
   UserMinusIcon,
   GlobeIcon,
+  InfoIcon,
 } from "@/components/icons";
 import { InitialAvatar } from "../ui/initial-avatar";
 import { badgeVariant, currencySymbol } from "@/lib/gift-utils";
@@ -66,8 +69,8 @@ export function GiftRow({
   );
 
   return (
-    <TableRow>
-      <TableCell className="w-1/3 whitespace-nowrap">
+    <TableRow className="h-12">
+      <TableCell className="w-1/4 whitespace-nowrap">
         <div className="font-medium truncate">
           <Link
             href={gift.link}
@@ -78,6 +81,11 @@ export function GiftRow({
             {gift.name}
           </Link>
         </div>
+      </TableCell>
+      <TableCell className="w-1/12 whitespace-nowrap">
+        <Tooltip text={gift.description}>
+          <InfoIcon className="h-4 w-4 ml-2 inline-block" />
+        </Tooltip>
       </TableCell>
       <TableCell className="w-1/8 whitespace-nowrap">
         <div className="font-medium">

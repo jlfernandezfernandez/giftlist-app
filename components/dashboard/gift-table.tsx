@@ -88,6 +88,7 @@ export function GiftTable({
             <TableHeader>
               <TableRow>
                 <TableHead>Gift</TableHead>
+                <TableHead>Description</TableHead>
                 <TableHead>Price</TableHead>
                 <TableHead>Website</TableHead>
                 <TableHead>Status</TableHead>
