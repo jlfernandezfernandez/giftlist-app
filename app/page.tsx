@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useAuth } from "@/app/lib/auth";
+import { useAuth } from "@/lib/auth";
 import Spinner from "@/components/ui/spinner";
 
 export default function Home() {

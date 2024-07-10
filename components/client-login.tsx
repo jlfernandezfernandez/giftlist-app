@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "@/app/lib/auth";
+import { useAuth } from "@/lib/auth";
 import LoginForm from "@/components/login-form";
 import Spinner from "@/components/ui/spinner";
 import Link from "next/link";

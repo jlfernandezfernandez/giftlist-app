@@ -1,4 +1,4 @@
-// app/lib/actions.ts
+// lib/firebase_auth.ts
 
 import {
   signInWithEmailAndPassword,

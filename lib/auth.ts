@@ -1,12 +1,11 @@
-// app/lib/auth.ts
 "use client";
 
-import { AuthenticatedUser } from "@/types/authenticated-user";
+import { syncUserWithSupabase } from "@/lib/services/user-service";
 import {
   authenticateWithCredentials,
   authenticateWithGoogle,
   registerWithEmailAndPassword,
-} from "./firebase_auth";
+} from "@/lib/firebase_auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -23,8 +22,11 @@ export function useAuth() {
     setError("");
     setIsPending(true);
     try {
-      await registerWithEmailAndPassword(name, email, password);
-      router.push("/dashboard");
+      const user = await registerWithEmailAndPassword(name, email, password);
+      if (user) {
+        await syncUserWithSupabase(user);
+        router.push("/dashboard");
+      }
     } catch (e) {
       setError((e as Error).message);
     }
@@ -35,11 +37,9 @@ export function useAuth() {
     setError("");
     setIsPending(true);
     try {
-      const user: AuthenticatedUser | null = await authenticateWithCredentials(
-        email,
-        password
-      );
+      const user = await authenticateWithCredentials(email, password);
       if (user) {
+        await syncUserWithSupabase(user);
         console.log("Usuario autenticado:", user.email);
         await fetch("/api/login", {
           headers: {
@@ -60,8 +60,9 @@ export function useAuth() {
     setError("");
     setIsPending(true);
     try {
-      const user: AuthenticatedUser | null = await authenticateWithGoogle();
+      const user = await authenticateWithGoogle();
       if (user) {
+        await syncUserWithSupabase(user);
         console.log("Usuario autenticado con Google:", user.email);
         await fetch("/api/login", {
           headers: {
