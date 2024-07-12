@@ -1,3 +1,4 @@
+// lib/repositories/gift-lists-repository.ts
 import { supabase } from "@/lib/supabase.client";
 import { GiftList } from "@/types/gift-list";
 

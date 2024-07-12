@@ -10,7 +10,7 @@ const giftLists: GiftList[] = [
     privacy: "private",
     users: [
       {
-        userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+        userId: "{userId}",
         role: "owner",
         displayName: "Jordi",
         email: "jordi@example.com",
@@ -67,7 +67,7 @@ const giftLists: GiftList[] = [
         email: "aldara@example.com",
       },
       {
-        userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+        userId: "{userId}",
         role: "owner",
         displayName: "Jordi",
         email: "jordi@example.com",
@@ -118,7 +118,7 @@ const giftLists: GiftList[] = [
     privacy: "private",
     users: [
       {
-        userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+        userId: "{userId}",
         role: "owner",
         displayName: "Jordi",
         email: "jordi@example.com",
@@ -164,7 +164,7 @@ const giftLists: GiftList[] = [
         email: "aldara@example.com",
       },
       {
-        userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+        userId: "{userId}",
         role: "guest",
         displayName: "Jordi",
         email: "jordi@example.com",
@@ -210,7 +210,7 @@ const giftLists: GiftList[] = [
         email: "lucia@example.com",
       },
       {
-        userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+        userId: "{userId}",
         role: "guest",
         displayName: "Jordi",
         email: "jordi@example.com",
@@ -332,7 +332,7 @@ const giftLists: GiftList[] = [
         email: "marta@example.com",
       },
       {
-        userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+        userId: "{userId}",
         role: "guest",
         displayName: "Jordi",
         email: "jordi@example.com",
@@ -395,7 +395,7 @@ const giftLists: GiftList[] = [
             email: "marta@example.com",
           },
           {
-            userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+            userId: "{userId}",
             displayName: "Jordi",
             email: "jordi@example.com",
           },
@@ -429,7 +429,7 @@ const giftLists: GiftList[] = [
         email: "lucia@example.com",
       },
       {
-        userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+        userId: "{userId}",
         role: "guest",
         displayName: "Jordi",
         email: "jordi@example.com",
@@ -509,7 +509,7 @@ const giftLists: GiftList[] = [
         email: "lucia@example.com",
       },
       {
-        userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+        userId: "{userId}",
         role: "guest",
         displayName: "Jordi",
         email: "jordi@example.com",
@@ -560,7 +560,7 @@ const giftLists: GiftList[] = [
             email: "lucia@example.com",
           },
           {
-            userId: "sgPjqDaObAWP4DF25QeoTCG45Y32",
+            userId: "{userId}",
             displayName: "Jordi",
             email: "jordi@example.com",
           },
@@ -571,9 +571,38 @@ const giftLists: GiftList[] = [
 ];
 
 export async function GET(request: Request) {
+  const userId = validateUserId(request);
+  console.log(`GET gift lists for user ${userId}`);
+  return NextResponse.json(replaceUserIdInGiftLists(giftLists, userId));
+}
+
+function validateUserId(request: Request): string {
   const url = new URL(request.url);
   const userId = url.searchParams.get("userId");
-  console.log(`GET gift lists for user ${userId}`);
+  if (!userId) {
+    throw { message: "userId is required" };
+  }
+  return userId;
+}
 
-  return NextResponse.json(giftLists);
+function replaceUserIdInGiftLists(
+  giftLists: GiftList[],
+  userId: string
+): GiftList[] {
+  return giftLists.map((giftList) => {
+    return {
+      ...giftList,
+      users: giftList.users.map((user) =>
+        user.userId === "{userId}" ? { ...user, userId } : user
+      ),
+      gifts: giftList.gifts.map((gift) => ({
+        ...gift,
+        assignedUsers: gift.assignedUsers.map((assignedUser) =>
+          assignedUser.userId === "{userId}"
+            ? { ...assignedUser, userId }
+            : assignedUser
+        ),
+      })),
+    };
+  });
 }
