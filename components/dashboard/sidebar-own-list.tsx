@@ -1,26 +1,27 @@
-// components/dashboard/SidebarOwnList.tsx
+// components/dashboard/sidebar-own-list.tsx
+
 import Link from "next/link";
 import { GiftIcon } from "lucide-react";
-import { GiftList } from "@/types/gift-list";
+import { GiftListSummary } from "@/types/gift-list-summary";
+import { useCurrentGiftListId } from "@/hooks/use-current-gift-list";
+import { useOwnGiftList } from "@/hooks/use-own-gift-list";
+import { useUser } from "@/context/user-context";
 
 interface SidebarOwnListProps {
-  giftLists: GiftList[];
-  currentListId: string | null;
-  handleEditList: (listId: string) => void;
+  giftLists: GiftListSummary[];
 }
 
-export function SidebarOwnList({
-  giftLists,
-  currentListId,
-  handleEditList,
-}: SidebarOwnListProps) {
+export function SidebarOwnList({ giftLists }: SidebarOwnListProps) {
+  const { user } = useUser();
+  const currentListId = useCurrentGiftListId();
+  const userGiftLists = useOwnGiftList(giftLists, user);
+
   return (
     <div>
-      {giftLists.map((list) => (
+      {userGiftLists.map((list) => (
         <Link
           key={list.id}
-          href="#"
-          onClick={() => handleEditList(list.id)}
+          href={`/gift-list/${list.id}`}
           className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
             list.id === currentListId ? "bg-muted text-foreground" : ""
           }`}

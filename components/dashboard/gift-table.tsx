@@ -1,5 +1,3 @@
-// app/components/dashboard/gift-table.tsx
-
 import {
   Card,
   CardHeader,
@@ -20,42 +18,94 @@ import { GiftList } from "@/types/gift-list";
 import { AICircleIcon, FilePenIcon, ShareIcon } from "../icons";
 import { GiftRow } from "./gift-row";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SmallSpinner from "../ui/small-spinner";
 import { AuthenticatedUser } from "@/types/authenticated-user";
+import Modal from "@/components/ui/modal";
 
 interface GiftTableProps {
-  user: AuthenticatedUser;
-  currentList: GiftList;
-  setShowEditListModal: (show: boolean) => void;
-  handleShareList: () => void;
-  handleRemoveGift: (listId: string, giftId: string) => void;
-  handleAddGift: (url: string) => void;
+  user: AuthenticatedUser | null;
+  currentListId: string;
 }
 
-export function GiftTable({
-  currentList,
-  setShowEditListModal,
-  handleShareList,
-  handleRemoveGift,
-  handleAddGift,
-  user,
-}: GiftTableProps) {
+export function GiftTable({ user, currentListId }: GiftTableProps) {
+  const [currentList, setCurrentList] = useState<GiftList | null>(null);
   const [newGiftUrl, setNewGiftUrl] = useState("");
   const [isAddingGift, setIsAddingGift] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const fetchGiftList = async () => {
+      setIsLoading(true);
+      const response = await fetch(
+        `/api/gift-lists/${user.uid}/${currentListId}`
+      );
+      const data: GiftList = await response.json();
+      setCurrentList(data);
+      setIsLoading(false);
+    };
+
+    fetchGiftList();
+  }, [currentListId, user]);
+
+  const handleAddGift = async (url: string) => {
+    if (!currentList || !url) return;
+    const response = await fetch("/api/get-gift-details", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ url }),
+    });
+
+    const giftDetails = await response.json();
+
+    const newGift = {
+      id: currentList.gifts.length + 1,
+      ...giftDetails,
+    };
+
+    setCurrentList((prevList) => {
+      if (!prevList) return prevList;
+      return {
+        ...prevList,
+        gifts: [...prevList.gifts, newGift],
+      };
+    });
+  };
+
+  const handleRemoveGift = (giftId: string) => {
+    setCurrentList((prevList) => {
+      if (!prevList) return prevList;
+      return {
+        ...prevList,
+        gifts: prevList.gifts.filter((gift) => gift.id !== giftId),
+      };
+    });
+  };
+
+  const handleShareList = () => {
+    console.log("Sharing gift list:", currentList?.name);
+  };
 
   const handleAddGiftClick = async () => {
     setIsAddingGift(true);
-    setTimeout(() => {
-      handleAddGift(newGiftUrl);
-      setIsAddingGift(false);
-      setNewGiftUrl("");
-    }, 2000);
+    await handleAddGift(newGiftUrl);
+    setIsAddingGift(false);
+    setNewGiftUrl("");
   };
 
-  const isOwner = currentList.users.some(
-    (listUser) => listUser.userId === user.uid && listUser.role === "owner"
-  );
+  if (isLoading || !user || !currentList) {
+    return <SmallSpinner />;
+  }
+
+  const isOwner =
+    currentList.users?.some(
+      (listUser) => listUser.userId === user.uid && listUser.role === "owner"
+    ) || false;
 
   return (
     <Card>
@@ -65,12 +115,12 @@ export function GiftTable({
             <CardTitle>{currentList?.name} Gifts</CardTitle>
             <CardDescription>{currentList?.description}</CardDescription>
             <div className="text-sm text-muted-foreground mt-1">
-              {new Date(currentList.date).toLocaleDateString()}
+              {currentList && new Date(currentList.date).toLocaleDateString()}
             </div>
           </div>
           {isOwner && (
             <div className="flex items-center gap-2">
-              <Button onClick={() => setShowEditListModal(true)}>
+              <Button onClick={() => setIsEditModalOpen(true)}>
                 <FilePenIcon className="h-4 w-4 mr-2" />
                 Edit List
               </Button>
@@ -83,7 +133,7 @@ export function GiftTable({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="overflow-x-auto">
+        <div className="overflow-por-auto">
           <Table className="min-w-full">
             <TableHeader>
               <TableRow>
@@ -97,7 +147,7 @@ export function GiftTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentList?.gifts.map((gift) => (
+              {currentList.gifts?.map((gift) => (
                 <GiftRow
                   user={user}
                   key={gift.id}
@@ -132,6 +182,16 @@ export function GiftTable({
             </Button>
           </div>
         </CardFooter>
+      )}
+      {isEditModalOpen && (
+        <Modal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          closeButtonActive
+        >
+          <h2>Edit Gift List</h2>
+          {/* Aquí puedes añadir el contenido de la modal para editar la lista de regalos */}
+        </Modal>
       )}
     </Card>
   );

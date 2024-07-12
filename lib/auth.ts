@@ -1,3 +1,4 @@
+// lib/auth.ts
 "use client";
 
 import { syncUserWithSupabase } from "@/lib/services/user-service";
@@ -25,7 +26,7 @@ export function useAuth() {
       const user = await registerWithEmailAndPassword(name, email, password);
       if (user) {
         await syncUserWithSupabase(user);
-        router.push("/dashboard");
+        router.push("/gift-list/create");
       }
     } catch (e) {
       setError((e as Error).message);
@@ -46,7 +47,7 @@ export function useAuth() {
             Authorization: `Bearer ${user.idToken}`,
           },
         });
-        router.push("/dashboard");
+        router.push("/gift-list/create");
       }
     } catch (error) {
       setError(
@@ -69,7 +70,7 @@ export function useAuth() {
             Authorization: `Bearer ${user.idToken}`,
           },
         });
-        router.push("/dashboard");
+        router.push("/gift-list/create");
       } else {
         setError("Failed to sign in with Google");
       }

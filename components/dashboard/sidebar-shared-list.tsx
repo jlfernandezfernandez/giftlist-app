@@ -1,22 +1,24 @@
-// components/dashboard/SidebarSharedList.tsx
+// components/dashboard/sidebar-shared-list.tsx
+
 import Link from "next/link";
 import { GiftIcon, UserIcon } from "lucide-react";
-import { GiftList } from "@/types/gift-list";
+import { GiftListSummary } from "@/types/gift-list-summary";
+import { useCurrentGiftListId } from "@/hooks/use-current-gift-list";
+import { useSharedGiftList } from "@/hooks/use-shared-gift-list";
+import { useUser } from "@/context/user-context";
 
 interface SidebarSharedListProps {
-  groupedSharedLists: { [key: string]: GiftList[] };
-  currentListId: string | null;
-  handleEditList: (listId: string) => void;
+  giftLists: GiftListSummary[];
 }
 
-export function SidebarSharedList({
-  groupedSharedLists,
-  currentListId,
-  handleEditList,
-}: SidebarSharedListProps) {
+export function SidebarSharedList({ giftLists }: SidebarSharedListProps) {
+  const { user } = useUser();
+  const currentListId = useCurrentGiftListId();
+  const groupedInvitedLists = useSharedGiftList(giftLists, user);
+
   return (
     <div>
-      {Object.keys(groupedSharedLists).map((owner) => (
+      {Object.keys(groupedInvitedLists).map((owner) => (
         <div key={owner} className="mt-4">
           <div className="flex items-center font-medium text-muted-foreground">
             <UserIcon className="h-4 w-4 mr-1 flex-shrink-0" />
@@ -24,11 +26,10 @@ export function SidebarSharedList({
               {owner}
             </span>
           </div>
-          {groupedSharedLists[owner].map((list) => (
+          {groupedInvitedLists[owner].map((list) => (
             <Link
               key={list.id}
-              href="#"
-              onClick={() => handleEditList(list.id)}
+              href={`/gift-list/${list.id}`}
               className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
                 list.id === currentListId ? "bg-muted text-foreground" : ""
               }`}
