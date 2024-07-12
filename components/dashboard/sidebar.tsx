@@ -1,4 +1,3 @@
-// components/dashboard/sidebar.tsx
 "use client";
 
 import { useState } from "react";
@@ -9,19 +8,23 @@ import { SidebarOwnList } from "./sidebar-own-list";
 import { SidebarSharedList } from "./sidebar-shared-list";
 import { useLogout } from "@/hooks/use-logout";
 import { useRouter } from "next/navigation";
-import { useFetchGiftList } from "@/hooks/use-fetch-gift-list";
 import Spinner from "@/components/ui/spinner";
 import { useUser } from "@/context/user-context";
+import { useGiftList } from "@/context/gift-list-context";
 
 export function Sidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { user, isLoadingUser } = useUser();
-  const { giftLists, isLoadingGiftList } = useFetchGiftList(user);
+  const { giftLists, isLoadingGiftList } = useGiftList();
   const router = useRouter();
   const handleLogout = useLogout();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
   };
 
   if (isLoadingUser || isLoadingGiftList) {
@@ -30,8 +33,14 @@ export function Sidebar() {
 
   return (
     <>
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black opacity-5 z-10 md:hidden"
+          onClick={closeSidebar}
+        ></div>
+      )}
       <button
-        className="md:hidden p-4"
+        className="md:hidden p-4 fixed z-20"
         onClick={toggleSidebar}
         aria-label="Toggle sidebar"
       >
