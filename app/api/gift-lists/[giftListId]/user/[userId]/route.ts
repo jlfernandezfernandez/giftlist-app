@@ -1,14 +1,14 @@
-// app/api/gift-lists/[userId]/[giftListId]/route.ts
+// app/api/gift-lists/[giftListId]/user/[userId]/route.ts
 import { NextResponse } from "next/server";
 import {
   giftListsMock,
-  replaceUserIdInGiftList,
   replaceUserIdInGift,
-} from "../../gift-list-mock";
+  replaceUserIdInGiftList,
+} from "../../../gift-list-mock";
 
 export async function GET(
   request: Request,
-  { params }: { params: { userId: string; giftListId: string } }
+  { params }: { params: { giftListId: string; userId: string } }
 ) {
   const { giftListId, userId } = params;
   console.log(`GET gift list ${giftListId} for user ${userId}`);

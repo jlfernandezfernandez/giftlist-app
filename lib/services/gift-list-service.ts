@@ -1,22 +1,19 @@
 // lib/services/gift-lists-service.ts
 import {
-  createGiftListRepo,
   getGiftListsByUserIdRepo,
+  getGiftListByIdRepo,
+  createGiftListRepo,
+  associateUserWithGiftList,
 } from "@/lib/repositories/gift-list-repository";
 import { GiftList } from "@/types/gift-list";
-import { GiftListEntity } from "@/types/gift-list-entity";
-import { mapGiftListEntityToGiftList } from "@/lib/mappers/gift-list-mapper";
+import { GiftListCreate } from "@/types/gift-list-entity";
+import { mapCompleteGiftList } from "../mappers/gift-list-mapper";
 
 export async function getGiftListsByUser(userId: string): Promise<GiftList[]> {
   try {
     const giftListEntities = await getGiftListsByUserIdRepo(userId);
-    const giftLists: GiftList[] = giftListEntities.map((entity) =>
-      mapGiftListEntityToGiftList(
-        entity,
-        userId,
-        "Jordi", // Estos valores deberían provenir de la autenticación del usuario
-        "jordi@example.com"
-      )
+    const giftLists = await Promise.all(
+      giftListEntities.map((entity) => mapCompleteGiftList(entity))
     );
     return giftLists;
   } catch (error) {
@@ -31,28 +28,30 @@ export async function createGiftList(
   description: string,
   date: string
 ): Promise<GiftList> {
-  const newGiftListEntity: GiftListEntity = {
+  const newGiftListEntity: GiftListCreate = {
     name,
     description,
     date,
   };
 
   try {
-    const createdGiftListEntity = await createGiftListRepo(
-      newGiftListEntity,
-      userId
-    );
-
-    const createdGiftList = mapGiftListEntityToGiftList(
-      createdGiftListEntity,
-      userId,
-      "Jordi", // Estos valores deberían provenir de la autenticación del usuario
-      "jordi@example.com"
-    );
-
+    const createdGiftListEntity = await createGiftListRepo(newGiftListEntity);
+    await associateUserWithGiftList(createdGiftListEntity.id, userId);
+    const createdGiftList = await mapCompleteGiftList(createdGiftListEntity);
     return createdGiftList;
   } catch (error) {
     console.error("Error creating gift list:", error);
     throw new Error("Failed to create gift list");
+  }
+}
+
+export async function getGiftListById(giftListId: string): Promise<GiftList> {
+  try {
+    const giftListEntity = await getGiftListByIdRepo(giftListId);
+    const giftList = await mapCompleteGiftList(giftListEntity);
+    return giftList;
+  } catch (error) {
+    console.error("Error getting gift list by ID:", error);
+    throw new Error("Failed to get gift list by ID");
   }
 }

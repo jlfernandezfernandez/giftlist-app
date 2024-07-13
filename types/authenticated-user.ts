@@ -2,7 +2,7 @@
 
 export interface AuthenticatedUser {
   uid: string;
-  displayName: string | null;
+  displayName: string;
   email: string;
   idToken: string;
 }

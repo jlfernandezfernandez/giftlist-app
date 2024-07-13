@@ -40,9 +40,7 @@ export function GiftTable({ user, currentListId }: GiftTableProps) {
 
     const fetchGiftList = async () => {
       setIsLoading(true);
-      const response = await fetch(
-        `/api/gift-lists/${user.uid}/${currentListId}`
-      );
+      const response = await fetch(`/api/gift-lists/${currentListId}`);
       const data: GiftList = await response.json();
       setCurrentList(data);
       setIsLoading(false);
@@ -112,7 +110,7 @@ export function GiftTable({ user, currentListId }: GiftTableProps) {
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>{currentList?.name} Gifts</CardTitle>
+            <CardTitle>{currentList?.name}</CardTitle>
             <CardDescription>{currentList?.description}</CardDescription>
             <div className="text-sm text-muted-foreground mt-1">
               {currentList && new Date(currentList.date).toLocaleDateString()}

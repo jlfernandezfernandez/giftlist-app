@@ -11,7 +11,7 @@ export const useUserGiftLists = (user: AuthenticatedUser | null) => {
     setIsLoading(true);
     console.log("fetching gift lists");
     try {
-      const response = await fetch(`/api/gift-lists/${user.uid}`);
+      const response = await fetch(`/api/gift-lists/user/${user.uid}`);
       const data: GiftListSummary[] = await response.json();
       setGiftLists(data);
     } catch (error) {

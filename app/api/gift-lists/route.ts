@@ -1,6 +1,7 @@
 // app/api/gift-lists/route.ts
 import { createGiftList } from "@/lib/services/gift-list-service";
 import { NextResponse } from "next/server";
+
 export async function POST(request: Request) {
   const { name, description, date, userId } = await request.json();
 
@@ -14,7 +15,7 @@ export async function POST(request: Request) {
   try {
     const newGiftList = await createGiftList(userId, name, description, date);
     return NextResponse.json(newGiftList, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ error: error }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

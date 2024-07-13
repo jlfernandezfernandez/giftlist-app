@@ -5,16 +5,21 @@ import { AuthenticatedUser } from "@/types/authenticated-user";
 
 export const useSharedGiftLists = (
   giftLists: GiftListSummary[],
-  user: AuthenticatedUser | null
+  authenticatedUser: AuthenticatedUser | null
 ) => {
-  if (!user) {
+  if (!authenticatedUser) {
     return {};
   }
 
   return giftLists.reduce((acc, list) => {
-    if (!list.users.some((u) => u.userId === user.uid && u.role === "owner")) {
+    if (
+      !list.users.map(
+        (user) => user.userId === authenticatedUser.uid && user.role === "owner"
+      )
+    ) {
       const owner =
-        list.users.find((u) => u.role === "owner")?.displayName || "Unknown";
+        list.users.find((user) => user.role === "owner")?.displayName ||
+        "Unknown";
       if (!acc[owner]) acc[owner] = [];
       acc[owner].push(list);
     }

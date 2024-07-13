@@ -5,12 +5,14 @@ import { AuthenticatedUser } from "@/types/authenticated-user";
 
 export const useOwnGiftLists = (
   giftLists: GiftListSummary[],
-  user: AuthenticatedUser | null
+  authenticatedUser: AuthenticatedUser | null
 ) => {
-  if (!user) {
+  if (!authenticatedUser) {
     return [];
   }
   return giftLists.filter((list) =>
-    list.users.some((u) => u.userId === user.uid && u.role === "owner")
+    list.users.map(
+      (user) => user.userId === authenticatedUser?.uid && user.role === "owner"
+    )
   );
 };

@@ -1,26 +1,19 @@
 // lib/mappers/gift-list-mapper.ts
 import { GiftList } from "@/types/gift-list";
 import { GiftListEntity } from "@/types/gift-list-entity";
+import {
+  getUsersByGiftListId,
+  getGiftsByGiftListId,
+} from "@/lib/repositories/gift-list-repository";
 
-export function mapGiftListEntityToGiftList(
-  entity: GiftListEntity,
-  userId: string,
-  userName: string,
-  userEmail: string
-): GiftList {
+export async function mapCompleteGiftList(
+  giftListEntity: GiftListEntity
+): Promise<GiftList> {
+  const users = await getUsersByGiftListId(giftListEntity.id);
+  const gifts = await getGiftsByGiftListId(giftListEntity.id);
   return {
-    id: entity.id!,
-    name: entity.name,
-    description: entity.description,
-    date: entity.date,
-    users: [
-      {
-        userId,
-        role: "owner",
-        displayName: userName,
-        email: userEmail,
-      },
-    ],
-    gifts: [],
+    ...giftListEntity,
+    users,
+    gifts,
   };
 }

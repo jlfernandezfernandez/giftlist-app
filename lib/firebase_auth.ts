@@ -39,7 +39,7 @@ export async function authenticateWithGoogle(): Promise<AuthenticatedUser | null
 
     return {
       uid: user.uid,
-      displayName: user.displayName,
+      displayName: user.displayName ?? "",
       email: user.email ?? "",
       idToken: await user.getIdToken(),
     };
