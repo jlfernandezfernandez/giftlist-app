@@ -40,10 +40,18 @@ export function GiftTable({ user, currentListId }: GiftTableProps) {
 
     const fetchGiftList = async () => {
       setIsLoading(true);
-      const response = await fetch(`/api/gift-lists/${currentListId}`);
-      const data: GiftList = await response.json();
-      setCurrentList(data);
-      setIsLoading(false);
+      try {
+        const response = await fetch(`/api/gift-lists/${currentListId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch gift list");
+        }
+        const data: GiftList = await response.json();
+        setCurrentList(data);
+      } catch (error) {
+        console.error("Error fetching gift list:", error);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchGiftList();
@@ -101,7 +109,7 @@ export function GiftTable({ user, currentListId }: GiftTableProps) {
   }
 
   const isOwner =
-    currentList.users?.map(
+    currentList.users?.some(
       (listUser) => listUser.userId === user.uid && listUser.role === "owner"
     ) || false;
 

@@ -89,6 +89,7 @@ export async function getUsersByGiftListId(
 
     return {
       ...user,
+      userId: user.id,
       role: userRole.role_id === 1 ? "owner" : "guest",
     };
   });
