@@ -64,7 +64,7 @@ export function GiftRow({
     // Aquí deberías actualizar el estado del regalo para reflejar el cambio
   };
 
-  const isAssigned = gift.assignedUsers.some(
+  const isAssigned = gift.assignedUsers.map(
     (assignedUser) => assignedUser.userId === user.uid
   );
 

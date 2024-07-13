@@ -27,7 +27,7 @@ export async function GET(
     return NextResponse.json({ error: "Gift list not found" }, { status: 404 });
   }
 
-  const userHasAccess = giftList.users.some(
+  const userHasAccess = giftList.users.map(
     (user: { userId: string }) => user.userId === userId
   );
 

@@ -101,7 +101,7 @@ export function GiftTable({ user, currentListId }: GiftTableProps) {
   }
 
   const isOwner =
-    currentList.users?.some(
+    currentList.users?.map(
       (listUser) => listUser.userId === user.uid && listUser.role === "owner"
     ) || false;
 
