@@ -3,7 +3,7 @@
 import { GiftTable } from "@/components/dashboard/gift-table";
 import Spinner from "@/components/ui/spinner";
 import { useUser } from "@/context/user-context";
-import { useCurrentGiftListId } from "@/hooks/use-current-gift-list";
+import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
 
 export default function GiftListPage() {
   const currentListId = useCurrentGiftListId();

@@ -6,7 +6,6 @@ export const giftListsMock: GiftList[] = [
     name: "birthday",
     description: "Gifts for my birthday",
     date: "2023-06-01",
-    privacy: "private",
     users: [
       {
         userId: "{userId}",
@@ -57,7 +56,6 @@ export const giftListsMock: GiftList[] = [
     name: "wedding",
     description: "Gifts for Aldara and Jordi's wedding",
     date: "2023-09-15",
-    privacy: "private",
     users: [
       {
         userId: "2",
@@ -114,7 +112,6 @@ export const giftListsMock: GiftList[] = [
     name: "housewarming",
     description: "Gifts for Jordi's new house",
     date: "2023-08-01",
-    privacy: "private",
     users: [
       {
         userId: "{userId}",
@@ -154,7 +151,6 @@ export const giftListsMock: GiftList[] = [
     name: "birthday",
     description: "Gifts for Aldara",
     date: "2023-08-01",
-    privacy: "private",
     users: [
       {
         userId: "2",
@@ -188,7 +184,6 @@ export const giftListsMock: GiftList[] = [
     name: "baby shower",
     description: "Gifts for Ana's baby shower",
     date: "2023-10-10",
-    privacy: "private",
     users: [
       {
         userId: "4",
@@ -268,7 +263,6 @@ export const giftListsMock: GiftList[] = [
     name: "housewarming",
     description: "Gifts for Ana's new house",
     date: "2023-11-20",
-    privacy: "private",
     users: [
       {
         userId: "4",
@@ -407,7 +401,6 @@ export const giftListsMock: GiftList[] = [
     name: "office setup",
     description: "Gifts for Ana's new office setup",
     date: "2024-01-15",
-    privacy: "private",
     users: [
       {
         userId: "4",
@@ -487,7 +480,6 @@ export const giftListsMock: GiftList[] = [
     name: "baking essentials",
     description: "Gifts for Ana's baking adventures",
     date: "2024-02-10",
-    privacy: "private",
     users: [
       {
         userId: "4",

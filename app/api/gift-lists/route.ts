@@ -1,7 +1,6 @@
-import { GiftList } from "@/types/gift-list";
-import { randomUUID } from "crypto";
+// app/api/gift-lists/route.ts
+import { createGiftList } from "@/lib/services/gift-list-service";
 import { NextResponse } from "next/server";
-
 export async function POST(request: Request) {
   const { name, description, date, userId } = await request.json();
 
@@ -12,21 +11,10 @@ export async function POST(request: Request) {
     );
   }
 
-  const newGiftList: GiftList = {
-    id: randomUUID(),
-    name,
-    description,
-    date,
-    privacy: "private",
-    users: [
-      {
-        userId,
-        role: "owner",
-        displayName: "Jordi",
-        email: "jordi@example.com",
-      },
-    ],
-    gifts: [],
-  };
-  return NextResponse.json(newGiftList, { status: 201 });
+  try {
+    const newGiftList = await createGiftList(userId, name, description, date);
+    return NextResponse.json(newGiftList, { status: 201 });
+  } catch (error) {
+    return NextResponse.json({ error: error }, { status: 500 });
+  }
 }

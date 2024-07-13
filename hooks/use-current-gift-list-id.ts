@@ -1,4 +1,4 @@
-// hooks/use-current-gift-list.ts
+// hooks/use-current-gift-list-id.ts
 import { usePathname } from "next/navigation";
 
 export const useCurrentGiftListId = () => {

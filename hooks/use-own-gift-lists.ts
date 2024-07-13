@@ -1,9 +1,9 @@
-// hooks/use-own-gift-list.ts
+// hooks/use-own-gift-lists.ts
 
 import { GiftListSummary } from "@/types/gift-list-summary";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 
-export const useOwnGiftList = (
+export const useOwnGiftLists = (
   giftLists: GiftListSummary[],
   user: AuthenticatedUser | null
 ) => {

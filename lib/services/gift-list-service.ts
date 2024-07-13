@@ -1,16 +1,23 @@
 // lib/services/gift-lists-service.ts
 import {
-  getGiftListsByUserId as getGiftListsByUserIdRepo,
-  createGiftList as createGiftListRepo,
-} from "@/lib/repositories/gift-lists-repository";
+  createGiftListRepo,
+  getGiftListsByUserIdRepo,
+} from "@/lib/repositories/gift-list-repository";
 import { GiftList } from "@/types/gift-list";
-import { AuthenticatedUser } from "@/types/authenticated-user";
+import { GiftListEntity } from "@/types/gift-list-entity";
+import { mapGiftListEntityToGiftList } from "@/lib/mappers/gift-list-mapper";
 
-export async function getGiftListsByUser(
-  user: AuthenticatedUser
-): Promise<GiftList[]> {
+export async function getGiftListsByUser(userId: string): Promise<GiftList[]> {
   try {
-    const giftLists = await getGiftListsByUserIdRepo(user.uid);
+    const giftListEntities = await getGiftListsByUserIdRepo(userId);
+    const giftLists: GiftList[] = giftListEntities.map((entity) =>
+      mapGiftListEntityToGiftList(
+        entity,
+        userId,
+        "Jordi", // Estos valores deberían provenir de la autenticación del usuario
+        "jordi@example.com"
+      )
+    );
     return giftLists;
   } catch (error) {
     console.error("Error getting gift lists by user ID:", error);
@@ -19,11 +26,30 @@ export async function getGiftListsByUser(
 }
 
 export async function createGiftList(
-  user: AuthenticatedUser,
-  giftList: GiftList
+  userId: string,
+  name: string,
+  description: string,
+  date: string
 ): Promise<GiftList> {
+  const newGiftListEntity: GiftListEntity = {
+    name,
+    description,
+    date,
+  };
+
   try {
-    const createdGiftList = await createGiftListRepo(giftList, user.uid);
+    const createdGiftListEntity = await createGiftListRepo(
+      newGiftListEntity,
+      userId
+    );
+
+    const createdGiftList = mapGiftListEntityToGiftList(
+      createdGiftListEntity,
+      userId,
+      "Jordi", // Estos valores deberían provenir de la autenticación del usuario
+      "jordi@example.com"
+    );
+
     return createdGiftList;
   } catch (error) {
     console.error("Error creating gift list:", error);

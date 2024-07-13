@@ -1,9 +1,9 @@
-// hooks/use-shared-gift-list.ts
+// hooks/use-shared-gift-lists.ts
 
 import { GiftListSummary } from "@/types/gift-list-summary";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 
-export const useSharedGiftList = (
+export const useSharedGiftLists = (
   giftLists: GiftListSummary[],
   user: AuthenticatedUser | null
 ) => {

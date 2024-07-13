@@ -8,7 +8,6 @@ export interface GiftList {
   name: string;
   description: string;
   date: string;
-  privacy: string;
   users: User[];
   gifts: Gift[];
 }

@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 import { getTokens } from "next-firebase-auth-edge";
 import { cookies } from "next/headers";
 import { clientConfig, serverConfig } from "@/config";
+import { getUserByEmail } from "@/lib/repositories/user-repository";
 
 export async function GET() {
   try {
@@ -20,8 +21,17 @@ export async function GET() {
 
     const decodedToken = tokens?.decodedToken;
 
+    if (!decodedToken.email) {
+      return NextResponse.json(
+        { error: "Email not found in token" },
+        { status: 400 }
+      );
+    }
+
+    const dbUser = await getUserByEmail(decodedToken.email);
+
     const user = {
-      uid: decodedToken.uid,
+      uid: dbUser.id,
       displayName: decodedToken.name,
       email: decodedToken.email || "",
       idToken: tokens.token,

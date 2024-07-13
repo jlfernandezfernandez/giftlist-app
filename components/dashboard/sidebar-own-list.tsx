@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { GiftIcon } from "lucide-react";
 import { GiftListSummary } from "@/types/gift-list-summary";
-import { useCurrentGiftListId } from "@/hooks/use-current-gift-list";
-import { useOwnGiftList } from "@/hooks/use-own-gift-list";
+import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
+import { useOwnGiftLists } from "@/hooks/use-own-gift-lists";
 import { useUser } from "@/context/user-context";
 
 interface SidebarOwnListProps {
@@ -14,7 +14,7 @@ interface SidebarOwnListProps {
 export function SidebarOwnList({ giftLists }: SidebarOwnListProps) {
   const { user } = useUser();
   const currentListId = useCurrentGiftListId();
-  const userGiftLists = useOwnGiftList(giftLists, user);
+  const userGiftLists = useOwnGiftLists(giftLists, user);
 
   return (
     <div>

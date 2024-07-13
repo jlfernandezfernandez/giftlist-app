@@ -2,10 +2,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useUser } from "@/context/user-context";
 import {
   CardHeader,
   CardTitle,
@@ -14,39 +12,17 @@ import {
   CardFooter,
   Card,
 } from "@/components/ui/card";
+import { useCreateGiftList } from "@/hooks/use-create-gift-list";
 
 export default function CreateGiftListPage() {
-  const { user } = useUser();
+  const { createGiftList, isLoading } = useCreateGiftList();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-
-    const response = await fetch("/api/gift-lists", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        description,
-        date,
-        userId: user?.uid,
-      }),
-    });
-
-    if (response.ok) {
-      const giftList = await response.json();
-      router.push(`/gift-list/${giftList.id}`);
-    } else {
-      setIsLoading(false);
-      alert("Failed to create gift list");
-    }
+    createGiftList(name, description, date);
   };
 
   return (

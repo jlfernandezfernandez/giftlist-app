@@ -1,10 +1,10 @@
-// lib/repositories/gift-lists-repository.ts
+// lib/repositories/gift-list-repository.ts
 import { supabase } from "@/lib/supabase.client";
-import { GiftList } from "@/types/gift-list";
+import { GiftListEntity } from "@/types/gift-list-entity";
 
-export async function getGiftListsByUserId(
+export async function getGiftListsByUserIdRepo(
   userId: string
-): Promise<GiftList[]> {
+): Promise<GiftListEntity[]> {
   const { data: giftListUsers, error: giftListUsersError } = await supabase
     .from("giftlistusers")
     .select("giftListId")
@@ -30,13 +30,13 @@ export async function getGiftListsByUserId(
     throw new Error(`Error fetching gift lists: ${error.message}`);
   }
 
-  return data as GiftList[];
+  return data as GiftListEntity[];
 }
 
-export async function createGiftList(
-  giftList: GiftList,
+export async function createGiftListRepo(
+  giftList: Omit<GiftListEntity, "id">,
   userId: string
-): Promise<GiftList> {
+): Promise<GiftListEntity> {
   const { data: giftListData, error: giftListError } = await supabase
     .from("giftlists")
     .insert([giftList])
@@ -48,7 +48,7 @@ export async function createGiftList(
 
   const { error: giftListUserError } = await supabase
     .from("giftlistusers")
-    .insert([{ giftListId: giftListData[0].id, userId, roleId: "owner" }]);
+    .insert([{ giftlist_id: giftListData[0].id, user_id: userId, role_id: 1 }]);
 
   if (giftListUserError) {
     throw new Error(

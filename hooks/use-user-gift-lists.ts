@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { GiftListSummary } from "@/types/gift-list-summary";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 
-export const useFetchGiftList = (user: AuthenticatedUser | null) => {
+export const useUserGiftLists = (user: AuthenticatedUser | null) => {
   const [giftLists, setGiftLists] = useState<GiftListSummary[]>([]);
   const [isLoadingGiftList, setIsLoading] = useState(false);
 

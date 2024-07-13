@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { GiftIcon, UserIcon } from "lucide-react";
 import { GiftListSummary } from "@/types/gift-list-summary";
-import { useCurrentGiftListId } from "@/hooks/use-current-gift-list";
-import { useSharedGiftList } from "@/hooks/use-shared-gift-list";
+import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
+import { useSharedGiftLists } from "@/hooks/use-shared-gift-lists";
 import { useUser } from "@/context/user-context";
 
 interface SidebarSharedListProps {
@@ -14,7 +14,7 @@ interface SidebarSharedListProps {
 export function SidebarSharedList({ giftLists }: SidebarSharedListProps) {
   const { user } = useUser();
   const currentListId = useCurrentGiftListId();
-  const groupedInvitedLists = useSharedGiftList(giftLists, user);
+  const groupedInvitedLists = useSharedGiftLists(giftLists, user);
 
   return (
     <div>

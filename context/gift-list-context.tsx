@@ -1,9 +1,10 @@
+// context/gift-list-context.tsx
 "use client";
 
 import { createContext, useContext, ReactNode, useEffect } from "react";
 import { GiftListSummary } from "@/types/gift-list-summary";
 import { useUser } from "@/context/user-context";
-import { useFetchGiftList } from "@/hooks/use-fetch-gift-list";
+import { useUserGiftLists } from "@/hooks/use-user-gift-lists";
 
 interface GiftListContextProps {
   giftLists: GiftListSummary[];
@@ -20,7 +21,7 @@ const GiftListContext = createContext<GiftListContextProps>({
 export const GiftListProvider = ({ children }: { children: ReactNode }) => {
   const { user } = useUser();
   const { giftLists, isLoadingGiftList, updateGiftList } =
-    useFetchGiftList(user);
+    useUserGiftLists(user);
 
   useEffect(() => {
     if (user) {
