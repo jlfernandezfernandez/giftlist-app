@@ -1,7 +1,5 @@
-// hooks/use-own-gift-lists.ts
-
-import { GiftListSummary } from "@/types/gift-list-summary";
 import { AuthenticatedUser } from "@/types/authenticated-user";
+import { GiftListSummary } from "@/types/gift-list-summary";
 
 export const useOwnGiftLists = (
   giftLists: GiftListSummary[],
@@ -10,9 +8,10 @@ export const useOwnGiftLists = (
   if (!authenticatedUser) {
     return [];
   }
+
   return giftLists.filter((list) =>
-    list.users.map(
-      (user) => user.userId === authenticatedUser?.uid && user.role === "owner"
+    list.users.some(
+      (user) => user.userId === authenticatedUser.uid && user.role === "owner"
     )
   );
 };

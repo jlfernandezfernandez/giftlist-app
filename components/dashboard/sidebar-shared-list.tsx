@@ -16,6 +16,11 @@ export function SidebarSharedList({ giftLists }: SidebarSharedListProps) {
   const currentListId = useCurrentGiftListId();
   const groupedInvitedLists = useSharedGiftLists(giftLists, user);
 
+  const getDisplayName = (fullName: string) => {
+    const words = fullName.split(" ");
+    return words.length > 2 ? words.slice(0, 2).join(" ") : fullName;
+  };
+
   return (
     <div>
       {Object.keys(groupedInvitedLists).map((owner) => (
@@ -23,7 +28,7 @@ export function SidebarSharedList({ giftLists }: SidebarSharedListProps) {
           <div className="flex items-center font-medium text-muted-foreground">
             <UserIcon className="h-4 w-4 mr-1 flex-shrink-0" />
             <span className="truncate" title={owner}>
-              {owner}
+              {getDisplayName(owner)}
             </span>
           </div>
           {groupedInvitedLists[owner].map((list) => (

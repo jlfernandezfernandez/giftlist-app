@@ -20,6 +20,7 @@ import { InitialAvatar } from "../ui/initial-avatar";
 import { badgeVariant, currencySymbol } from "@/lib/gift-utils";
 import { useState } from "react";
 import { AuthenticatedUser } from "@/types/authenticated-user";
+import { User } from "@/types/user";
 
 interface GiftRowProps {
   user: AuthenticatedUser;
@@ -103,8 +104,8 @@ export function GiftRow({
       </TableCell>
       <TableCell className="w-1/4 whitespace-nowrap">
         <div className="flex items-center gap-2">
-          {gift.assignedUsers.map((assignee) => (
-            <InitialAvatar key={assignee.userId} name={assignee.displayName} />
+          {gift.assignedUsers.map((user: User) => (
+            <InitialAvatar key={user.userId} name={user.name} />
           ))}
         </div>
       </TableCell>

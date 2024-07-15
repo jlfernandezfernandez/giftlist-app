@@ -2,7 +2,7 @@
 
 export interface User {
   userId: string;
-  displayName: string;
+  name: string;
   email: string;
   role?: string; // Opcional, solo se usará en `GiftList`
 }

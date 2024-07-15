@@ -16,13 +16,13 @@ export async function authenticateWithCredentials(
 ): Promise<AuthenticatedUser | null> {
   try {
     const credential = await signInWithEmailAndPassword(auth, email, password);
-    const user = credential.user;
+    const authenticatedUser = credential.user;
 
     return {
-      uid: user.uid,
-      displayName: user.displayName ?? "", // Add null check and provide a default value
-      email: user.email ?? "",
-      idToken: await user.getIdToken(),
+      uid: authenticatedUser.uid,
+      displayName: authenticatedUser.displayName ?? "", // Add null check and provide a default value
+      email: authenticatedUser.email ?? "",
+      idToken: await authenticatedUser.getIdToken(),
     };
   } catch (error) {
     console.error("Error al iniciar sesión con correo/contraseña: ", error);
@@ -35,13 +35,13 @@ export async function authenticateWithGoogle(): Promise<AuthenticatedUser | null
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
 
-    const user = result.user;
+    const authenticatedUser = result.user;
 
     return {
-      uid: user.uid,
-      displayName: user.displayName ?? "",
-      email: user.email ?? "",
-      idToken: await user.getIdToken(),
+      uid: authenticatedUser.uid,
+      displayName: authenticatedUser.displayName ?? "",
+      email: authenticatedUser.email ?? "",
+      idToken: await authenticatedUser.getIdToken(),
     };
   } catch (error) {
     console.error("Error al iniciar sesión con Google: ", error);
@@ -60,17 +60,17 @@ export async function registerWithEmailAndPassword(
       email,
       password
     );
-    const user = credential.user;
+    const authenticatedUser = credential.user;
 
-    await updateProfile(user, {
+    await updateProfile(authenticatedUser, {
       displayName: name,
     });
 
     return {
-      uid: user.uid,
-      displayName: user.displayName ?? "",
-      email: user.email ?? "",
-      idToken: await user.getIdToken(),
+      uid: authenticatedUser.uid,
+      displayName: authenticatedUser.displayName ?? "",
+      email: authenticatedUser.email ?? "",
+      idToken: await authenticatedUser.getIdToken(),
     };
   } catch (error) {
     console.error("Error al registrar usuario: ", error);

@@ -10,13 +10,13 @@ export const giftListsMock: GiftList[] = [
       {
         userId: "{userId}",
         role: "owner",
-        displayName: "Jordi",
+        name: "Jordi",
         email: "jordi@example.com",
       },
       {
         userId: "2",
         role: "guest",
-        displayName: "Aldara",
+        name: "Aldara",
         email: "aldara@example.com",
       },
     ],
@@ -33,7 +33,7 @@ export const giftListsMock: GiftList[] = [
         assignedUsers: [
           {
             userId: "2",
-            displayName: "Aldara",
+            name: "Aldara",
             email: "aldara@example.com",
           },
         ],
@@ -60,19 +60,19 @@ export const giftListsMock: GiftList[] = [
       {
         userId: "2",
         role: "owner",
-        displayName: "Aldara",
+        name: "Aldara",
         email: "aldara@example.com",
       },
       {
         userId: "{userId}",
         role: "owner",
-        displayName: "Jordi",
+        name: "Jordi",
         email: "jordi@example.com",
       },
       {
         userId: "3",
         role: "guest",
-        displayName: "Juan",
+        name: "Juan",
         email: "juan@example.com",
       },
     ],
@@ -89,7 +89,7 @@ export const giftListsMock: GiftList[] = [
         assignedUsers: [
           {
             userId: "3",
-            displayName: "Juan",
+            name: "Juan",
             email: "juan@example.com",
           },
         ],
@@ -116,13 +116,13 @@ export const giftListsMock: GiftList[] = [
       {
         userId: "{userId}",
         role: "owner",
-        displayName: "Jordi",
+        name: "Jordi",
         email: "jordi@example.com",
       },
       {
         userId: "4",
         role: "guest",
-        displayName: "Ana",
+        name: "Ana",
         email: "ana@example.com",
       },
     ],
@@ -139,7 +139,7 @@ export const giftListsMock: GiftList[] = [
         assignedUsers: [
           {
             userId: "4",
-            displayName: "Ana",
+            name: "Ana",
             email: "ana@example.com",
           },
         ],
@@ -155,13 +155,13 @@ export const giftListsMock: GiftList[] = [
       {
         userId: "2",
         role: "owner",
-        displayName: "Aldara",
+        name: "Aldara",
         email: "aldara@example.com",
       },
       {
         userId: "{userId}",
         role: "guest",
-        displayName: "Jordi",
+        name: "Jordi",
         email: "jordi@example.com",
       },
     ],
@@ -188,25 +188,25 @@ export const giftListsMock: GiftList[] = [
       {
         userId: "4",
         role: "owner",
-        displayName: "Ana",
+        name: "Ana",
         email: "ana@example.com",
       },
       {
         userId: "5",
         role: "guest",
-        displayName: "Carlos",
+        name: "Carlos",
         email: "carlos@example.com",
       },
       {
         userId: "6",
         role: "guest",
-        displayName: "Lucía",
+        name: "Lucía",
         email: "lucia@example.com",
       },
       {
         userId: "{userId}",
         role: "guest",
-        displayName: "Jordi",
+        name: "Jordi",
         email: "jordi@example.com",
       },
     ],
@@ -234,7 +234,7 @@ export const giftListsMock: GiftList[] = [
         assignedUsers: [
           {
             userId: "5",
-            displayName: "Carlos",
+            name: "Carlos",
             email: "carlos@example.com",
           },
         ],
@@ -251,7 +251,7 @@ export const giftListsMock: GiftList[] = [
         assignedUsers: [
           {
             userId: "6",
-            displayName: "Lucía",
+            name: "Lucía",
             email: "lucia@example.com",
           },
         ],
@@ -267,67 +267,67 @@ export const giftListsMock: GiftList[] = [
       {
         userId: "4",
         role: "owner",
-        displayName: "Ana",
+        name: "Ana",
         email: "ana@example.com",
       },
       {
         userId: "5",
         role: "guest",
-        displayName: "Carlos",
+        name: "Carlos",
         email: "carlos@example.com",
       },
       {
         userId: "6",
         role: "guest",
-        displayName: "Lucía",
+        name: "Lucía",
         email: "lucia@example.com",
       },
       {
         userId: "7",
         role: "guest",
-        displayName: "Miguel",
+        name: "Miguel",
         email: "miguel@example.com",
       },
       {
         userId: "8",
         role: "guest",
-        displayName: "Sara",
+        name: "Sara",
         email: "sara@example.com",
       },
       {
         userId: "9",
         role: "guest",
-        displayName: "Laura",
+        name: "Laura",
         email: "laura@example.com",
       },
       {
         userId: "10",
         role: "guest",
-        displayName: "Pablo",
+        name: "Pablo",
         email: "pablo@example.com",
       },
       {
         userId: "11",
         role: "guest",
-        displayName: "Irene",
+        name: "Irene",
         email: "irene@example.com",
       },
       {
         userId: "12",
         role: "guest",
-        displayName: "Alberto",
+        name: "Alberto",
         email: "alberto@example.com",
       },
       {
         userId: "13",
         role: "guest",
-        displayName: "Marta",
+        name: "Marta",
         email: "marta@example.com",
       },
       {
         userId: "{userId}",
         role: "guest",
-        displayName: "Jordi",
+        name: "Jordi",
         email: "jordi@example.com",
       },
     ],
@@ -344,52 +344,52 @@ export const giftListsMock: GiftList[] = [
         assignedUsers: [
           {
             userId: "5",
-            displayName: "Carlos",
+            name: "Carlos",
             email: "carlos@example.com",
           },
           {
             userId: "6",
-            displayName: "Lucía",
+            name: "Lucía",
             email: "lucia@example.com",
           },
           {
             userId: "7",
-            displayName: "Miguel",
+            name: "Miguel",
             email: "miguel@example.com",
           },
           {
             userId: "8",
-            displayName: "Sara",
+            name: "Sara",
             email: "sara@example.com",
           },
           {
             userId: "9",
-            displayName: "Laura",
+            name: "Laura",
             email: "laura@example.com",
           },
           {
             userId: "10",
-            displayName: "Pablo",
+            name: "Pablo",
             email: "pablo@example.com",
           },
           {
             userId: "11",
-            displayName: "Irene",
+            name: "Irene",
             email: "irene@example.com",
           },
           {
             userId: "12",
-            displayName: "Alberto",
+            name: "Alberto",
             email: "alberto@example.com",
           },
           {
             userId: "13",
-            displayName: "Marta",
+            name: "Marta",
             email: "marta@example.com",
           },
           {
             userId: "{userId}",
-            displayName: "Jordi",
+            name: "Jordi",
             email: "jordi@example.com",
           },
         ],
@@ -405,25 +405,25 @@ export const giftListsMock: GiftList[] = [
       {
         userId: "4",
         role: "owner",
-        displayName: "Ana",
+        name: "Ana",
         email: "ana@example.com",
       },
       {
         userId: "5",
         role: "guest",
-        displayName: "Carlos",
+        name: "Carlos",
         email: "carlos@example.com",
       },
       {
         userId: "6",
         role: "guest",
-        displayName: "Lucía",
+        name: "Lucía",
         email: "lucia@example.com",
       },
       {
         userId: "{userId}",
         role: "guest",
-        displayName: "Jordi",
+        name: "Jordi",
         email: "jordi@example.com",
       },
     ],
@@ -451,7 +451,7 @@ export const giftListsMock: GiftList[] = [
         assignedUsers: [
           {
             userId: "5",
-            displayName: "Carlos",
+            name: "Carlos",
             email: "carlos@example.com",
           },
         ],
@@ -468,7 +468,7 @@ export const giftListsMock: GiftList[] = [
         assignedUsers: [
           {
             userId: "6",
-            displayName: "Lucía",
+            name: "Lucía",
             email: "lucia@example.com",
           },
         ],
@@ -484,25 +484,25 @@ export const giftListsMock: GiftList[] = [
       {
         userId: "4",
         role: "owner",
-        displayName: "Ana",
+        name: "Ana",
         email: "ana@example.com",
       },
       {
         userId: "5",
         role: "guest",
-        displayName: "Carlos",
+        name: "Carlos",
         email: "carlos@example.com",
       },
       {
         userId: "6",
         role: "guest",
-        displayName: "Lucía",
+        name: "Lucía",
         email: "lucia@example.com",
       },
       {
         userId: "{userId}",
         role: "guest",
-        displayName: "Jordi",
+        name: "Jordi",
         email: "jordi@example.com",
       },
     ],
@@ -530,7 +530,7 @@ export const giftListsMock: GiftList[] = [
         assignedUsers: [
           {
             userId: "5",
-            displayName: "Carlos",
+            name: "Carlos",
             email: "carlos@example.com",
           },
         ],
@@ -547,12 +547,12 @@ export const giftListsMock: GiftList[] = [
         assignedUsers: [
           {
             userId: "6",
-            displayName: "Lucía",
+            name: "Lucía",
             email: "lucia@example.com",
           },
           {
             userId: "{userId}",
-            displayName: "Jordi",
+            name: "Jordi",
             email: "jordi@example.com",
           },
         ],

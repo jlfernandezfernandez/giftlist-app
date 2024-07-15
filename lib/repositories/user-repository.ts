@@ -17,13 +17,13 @@ export async function getUserByEmail(email: string) {
   return data;
 }
 
-export async function createUser(user: AuthenticatedUser) {
+export async function createUser(authenticatedUser: AuthenticatedUser) {
   const { data, error } = await supabase
     .from("users")
     .insert({
-      id: user.uid,
-      name: user.displayName,
-      email: user.email,
+      id: authenticatedUser.uid,
+      name: authenticatedUser.displayName,
+      email: authenticatedUser.email,
     })
     .select();
 
@@ -35,13 +35,13 @@ export async function createUser(user: AuthenticatedUser) {
   return data;
 }
 
-export async function updateUser(user: AuthenticatedUser) {
+export async function updateUser(authenticatedUser: AuthenticatedUser) {
   const { data, error } = await supabase
     .from("users")
     .update({
-      name: user.displayName,
+      name: authenticatedUser.displayName,
     })
-    .eq("email", user.email)
+    .eq("email", authenticatedUser.email)
     .select();
 
   if (error) {

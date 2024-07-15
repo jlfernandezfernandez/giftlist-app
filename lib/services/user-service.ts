@@ -5,19 +5,19 @@ import {
   updateUser,
 } from "@/lib/repositories/user-repository";
 
-export async function syncUserWithSupabase(user: AuthenticatedUser) {
+export async function syncUserWithSupabase(authenticatedUser: AuthenticatedUser) {
   try {
-    const existingUser = await getUserByEmail(user.email);
+    const existingUser = await getUserByEmail(authenticatedUser.email);
     if (existingUser) {
       // Update user if necessary
-      if (existingUser.name !== user.displayName) {
-        const updatedUser = await updateUser(user);
+      if (existingUser.name !== authenticatedUser.displayName) {
+        const updatedUser = await updateUser(authenticatedUser);
         return updatedUser;
       }
       return existingUser;
     } else {
       // Create new user
-      const newUser = await createUser(user);
+      const newUser = await createUser(authenticatedUser);
       return newUser;
     }
   } catch (error) {
