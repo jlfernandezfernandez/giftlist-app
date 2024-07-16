@@ -10,7 +10,7 @@ export async function scrapeProductData(url: string): Promise<Partial<Gift>> {
       description: "Almacenamiento: 128GB, Color: Negro",
       price: 999.99,
       currency: "EUR",
-      website: "Amazon España",
+      website: "Amazon",
       link: url,
     },
     {
@@ -18,7 +18,7 @@ export async function scrapeProductData(url: string): Promise<Partial<Gift>> {
       description: "Tamaño: 45mm, Color: Plata",
       price: 429.99,
       currency: "EUR",
-      website: "Amazon España",
+      website: "Amazon",
       link: url,
     },
     {
@@ -26,7 +26,7 @@ export async function scrapeProductData(url: string): Promise<Partial<Gift>> {
       description: "",
       price: 549.99,
       currency: "EUR",
-      website: "Amazon España",
+      website: "Amazon",
       link: url,
     },
     {
@@ -34,7 +34,7 @@ export async function scrapeProductData(url: string): Promise<Partial<Gift>> {
       description: "Tamaño: 42, Color: Negro",
       price: 129.99,
       currency: "EUR",
-      website: "Amazon España",
+      website: "Amazon",
       link: url,
     },
     {
@@ -42,7 +42,7 @@ export async function scrapeProductData(url: string): Promise<Partial<Gift>> {
       description: "Volumen: 100ml",
       price: 89.99,
       currency: "EUR",
-      website: "Amazon España",
+      website: "Amazon",
       link: url,
     },
     {
@@ -50,7 +50,7 @@ export async function scrapeProductData(url: string): Promise<Partial<Gift>> {
       description: "Almacenamiento: 256GB, Color: Gris Espacial",
       price: 1249.99,
       currency: "EUR",
-      website: "Amazon España",
+      website: "Amazon",
       link: url,
     },
     {
@@ -58,7 +58,7 @@ export async function scrapeProductData(url: string): Promise<Partial<Gift>> {
       description: "",
       price: 279.99,
       currency: "EUR",
-      website: "Amazon España",
+      website: "Amazon",
       link: url,
     },
     {
@@ -66,7 +66,7 @@ export async function scrapeProductData(url: string): Promise<Partial<Gift>> {
       description: "",
       price: 299.99,
       currency: "EUR",
-      website: "Amazon España",
+      website: "Amazon",
       link: url,
     },
     {
@@ -74,7 +74,7 @@ export async function scrapeProductData(url: string): Promise<Partial<Gift>> {
       description: "Tamaño: L, Color: Negro",
       price: 79.99,
       currency: "EUR",
-      website: "Amazon España",
+      website: "Amazon",
       link: url,
     },
     {
@@ -82,7 +82,7 @@ export async function scrapeProductData(url: string): Promise<Partial<Gift>> {
       description: "Volumen: 100ml",
       price: 109.99,
       currency: "EUR",
-      website: "Amazon España",
+      website: "Amazon",
       link: url,
     },
   ];
