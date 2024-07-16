@@ -30,11 +30,11 @@ interface GiftTableProps {
 }
 
 export function GiftTable({ authenticatedUser }: GiftTableProps) {
-  const [newGiftUrl, setNewGiftUrl] = useState("");
-  const [isAddingGift, setIsAddingGift] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [newGiftUrl, setNewGiftUrl] = useState<string>("");
+  const [isAddingGift, setIsAddingGift] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
-  const { currentList, isLoading, refreshGiftList } =
+  const { currentList, setCurrentList, isLoading, refreshGiftList } =
     useGiftList(authenticatedUser);
 
   const handleAddGift = async (url: string) => {
@@ -54,24 +54,25 @@ export function GiftTable({ authenticatedUser }: GiftTableProps) {
     }
 
     const giftDetails = await response.json();
-
-    setCurrentList((prevList) => {
-      if (!prevList) return prevList;
-      return {
-        ...prevList,
-        gifts: [...prevList.gifts, giftDetails],
-      };
-    });
+    await refreshGiftList(); // Refrescar la lista después de añadir un regalo
   };
 
-  const handleRemoveGift = (giftId: string) => {
-    setCurrentList((prevList) => {
-      if (!prevList) return prevList;
-      return {
-        ...prevList,
-        gifts: prevList.gifts.filter((gift) => gift.id !== giftId),
-      };
-    });
+  const handleRemoveGift = async (giftId: string) => {
+    if (!currentList || !giftId) return;
+
+    const response = await fetch(
+      `/api/gift-lists/${currentList.id}/gift/${giftId}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    if (!response.ok) {
+      console.error("Failed to remove gift");
+      return;
+    }
+
+    await refreshGiftList(); // Refrescar la lista después de eliminar un regalo
   };
 
   const handleShareList = () => {

@@ -1,12 +1,13 @@
 // hooks/use-gift-list.ts
-import { useState, useEffect, useCallback } from "react";
+
+import { useState, useCallback, useEffect } from "react";
 import { GiftList } from "@/types/gift-list";
-import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
 import { AuthenticatedUser } from "@/types/authenticated-user";
+import { useCurrentGiftListId } from "./use-current-gift-list-id";
 
 export const useGiftList = (authenticatedUser: AuthenticatedUser | null) => {
   const [currentList, setCurrentList] = useState<GiftList | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const currentListId = useCurrentGiftListId();
 
   const fetchGiftList = useCallback(async () => {
@@ -31,5 +32,7 @@ export const useGiftList = (authenticatedUser: AuthenticatedUser | null) => {
     fetchGiftList();
   }, [fetchGiftList]);
 
-  return { currentList, isLoading, refreshGiftList: fetchGiftList };
+  const refreshGiftList = fetchGiftList;
+
+  return { currentList, setCurrentList, isLoading, refreshGiftList };
 };
