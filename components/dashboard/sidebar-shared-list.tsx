@@ -38,7 +38,6 @@ export function SidebarSharedList({ giftLists }: SidebarSharedListProps) {
               className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
                 list.id === currentListId ? "bg-muted text-foreground" : ""
               }`}
-              prefetch={false}
             >
               <GiftIcon className="h-4 w-4 mr-1 flex-shrink-0" />
               <span className="truncate" title={list.name}>
