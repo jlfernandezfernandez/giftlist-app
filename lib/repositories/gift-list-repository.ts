@@ -97,21 +97,6 @@ export async function getUsersByGiftListId(
   return usersWithRoles;
 }
 
-export async function getGiftsByGiftListId(
-  giftListId: string
-): Promise<Gift[]> {
-  const { data, error } = await supabase
-    .from("gifts")
-    .select("*")
-    .eq("giftlist_id", giftListId);
-
-  if (error) {
-    throw new Error(`Error fetching gifts for gift list: ${error.message}`);
-  }
-
-  return data as Gift[];
-}
-
 export async function createGiftListRepo(
   giftList: GiftListCreate
 ): Promise<GiftListEntity> {

@@ -21,9 +21,10 @@ import { badgeVariant, currencySymbol } from "@/lib/gift-utils";
 import { useState } from "react";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { User } from "@/types/user";
+import { notFound } from "next/navigation";
 
 interface GiftRowProps {
-  user: AuthenticatedUser;
+  authenticatedUser: AuthenticatedUser;
   gift: Gift;
   listId: string;
   handleRemoveGift: (listId: string, giftId: string) => void;
@@ -31,7 +32,7 @@ interface GiftRowProps {
 }
 
 export function GiftRow({
-  user,
+  authenticatedUser,
   gift,
   listId,
   handleRemoveGift,
@@ -46,7 +47,11 @@ export function GiftRow({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ listId, giftId: gift.id, userId: user.uid }),
+      body: JSON.stringify({
+        listId,
+        giftId: gift.id,
+        userId: authenticatedUser.uid,
+      }),
     });
     setIsAssigning(false);
     // Aquí deberías actualizar el estado del regalo para reflejar el cambio
@@ -59,14 +64,18 @@ export function GiftRow({
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ listId, giftId: gift.id, userId: user.uid }),
+      body: JSON.stringify({
+        listId,
+        giftId: gift.id,
+        userId: authenticatedUser.uid,
+      }),
     });
     setIsAssigning(false);
     // Aquí deberías actualizar el estado del regalo para reflejar el cambio
   };
 
-  const isAssigned = gift.assignedUsers.map(
-    (assignedUser) => assignedUser.userId === user.uid
+  const isAssigned = gift.assignedUsers?.some(
+    (assignedUser) => assignedUser.userId === authenticatedUser.uid
   );
 
   return (
@@ -74,7 +83,7 @@ export function GiftRow({
       <TableCell className="w-1/4 whitespace-nowrap">
         <div className="font-medium truncate">
           <Link
-            href={gift.link}
+            href={gift.link ? gift.link : notFound()}
             target="_blank"
             className="underline"
             prefetch={false}
@@ -100,12 +109,14 @@ export function GiftRow({
         <div className="font-medium truncate">{gift.website}</div>
       </TableCell>
       <TableCell className="w-1/10 whitespace-nowrap">
-        <Badge variant={badgeVariant(gift.state)}>{gift.state}</Badge>
+        <Badge variant={badgeVariant(gift.state ? gift.state : "default")}>
+          {gift.state}
+        </Badge>
       </TableCell>
       <TableCell className="w-1/4 whitespace-nowrap">
         <div className="flex items-center gap-2">
-          {gift.assignedUsers.map((user: User) => (
-            <InitialAvatar key={user.userId} name={user.name} />
+          {gift.assignedUsers?.map((assignedUser: User) => (
+            <InitialAvatar key={assignedUser.userId} name={assignedUser.name} />
           ))}
         </div>
       </TableCell>
@@ -120,7 +131,7 @@ export function GiftRow({
               <Button
                 size="icon"
                 variant="destructive"
-                onClick={() => handleRemoveGift(listId, gift.id)}
+                onClick={() => gift.id && handleRemoveGift(listId, gift.id)}
                 title="Delete Gift"
               >
                 <TrashIcon className="h-4 w-4" />
@@ -132,7 +143,9 @@ export function GiftRow({
               {gift.state === "bought" ? (
                 <Button
                   size="icon"
-                  onClick={() => window.open(gift.link, "_blank")}
+                  onClick={() =>
+                    window.open(gift.link ? gift.link : "", "_blank")
+                  }
                   title="View Product"
                 >
                   <GlobeIcon className="h-4 w-4" />
@@ -141,7 +154,9 @@ export function GiftRow({
               ) : (
                 <Button
                   size="icon"
-                  onClick={() => window.open(gift.link, "_blank")}
+                  onClick={() =>
+                    window.open(gift.link ? gift.link : "", "_blank")
+                  }
                   title="Buy Gift"
                 >
                   <ShoppingCartIcon className="h-4 w-4" />

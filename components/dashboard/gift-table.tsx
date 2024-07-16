@@ -24,11 +24,14 @@ import { AuthenticatedUser } from "@/types/authenticated-user";
 import Modal from "@/components/ui/modal";
 
 interface GiftTableProps {
-  user: AuthenticatedUser | null;
+  authenticatedUser: AuthenticatedUser | null;
   currentListId: string;
 }
 
-export function GiftTable({ user, currentListId }: GiftTableProps) {
+export function GiftTable({
+  authenticatedUser,
+  currentListId,
+}: GiftTableProps) {
   const [currentList, setCurrentList] = useState<GiftList | null>(null);
   const [newGiftUrl, setNewGiftUrl] = useState("");
   const [isAddingGift, setIsAddingGift] = useState(false);
@@ -36,7 +39,7 @@ export function GiftTable({ user, currentListId }: GiftTableProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!user) return;
+    if (!authenticatedUser) return;
 
     const fetchGiftList = async () => {
       setIsLoading(true);
@@ -55,30 +58,32 @@ export function GiftTable({ user, currentListId }: GiftTableProps) {
     };
 
     fetchGiftList();
-  }, [currentListId, user]);
+  }, [currentListId, authenticatedUser]);
 
   const handleAddGift = async (url: string) => {
     if (!currentList || !url) return;
-    const response = await fetch("/api/get-gift-details", {
+
+    const response = await fetch(`/api/gift-lists/${currentList.id}/gift`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ url }),
+      body: JSON.stringify({ url, userId: authenticatedUser?.uid }),
     });
 
-    const giftDetails = await response.json();
+    if (!response.ok) {
+      // Manejar error
+      console.error("Failed to add gift");
+      return;
+    }
 
-    const newGift = {
-      id: currentList.gifts.length + 1,
-      ...giftDetails,
-    };
+    const giftDetails = await response.json();
 
     setCurrentList((prevList) => {
       if (!prevList) return prevList;
       return {
         ...prevList,
-        gifts: [...prevList.gifts, newGift],
+        gifts: [...prevList.gifts, giftDetails],
       };
     });
   };
@@ -104,13 +109,14 @@ export function GiftTable({ user, currentListId }: GiftTableProps) {
     setNewGiftUrl("");
   };
 
-  if (isLoading || !user || !currentList) {
+  if (isLoading || !authenticatedUser || !currentList) {
     return <SmallSpinner />;
   }
 
   const isOwner =
     currentList.users?.some(
-      (listUser) => listUser.userId === user.uid && listUser.role === "owner"
+      (listUser) =>
+        listUser.userId === authenticatedUser.uid && listUser.role === "owner"
     ) || false;
 
   return (
@@ -155,7 +161,7 @@ export function GiftTable({ user, currentListId }: GiftTableProps) {
             <TableBody>
               {currentList.gifts?.map((gift) => (
                 <GiftRow
-                  user={user}
+                  authenticatedUser={authenticatedUser}
                   key={gift.id}
                   gift={gift}
                   listId={currentList.id}

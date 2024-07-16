@@ -1,11 +1,16 @@
-import { supabase } from "@/lib/supabase.client";
-import { Gift } from "@/types/gift";
+// lib/repositories/gift-repository.ts
 
-export async function getGiftsByUserId(userId: string): Promise<Gift[]> {
+import { supabase } from "@/lib/supabase.client";
+import { GiftEntity } from "@/types/gift-entity";
+import { GiftUserEntity } from "@/types/gift-user-entity";
+
+export async function getGiftsByUserIdRepo(
+  userId: string
+): Promise<GiftEntity[]> {
   const { data: giftUsers, error: giftUsersError } = await supabase
     .from("giftusers")
-    .select("giftId")
-    .eq("userId", userId);
+    .select("gift_id")
+    .eq("user_id", userId);
 
   if (giftUsersError) {
     throw new Error(`Error fetching gift users: ${giftUsersError.message}`);
@@ -15,7 +20,7 @@ export async function getGiftsByUserId(userId: string): Promise<Gift[]> {
     return [];
   }
 
-  const giftIds = giftUsers.map((gu: { giftId: string }) => gu.giftId);
+  const giftIds = giftUsers.map((gu: { gift_id: string }) => gu.gift_id);
 
   const { data, error } = await supabase
     .from("gifts")
@@ -26,23 +31,28 @@ export async function getGiftsByUserId(userId: string): Promise<Gift[]> {
     throw new Error(`Error fetching gifts: ${error.message}`);
   }
 
-  return data as Gift[];
+  return data as GiftEntity[];
 }
 
-export async function getGiftsByListId(listId: string): Promise<Gift[]> {
+export async function getGiftsByListIdRepo(
+  listId: string
+): Promise<GiftEntity[]> {
   const { data, error } = await supabase
     .from("gifts")
     .select("*")
-    .eq("giftListId", listId);
+    .eq("giftlist_id", listId);
 
   if (error) {
     throw new Error(`Error fetching gifts for list: ${error.message}`);
   }
 
-  return data as Gift[];
+  return data as GiftEntity[];
 }
 
-export async function createGift(gift: Gift, userId: string): Promise<Gift> {
+export async function createGiftRepo(
+  gift: Omit<GiftEntity, "id">,
+  userId: string
+): Promise<GiftEntity> {
   const { data: giftData, error: giftError } = await supabase
     .from("gifts")
     .insert([gift])
@@ -52,15 +62,59 @@ export async function createGift(gift: Gift, userId: string): Promise<Gift> {
     throw new Error(`Error creating gift: ${giftError.message}`);
   }
 
-  const { error: giftUserError } = await supabase
-    .from("giftusers")
-    .insert([{ giftId: giftData[0].id, userId }]);
+  return giftData[0];
+}
 
-  if (giftUserError) {
-    throw new Error(
-      `Error associating user with gift: ${giftUserError.message}`
-    );
+export async function createGiftUserRepo(
+  giftUser: Omit<GiftUserEntity, "id">
+): Promise<GiftUserEntity> {
+  const { data, error } = await supabase
+    .from("giftusers")
+    .insert([giftUser])
+    .select();
+
+  if (error) {
+    throw new Error(`Error creating gift user: ${error.message}`);
   }
 
-  return giftData[0];
+  return data[0];
+}
+
+export async function updateGiftRepo(
+  giftId: string,
+  gift: Partial<GiftEntity>
+): Promise<GiftEntity> {
+  const { data, error } = await supabase
+    .from("gifts")
+    .update(gift)
+    .eq("id", giftId)
+    .select();
+
+  if (error) {
+    throw new Error(`Error updating gift: ${error.message}`);
+  }
+
+  return data[0] as GiftEntity;
+}
+
+export async function deleteGiftRepo(giftId: string): Promise<void> {
+  const { error } = await supabase.from("gifts").delete().eq("id", giftId);
+
+  if (error) {
+    throw new Error(`Error deleting gift: ${error.message}`);
+  }
+}
+
+export async function getGiftByIdRepo(giftId: string): Promise<GiftEntity> {
+  const { data, error } = await supabase
+    .from("gifts")
+    .select("*")
+    .eq("id", giftId)
+    .single();
+
+  if (error) {
+    throw new Error(`Error fetching gift by ID: ${error.message}`);
+  }
+
+  return data as GiftEntity;
 }

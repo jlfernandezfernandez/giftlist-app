@@ -3,13 +3,14 @@
 import { User } from "./user";
 
 export interface Gift {
-  id: string;
-  name: string;
+  id: string | null;
+  giftListId: string | null;
+  name: string | null;
   description: string | null;
-  link: string;
-  website: string;
+  link: string | null;
+  website: string | null;
   price: number | null;
   currency: string | null;
-  state: string;
+  state: string | null;
   assignedUsers: User[];
 }

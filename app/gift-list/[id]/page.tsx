@@ -16,7 +16,7 @@ export default function GiftListPage() {
   return (
     <div className="flex min-h-screen w-full flex-col md:flex-row">
       <main className="flex-1 p-6 ml-auto">
-        <GiftTable user={user} currentListId={currentListId} />
+        <GiftTable authenticatedUser={user} currentListId={currentListId} />
       </main>
     </div>
   );
