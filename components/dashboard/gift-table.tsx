@@ -16,50 +16,26 @@ import {
   TableBody,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { GiftList } from "@/types/gift-list";
 import { AICircleIcon, FilePenIcon, ShareIcon } from "../icons";
 import { GiftRow } from "./gift-row";
 import { Input } from "@/components/ui/input";
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import SmallSpinner from "../ui/small-spinner";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import Modal from "@/components/ui/modal";
-import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
+import { useGiftList } from "@/hooks/use-gift-list";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
 }
 
 export function GiftTable({ authenticatedUser }: GiftTableProps) {
-  const [currentList, setCurrentList] = useState<GiftList | null>(null);
   const [newGiftUrl, setNewGiftUrl] = useState("");
   const [isAddingGift, setIsAddingGift] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
-  const currentListId = useCurrentGiftListId();
-
-  const fetchGiftList = useCallback(async () => {
-    if (!authenticatedUser || !currentListId) return;
-
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/gift-lists/${currentListId}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch gift list");
-      }
-      const data: GiftList = await response.json();
-      setCurrentList(data);
-    } catch (error) {
-      console.error("Error fetching gift list:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [authenticatedUser, currentListId]);
-
-  useEffect(() => {
-    fetchGiftList();
-  }, [fetchGiftList]);
+  const { currentList, isLoading, refreshGiftList } =
+    useGiftList(authenticatedUser);
 
   const handleAddGift = async (url: string) => {
     if (!currentList || !url) return;
@@ -145,7 +121,7 @@ export function GiftTable({ authenticatedUser }: GiftTableProps) {
         </div>
       </CardHeader>
       <CardContent>
-        <div className="overflow-por-auto">
+        <div className="overflow-auto">
           <Table className="min-w-full">
             <TableHeader>
               <TableRow>
