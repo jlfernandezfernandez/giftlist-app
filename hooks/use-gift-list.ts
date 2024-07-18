@@ -32,7 +32,9 @@ export const useGiftList = (authenticatedUser: AuthenticatedUser | null) => {
     fetchGiftList();
   }, [fetchGiftList]);
 
-  const refreshGiftList = fetchGiftList;
+  const refreshGiftList = useCallback(() => {
+    fetchGiftList();
+  }, [fetchGiftList]);
 
   return { currentList, setCurrentList, isLoading, refreshGiftList };
 };

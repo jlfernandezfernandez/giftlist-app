@@ -24,6 +24,7 @@ import SmallSpinner from "../ui/small-spinner";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import Modal from "@/components/ui/modal";
 import { useGiftList } from "@/hooks/use-gift-list";
+import { useAddGift } from "@/hooks/use-add-gift";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -31,30 +32,18 @@ interface GiftTableProps {
 
 export function GiftTable({ authenticatedUser }: GiftTableProps) {
   const [newGiftUrl, setNewGiftUrl] = useState<string>("");
-  const [isAddingGift, setIsAddingGift] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
-  const { currentList, setCurrentList, isLoading, refreshGiftList } =
+  const { currentList, isLoading, refreshGiftList } =
     useGiftList(authenticatedUser);
+  const { isAddingGift, setIsAddingGift, handleAddGift } =
+    useAddGift(authenticatedUser);
 
-  const handleAddGift = async (url: string) => {
-    if (!currentList || !url) return;
-
-    const response = await fetch(`/api/gift-lists/${currentList.id}/gift`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ url, userId: authenticatedUser?.uid }),
-    });
-
-    if (!response.ok) {
-      console.error("Failed to add gift");
-      return;
-    }
-
-    const giftDetails = await response.json();
-    await refreshGiftList(); // Refrescar la lista después de añadir un regalo
+  const handleAddGiftClick = async () => {
+    setIsAddingGift(true);
+    await handleAddGift(newGiftUrl);
+    setIsAddingGift(false);
+    setNewGiftUrl("");
   };
 
   const handleRemoveGift = async (giftId: string) => {
@@ -77,13 +66,6 @@ export function GiftTable({ authenticatedUser }: GiftTableProps) {
 
   const handleShareList = () => {
     console.log("Sharing gift list:", currentList?.name);
-  };
-
-  const handleAddGiftClick = async () => {
-    setIsAddingGift(true);
-    await handleAddGift(newGiftUrl);
-    setIsAddingGift(false);
-    setNewGiftUrl("");
   };
 
   if (isLoading || !authenticatedUser || !currentList) {
