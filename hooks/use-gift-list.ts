@@ -1,40 +1,23 @@
 // hooks/use-gift-list.ts
 
-import { useState, useCallback, useEffect } from "react";
+import useSWR from "swr";
 import { GiftList } from "@/types/gift-list";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { useCurrentGiftListId } from "./use-current-gift-list-id";
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 export const useGiftList = (authenticatedUser: AuthenticatedUser | null) => {
-  const [currentList, setCurrentList] = useState<GiftList | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const currentListId = useCurrentGiftListId();
+  const { data, error, mutate } = useSWR<GiftList>(
+    authenticatedUser && currentListId
+      ? `/api/gift-lists/${currentListId}`
+      : null,
+    fetcher
+  );
 
-  const fetchGiftList = useCallback(async () => {
-    if (!authenticatedUser || !currentListId) return;
+  const isLoading = !data && !error;
+  const refreshGiftList = mutate;
 
-    setIsLoading(true);
-    try {
-      const response = await fetch(`/api/gift-lists/${currentListId}`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch gift list");
-      }
-      const data: GiftList = await response.json();
-      setCurrentList(data);
-    } catch (error) {
-      console.error("Error fetching gift list:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [authenticatedUser, currentListId]);
-
-  useEffect(() => {
-    fetchGiftList();
-  }, [fetchGiftList]);
-
-  const refreshGiftList = useCallback(() => {
-    fetchGiftList();
-  }, [fetchGiftList]);
-
-  return { currentList, setCurrentList, isLoading, refreshGiftList };
+  return { currentList: data, isLoading, refreshGiftList };
 };
