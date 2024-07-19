@@ -1,6 +1,5 @@
 // components/dashboard/gift-table.tsx
 
-import { useState } from "react";
 import {
   Card,
   CardHeader,
@@ -20,15 +19,18 @@ import { Button } from "@/components/ui/button";
 import { AICircleIcon, FilePenIcon, ShareIcon } from "../icons";
 import { GiftRow } from "./gift-row";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
 import SmallSpinner from "../ui/small-spinner";
 import { AuthenticatedUser } from "@/types/authenticated-user";
-import { Gift } from "@/types/gift";
 import Modal from "@/components/ui/modal";
 import { useAddGift } from "@/hooks/use-add-gift";
+import { GiftList } from "@/types/gift-list";
+import { Gift } from "@/types/gift";
+import { mutate } from "swr";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
-  currentList: any; // Cambiar al tipo correcto
+  currentList: GiftList;
   gifts: Gift[];
   isOwner: boolean;
 }
@@ -36,21 +38,17 @@ interface GiftTableProps {
 export function GiftTable({
   authenticatedUser,
   currentList,
-  gifts: initialGifts,
+  gifts,
   isOwner,
 }: GiftTableProps) {
-  const [gifts, setGifts] = useState<Gift[]>(initialGifts);
   const [newGiftUrl, setNewGiftUrl] = useState<string>("");
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
   const { isAddingGift, handleAddGift } = useAddGift(authenticatedUser);
 
   const handleAddGiftClick = async () => {
-    const newGift = await handleAddGift(currentList.id, newGiftUrl);
-    if (newGift) {
-      setGifts((prevGifts) => [...prevGifts, newGift]);
-      setNewGiftUrl("");
-    }
+    await handleAddGift(currentList.id, newGiftUrl);
+    setNewGiftUrl("");
   };
 
   const handleRemoveGift = async (giftId: string) => {
@@ -68,16 +66,12 @@ export function GiftTable({
       return;
     }
 
-    setGifts((prevGifts) => prevGifts.filter((gift) => gift.id !== giftId));
+    mutate(`/api/gift-lists/${currentList.id}/gift`);
   };
 
   const handleShareList = () => {
     console.log("Sharing gift list:", currentList?.name);
   };
-
-  if (!authenticatedUser || !currentList) {
-    return <SmallSpinner />;
-  }
 
   return (
     <Card>
@@ -119,7 +113,7 @@ export function GiftTable({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {gifts.map((gift) => (
+              {gifts?.map((gift) => (
                 <GiftRow
                   authenticatedUser={authenticatedUser}
                   key={gift.id}

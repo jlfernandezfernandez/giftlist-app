@@ -58,12 +58,12 @@ export function Sidebar() {
       <aside
         className={`bg-background border-r border-border p-4 fixed md:relative z-20 h-full md:h-screen transition-transform transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 w-64 overflow-hidden`}
+        } md:translate-x-0 w-64 overflow-y-auto`}
       >
         <div className="flex flex-col justify-between">
           <div>
             <AvatarSection user={user} />
-            <nav className="flex flex-col gap-4">
+            <nav className="flex flex-col gap-4 mt-4">
               <div>
                 <div className="flex items-center font-medium text-muted-foreground mb-2">
                   Mis Listas
@@ -80,7 +80,7 @@ export function Sidebar() {
                   </Button>
                 </div>
               </div>
-              <div className="space-y-2">
+              <div className="mt-2 space-y-2">
                 {guestGiftLists.map((list) => (
                   <GuestGiftList key={list.id} list={list} />
                 ))}

@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { Gift } from "@/types/gift";
+import { mutate } from "swr";
 
 export const useAddGift = (authenticatedUser: AuthenticatedUser | null) => {
   const [isAddingGift, setIsAddingGift] = useState<boolean>(false);
 
-  const handleAddGift = async (listId: string, link: string): Promise<Gift | null> => {
+  const handleAddGift = async (listId: string, link: string) => {
     setIsAddingGift(true);
 
     const response = await fetch(`/api/gift-lists/${listId}/gift`, {
@@ -25,12 +26,14 @@ export const useAddGift = (authenticatedUser: AuthenticatedUser | null) => {
     if (!response.ok) {
       console.error("Failed to add gift");
       setIsAddingGift(false);
-      return null;
+      return;
     }
 
     const gift: Gift = await response.json();
     setIsAddingGift(false);
-    return gift;
+
+    // Forzar actualización de la lista de regalos
+    mutate(`/api/gift-lists/${listId}/gift`);
   };
 
   return {
