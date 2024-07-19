@@ -6,7 +6,7 @@ import { useGiftList } from "@/context/gift-list-context";
 import { useUser } from "@/context/user-context";
 
 export const useCreateGiftList = () => {
-  const { updateGiftList } = useGiftList();
+  const { mutate } = useGiftList();
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -33,7 +33,7 @@ export const useCreateGiftList = () => {
 
     if (response.ok) {
       const giftList: GiftList = await response.json();
-      updateGiftList(); // Llamamos a updateGiftList para actualizar el contexto
+      mutate(); // Llamamos a mutate para actualizar el contexto
       router.push(`/gift-list/${giftList.id}`);
     } else {
       setIsLoading(false);

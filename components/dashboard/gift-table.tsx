@@ -1,5 +1,6 @@
 // components/dashboard/gift-table.tsx
 
+import { useState } from "react";
 import {
   Card,
   CardHeader,
@@ -19,31 +20,37 @@ import { Button } from "@/components/ui/button";
 import { AICircleIcon, FilePenIcon, ShareIcon } from "../icons";
 import { GiftRow } from "./gift-row";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
 import SmallSpinner from "../ui/small-spinner";
 import { AuthenticatedUser } from "@/types/authenticated-user";
+import { Gift } from "@/types/gift";
 import Modal from "@/components/ui/modal";
-import { useGiftList } from "@/hooks/use-gift-list";
 import { useAddGift } from "@/hooks/use-add-gift";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
+  currentList: any; // Cambiar al tipo correcto
+  gifts: Gift[];
+  isOwner: boolean;
 }
 
-export function GiftTable({ authenticatedUser }: GiftTableProps) {
+export function GiftTable({
+  authenticatedUser,
+  currentList,
+  gifts: initialGifts,
+  isOwner,
+}: GiftTableProps) {
+  const [gifts, setGifts] = useState<Gift[]>(initialGifts);
   const [newGiftUrl, setNewGiftUrl] = useState<string>("");
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
-  const { currentList, isLoading, refreshGiftList } =
-    useGiftList(authenticatedUser);
-  const { isAddingGift, setIsAddingGift, handleAddGift } =
-    useAddGift(authenticatedUser);
+  const { isAddingGift, handleAddGift } = useAddGift(authenticatedUser);
 
   const handleAddGiftClick = async () => {
-    setIsAddingGift(true);
-    await handleAddGift(newGiftUrl);
-    setIsAddingGift(false);
-    setNewGiftUrl("");
+    const newGift = await handleAddGift(currentList.id, newGiftUrl);
+    if (newGift) {
+      setGifts((prevGifts) => [...prevGifts, newGift]);
+      setNewGiftUrl("");
+    }
   };
 
   const handleRemoveGift = async (giftId: string) => {
@@ -61,22 +68,16 @@ export function GiftTable({ authenticatedUser }: GiftTableProps) {
       return;
     }
 
-    await refreshGiftList(); // Refrescar la lista después de eliminar un regalo
+    setGifts((prevGifts) => prevGifts.filter((gift) => gift.id !== giftId));
   };
 
   const handleShareList = () => {
     console.log("Sharing gift list:", currentList?.name);
   };
 
-  if (isLoading || !authenticatedUser || !currentList) {
+  if (!authenticatedUser || !currentList) {
     return <SmallSpinner />;
   }
-
-  const isOwner =
-    currentList.users?.some(
-      (listUser) =>
-        listUser.userId === authenticatedUser.uid && listUser.role === "owner"
-    ) || false;
 
   return (
     <Card>
@@ -118,7 +119,7 @@ export function GiftTable({ authenticatedUser }: GiftTableProps) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentList.gifts?.map((gift) => (
+              {gifts.map((gift) => (
                 <GiftRow
                   authenticatedUser={authenticatedUser}
                   key={gift.id}

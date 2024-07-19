@@ -5,5 +5,5 @@ import { useMemo } from "react";
 
 export const useCurrentGiftListId = () => {
   const pathname = usePathname();
-  return useMemo(() => pathname.split("/")[2] || null, [pathname]);
+  return useMemo(() => pathname.split("/")[2], [pathname]);
 };

@@ -2,8 +2,8 @@
 
 import { getAffiliateLink } from "@/lib/services/affiliate-service";
 import { scrapeProductData } from "@/lib/services/scraper-service";
-import { addGift } from "@/lib/services/gift-service";
 import { Gift } from "@/types/gift";
+import { createGift } from "./gift-service";
 
 export async function processGift(
   url: string,
@@ -14,18 +14,15 @@ export async function processGift(
   const productData = await scrapeProductData(url);
 
   const newGift: Gift = {
-    id: "",
-    name: productData.name ?? null,
-    description: productData.description ?? null,
     giftListId,
+    name: productData.name ?? undefined,
+    description: productData.description ?? undefined,
     link: affiliateLink,
-    website: productData.website ?? null,
-    price: productData.price ?? null,
-    currency: productData.currency ?? null,
-    state: "pending", // default state
-    assignedUsers: [],
+    website: productData.website ?? undefined,
+    price: productData.price ?? undefined,
+    currency: productData.currency ?? undefined,
   };
 
-  const createdGift = await addGift(newGift, userId);
+  const createdGift = await createGift(newGift);
   return createdGift;
 }

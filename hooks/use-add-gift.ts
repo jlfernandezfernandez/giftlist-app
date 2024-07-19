@@ -2,34 +2,39 @@
 
 import { useState } from "react";
 import { AuthenticatedUser } from "@/types/authenticated-user";
-import { useGiftList } from "@/hooks/use-gift-list";
+import { Gift } from "@/types/gift";
 
 export const useAddGift = (authenticatedUser: AuthenticatedUser | null) => {
   const [isAddingGift, setIsAddingGift] = useState<boolean>(false);
-  const { currentList, refreshGiftList } = useGiftList(authenticatedUser);
 
-  const handleAddGift = async (url: string) => {
-    if (!currentList || !url) return;
+  const handleAddGift = async (listId: string, link: string): Promise<Gift | null> => {
+    setIsAddingGift(true);
 
-    const response = await fetch(`/api/gift-lists/${currentList.id}/gift`, {
+    const response = await fetch(`/api/gift-lists/${listId}/gift`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ url, userId: authenticatedUser?.uid }),
+      body: JSON.stringify({
+        giftListId: listId,
+        link,
+        userId: authenticatedUser?.uid,
+      }),
     });
 
     if (!response.ok) {
       console.error("Failed to add gift");
-      return;
+      setIsAddingGift(false);
+      return null;
     }
 
-    await refreshGiftList(); // Refrescar la lista después de añadir un regalo
+    const gift: Gift = await response.json();
+    setIsAddingGift(false);
+    return gift;
   };
 
   return {
     isAddingGift,
-    setIsAddingGift,
     handleAddGift,
   };
 };

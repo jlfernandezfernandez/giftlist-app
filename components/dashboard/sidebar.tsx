@@ -1,16 +1,18 @@
+// components/dashboard/sidebar.tsx
+
 "use client";
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AvatarSection } from "./avatar-section";
 import { MenuIcon, XIcon } from "lucide-react";
-import { SidebarOwnList } from "./sidebar-own-list";
-import { SidebarSharedList } from "./sidebar-shared-list";
 import { useLogout } from "@/hooks/use-logout";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/ui/spinner";
 import { useUser } from "@/context/user-context";
 import { useGiftList } from "@/context/gift-list-context";
+import { OwnGiftList } from "./sidebar-own-gift-list";
+import { GuestGiftList } from "./sidebar-guest-gift-list";
 
 export function Sidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -30,6 +32,9 @@ export function Sidebar() {
   if (isLoadingUser || isLoadingGiftList) {
     return <Spinner />;
   }
+
+  const ownGiftLists = giftLists.filter((list) => list.isOwner);
+  const guestGiftLists = giftLists.filter((list) => !list.isOwner);
 
   return (
     <>
@@ -63,15 +68,23 @@ export function Sidebar() {
                 <div className="flex items-center font-medium text-muted-foreground mb-2">
                   Mis Listas
                 </div>
-                <SidebarOwnList giftLists={giftLists} />
-                <Button
-                  className="mt-2 w-full"
-                  onClick={() => router.push("/gift-list/create")}
-                >
-                  Add Gift List
-                </Button>
+                <div className="space-y-2">
+                  {ownGiftLists.map((list) => (
+                    <OwnGiftList key={list.id} list={list} />
+                  ))}
+                  <Button
+                    className="mt-2 w-full"
+                    onClick={() => router.push("/gift-list/create")}
+                  >
+                    Add Gift List
+                  </Button>
+                </div>
               </div>
-              <SidebarSharedList giftLists={giftLists} />
+              <div className="space-y-2">
+                {guestGiftLists.map((list) => (
+                  <GuestGiftList key={list.id} list={list} />
+                ))}
+              </div>
             </nav>
           </div>
           <hr className="border-t border-border mt-8" />

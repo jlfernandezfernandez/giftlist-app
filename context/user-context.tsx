@@ -28,7 +28,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("fetching user");
     const fetchUser = async () => {
       try {
         const response = await fetch("/api/get-authenticated-user");
@@ -46,6 +45,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     fetchUser();
   }, [router]);
+
+  useEffect(() => {
+    if (!isLoadingUser && !user) {
+      router.push("/login");
+    }
+  }, [isLoadingUser, user, router]);
 
   return (
     <UserContext.Provider value={{ user, setUser, isLoadingUser }}>
