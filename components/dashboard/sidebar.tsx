@@ -2,7 +2,6 @@
 
 "use client";
 
-import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { AvatarSection } from "./avatar-section";
 import { XIcon } from "lucide-react";
@@ -28,6 +27,11 @@ export function Sidebar() {
 
   const ownGiftLists = giftLists.filter((list) => list.isOwner);
   const guestGiftLists = giftLists.filter((list) => !list.isOwner);
+
+  const handleListClick = (url: string) => {
+    router.push(url);
+    closeSidebar();
+  };
 
   return (
     <>
@@ -58,11 +62,18 @@ export function Sidebar() {
                 </div>
                 <div className="space-y-2">
                   {ownGiftLists.map((list) => (
-                    <OwnGiftList key={list.id} list={list} />
+                    <OwnGiftList
+                      key={list.id}
+                      list={list}
+                      onClick={() => handleListClick(`/gift-list/${list.id}`)}
+                    />
                   ))}
                   <Button
                     className="mt-2 w-full"
-                    onClick={() => router.push("/gift-list/create")}
+                    onClick={() => {
+                      router.push("/gift-list/create");
+                      closeSidebar();
+                    }}
                   >
                     Add Gift List
                   </Button>
@@ -70,7 +81,11 @@ export function Sidebar() {
               </div>
               <div className="mt-2 space-y-2">
                 {guestGiftLists.map((list) => (
-                  <GuestGiftList key={list.id} list={list} />
+                  <GuestGiftList
+                    key={list.id}
+                    list={list}
+                    onClick={() => handleListClick(`/gift-list/${list.id}`)}
+                  />
                 ))}
               </div>
             </nav>

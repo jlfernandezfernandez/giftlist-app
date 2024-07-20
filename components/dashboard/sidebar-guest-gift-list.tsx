@@ -4,13 +4,16 @@ import Link from "next/link";
 import { GiftIcon, UserIcon } from "lucide-react";
 import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
 import { GiftList } from "@/types/gift-list";
+import { useSidebar } from "@/context/sidebar-context";
 
 interface GuestGiftListProps {
   list: GiftList;
+  onClick: () => void;
 }
 
-export function GuestGiftList({ list }: GuestGiftListProps) {
+export function GuestGiftList({ list, onClick }: GuestGiftListProps) {
   const currentListId = useCurrentGiftListId();
+  const { closeSidebar } = useSidebar();
 
   const owners = list.users.filter((user) => user.role === "owner");
   let ownerNames = "";
@@ -31,8 +34,13 @@ export function GuestGiftList({ list }: GuestGiftListProps) {
       .join(" ");
   }
 
+  const handleListClick = () => {
+    onClick();
+    closeSidebar();
+  };
+
   return (
-    <div>
+    <div onClick={handleListClick} className="cursor-pointer">
       <div className="flex items-center font-medium text-muted-foreground">
         <UserIcon className="h-4 w-4 mr-1 flex-shrink-0" />
         <span className="truncate" title={ownerNames}>
