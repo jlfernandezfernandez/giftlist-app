@@ -10,7 +10,7 @@ export function MobileHeader() {
 
   return (
     <header className="md:hidden flex items-center justify-between p-4 bg-background border-b border-border">
-      <h1 className="text-lg font-semibold">Gift Lists</h1>
+      <h1 className="text-lg font-semibold">GiftList AI</h1>
       <Button variant="ghost" size="icon" onClick={toggleSidebar}>
         <MenuIcon className="h-6 w-6" />
       </Button>
