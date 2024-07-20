@@ -78,7 +78,7 @@ export function GiftCard({
           </div>
         </div>
 
-        <div className="flex items-center justify-between sm:w-1/4 sm:justify-end space-x-2">
+        <div className="flex items-center justify-between sm:w-1/4 sm:justify-end space-x-2 space-y-1">
           <div className="flex items-center space-x-1">
             {gift.assignedUsers?.map((user) => (
               <Tooltip key={user.userId} text={user.name}>
