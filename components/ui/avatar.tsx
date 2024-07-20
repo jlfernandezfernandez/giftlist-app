@@ -1,10 +1,7 @@
-// components/ui/avatar.tsx
-
 "use client";
 
 import * as React from "react";
 import * as AvatarPrimitive from "@radix-ui/react-avatar";
-import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 
@@ -26,20 +23,12 @@ Avatar.displayName = AvatarPrimitive.Root.displayName;
 const AvatarImage = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Image>,
   React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Image>
->(({ className, src, alt, ...props }, ref) => (
+>(({ className, ...props }, ref) => (
   <AvatarPrimitive.Image
     ref={ref}
     className={cn("aspect-square h-full w-full", className)}
     {...props}
-    asChild
-  >
-    <Image
-      src={src as string}
-      alt={alt as string}
-      fill
-      style={{ objectFit: "cover" }}
-    />
-  </AvatarPrimitive.Image>
+  />
 ));
 AvatarImage.displayName = AvatarPrimitive.Image.displayName;
 
