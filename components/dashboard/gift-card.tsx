@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip } from "@geist-ui/core";
+import { Tooltip, useMediaQuery } from "@geist-ui/core";
 import { Gift } from "@/types/gift";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { badgeVariant, currencySymbol } from "@/lib/gift-utils";
@@ -49,6 +49,8 @@ export function GiftCard({
     window.open(gift.link || "", "_blank");
   }, [gift.link]);
 
+  const isSM = useMediaQuery("sm");
+
   return (
     <Card className="p-3 sm:p-4 hover:shadow-sm transition-shadow duration-300">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
@@ -63,8 +65,11 @@ export function GiftCard({
               {gift.name}
             </Link>
             {gift.description && (
-              <Tooltip text={gift.description}>
-                <InfoIcon className="h-4 w-4 ml-1 text-gray-400 cursor-help" />
+              <Tooltip
+                text={gift.description}
+                placement={isSM ? "top" : "left"}
+              >
+                <InfoIcon className="h-4 w-4 ml-1 text-gray-400" />
               </Tooltip>
             )}
           </div>
