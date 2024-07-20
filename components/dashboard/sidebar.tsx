@@ -58,10 +58,10 @@ export function Sidebar() {
       <aside
         className={`bg-background border-r border-border p-4 fixed md:relative z-20 h-full md:h-screen transition-transform transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 w-64 overflow-y-auto`}
+        } md:translate-x-0 w-64 md:w-64`}
       >
-        <div className="flex flex-col justify-between">
-          <div>
+        <div className="flex flex-col h-full justify-between">
+          <div className="overflow-y-auto flex-1">
             <AvatarSection user={user} />
             <nav className="flex flex-col gap-4 mt-4">
               <div>
@@ -87,8 +87,7 @@ export function Sidebar() {
               </div>
             </nav>
           </div>
-          <hr className="border-t border-border mt-8" />
-          <div className="mt-4">
+          <div className="border-t border-border mt-8 pt-4">
             <Button
               variant={"ghost"}
               alignment={"left"}

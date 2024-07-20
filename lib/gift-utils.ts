@@ -14,7 +14,7 @@ export const badgeVariant = (status: string) => {
 };
 
 export const currencySymbol = (currency: string) => {
-  switch (currency) {
+  switch (currency.toLowerCase()) {
     case "usd":
       return "$";
     case "eur":
@@ -25,5 +25,3 @@ export const currencySymbol = (currency: string) => {
       return "";
   }
 };
-
-

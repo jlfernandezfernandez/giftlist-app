@@ -1,32 +1,13 @@
 // components/dashboard/gift-table.tsx
 
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableHeader,
-  TableRow,
-  TableHead,
-  TableBody,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { AICircleIcon, FilePenIcon, ShareIcon } from "../icons";
-import { GiftRow } from "./gift-row";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import SmallSpinner from "../ui/small-spinner";
-import { AuthenticatedUser } from "@/types/authenticated-user";
-import Modal from "@/components/ui/modal";
-import { useAddGift } from "@/hooks/use-add-gift";
+import { useState, useRef, useEffect, useCallback } from "react";
+import { GiftListHeader } from "./gift-list-header";
+import { AddGiftCard } from "./add-gift-card";
+import { GiftCard } from "./gift-card";
 import { GiftList } from "@/types/gift-list";
 import { Gift } from "@/types/gift";
-import { mutate } from "swr";
+import { AuthenticatedUser } from "@/types/authenticated-user";
+import { useAddGift } from "@/hooks/use-add-gift";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -41,124 +22,80 @@ export function GiftTable({
   gifts,
   isOwner,
 }: GiftTableProps) {
-  const [newGiftUrl, setNewGiftUrl] = useState<string>("");
-  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-
+  const [newGiftId, setNewGiftId] = useState<string | null>(null);
+  const newGiftRef = useRef<HTMLDivElement>(null);
   const { isAddingGift, handleAddGift } = useAddGift(authenticatedUser);
 
-  const handleAddGiftClick = async () => {
-    await handleAddGift(currentList.id, newGiftUrl);
-    setNewGiftUrl("");
-  };
-
-  const handleRemoveGift = async (giftId: string) => {
-    if (!currentList || !giftId) return;
-
-    const response = await fetch(
-      `/api/gift-lists/${currentList.id}/gift/${giftId}`,
-      {
-        method: "DELETE",
+  const handleAddGiftClick = useCallback(
+    async (url: string) => {
+      if (url) {
+        const newGift = await handleAddGift(currentList.id, url);
+        if (newGift && newGift.id) {
+          setNewGiftId(newGift.id);
+        }
       }
-    );
+    },
+    [currentList.id, handleAddGift]
+  );
 
-    if (!response.ok) {
-      console.error("Failed to remove gift");
-      return;
+  useEffect(() => {
+    if (newGiftId && newGiftRef.current) {
+      newGiftRef.current.scrollIntoView({ behavior: "smooth" });
+      setNewGiftId(null);
     }
-
-    mutate(`/api/gift-lists/${currentList.id}/gift`);
-  };
-
-  const handleShareList = () => {
-    console.log("Sharing gift list:", currentList?.name);
-  };
+  }, [newGiftId]);
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle>{currentList?.name}</CardTitle>
-            <CardDescription>{currentList?.description}</CardDescription>
-            <div className="text-sm text-muted-foreground mt-1">
-              {currentList && new Date(currentList.date).toLocaleDateString()}
+    <div className="space-y-4 px-2 sm:px-4 md:px-6">
+      <GiftListHeader
+        currentList={currentList}
+        isOwner={isOwner}
+        handleEditList={() => {
+          /* Implementar lógica de edición */
+        }}
+        handleShareList={() => {
+          /* Implementar lógica de compartir */
+        }}
+      />
+      {isOwner && (
+        <AddGiftCard
+          isAddingGift={isAddingGift}
+          handleAddGift={handleAddGiftClick}
+        />
+      )}
+      {gifts.length > 0 ? (
+        <div className="space-y-3">
+          {gifts.map((gift) => (
+            <div key={gift.id} ref={gift.id === newGiftId ? newGiftRef : null}>
+              <GiftCard
+                authenticatedUser={authenticatedUser}
+                gift={gift}
+                isOwner={isOwner}
+                handleRemoveGift={() => {
+                  /* Implementar lógica de eliminación */
+                }}
+                handleAssignGift={() => {
+                  /* Implementar lógica de asignación */
+                }}
+                handleUnassignGift={() => {
+                  /* Implementar lógica de desasignación */
+                }}
+              />
             </div>
-          </div>
-          {isOwner && (
-            <div className="flex items-center gap-2">
-              <Button onClick={() => setIsEditModalOpen(true)}>
-                <FilePenIcon className="h-4 w-4 mr-2" />
-                Edit List
-              </Button>
-              <Button onClick={handleShareList}>
-                <ShareIcon className="h-4 w-4 mr-2" />
-                Share
-              </Button>
-            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-8">
+          <p className="text-lg font-semibold text-gray-600">
+            No hay regalos en esta lista aún
+          </p>
+          {!isOwner && (
+            <p className="mt-2 text-sm text-gray-500">
+              Vuelve más tarde para ver si se han añadido regalos
+            </p>
           )}
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="overflow-auto">
-          <Table className="min-w-full">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Gift</TableHead>
-                <TableHead></TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Website</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Assigned To</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {gifts?.map((gift) => (
-                <GiftRow
-                  authenticatedUser={authenticatedUser}
-                  key={gift.id}
-                  gift={gift}
-                  listId={currentList.id}
-                  handleRemoveGift={handleRemoveGift}
-                  isOwner={isOwner}
-                />
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </CardContent>
-      {isOwner && (
-        <CardFooter>
-          <div className="flex items-center space-x-2 w-full">
-            <Input
-              id="new-gift-url"
-              value={newGiftUrl}
-              onChange={(e) => setNewGiftUrl(e.target.value)}
-              placeholder="Paste url to add with AI"
-              className="flex-grow"
-              disabled={isAddingGift}
-            />
-            <Button onClick={handleAddGiftClick} disabled={isAddingGift}>
-              {isAddingGift ? (
-                <SmallSpinner />
-              ) : (
-                <AICircleIcon className="h-4 w-4 mr-2" />
-              )}
-              {isAddingGift ? "Adding..." : "Add Gift"}
-            </Button>
-          </div>
-        </CardFooter>
       )}
-      {isEditModalOpen && (
-        <Modal
-          isOpen={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
-          closeButtonActive
-        >
-          <h2>Edit Gift List</h2>
-          {/* Aquí puedes añadir el contenido de la modal para editar la lista de regalos */}
-        </Modal>
-      )}
-    </Card>
+    </div>
   );
 }

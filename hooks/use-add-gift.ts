@@ -8,32 +8,41 @@ import { mutate } from "swr";
 export const useAddGift = (authenticatedUser: AuthenticatedUser | null) => {
   const [isAddingGift, setIsAddingGift] = useState<boolean>(false);
 
-  const handleAddGift = async (listId: string, link: string) => {
+  const handleAddGift = async (
+    listId: string,
+    link: string
+  ): Promise<Gift | null> => {
     setIsAddingGift(true);
 
-    const response = await fetch(`/api/gift-lists/${listId}/gift`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        giftListId: listId,
-        link,
-        userId: authenticatedUser?.uid,
-      }),
-    });
+    try {
+      const response = await fetch(`/api/gift-lists/${listId}/gift`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          giftListId: listId,
+          link,
+          userId: authenticatedUser?.uid,
+        }),
+      });
 
-    if (!response.ok) {
-      console.error("Failed to add gift");
+      if (!response.ok) {
+        throw new Error("Failed to add gift");
+      }
+
+      const newGift: Gift = await response.json();
+
+      // Forzar actualización de la lista de regalos
+      mutate(`/api/gift-lists/${listId}/gift`);
+
+      return newGift;
+    } catch (error) {
+      console.error("Error adding gift:", error);
+      return null;
+    } finally {
       setIsAddingGift(false);
-      return;
     }
-
-    const gift: Gift = await response.json();
-    setIsAddingGift(false);
-
-    // Forzar actualización de la lista de regalos
-    mutate(`/api/gift-lists/${listId}/gift`);
   };
 
   return {

@@ -19,7 +19,7 @@ export default function GiftListPage() {
 
   return (
     <div className="flex min-h-screen w-full flex-col md:flex-row">
-      <main className="flex-1 p-6 ml-auto">
+      <main className="flex-1 p-2 sm:p-6">
         {user && selectedList && (
           <GiftTable
             key={selectedList.id}
