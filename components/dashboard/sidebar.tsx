@@ -2,10 +2,10 @@
 
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { AvatarSection } from "./avatar-section";
-import { MenuIcon, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import { useLogout } from "@/hooks/use-logout";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/ui/spinner";
@@ -13,21 +13,14 @@ import { useUser } from "@/context/user-context";
 import { useGiftList } from "@/context/gift-list-context";
 import { OwnGiftList } from "./sidebar-own-gift-list";
 import { GuestGiftList } from "./sidebar-guest-gift-list";
+import { useSidebar } from "@/context/sidebar-context";
 
 export function Sidebar() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { isSidebarOpen, closeSidebar } = useSidebar();
   const { user, isLoadingUser } = useUser();
   const { giftLists, isLoadingGiftList } = useGiftList();
   const router = useRouter();
   const handleLogout = useLogout();
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const closeSidebar = () => {
-    setIsSidebarOpen(false);
-  };
 
   if (isLoadingUser || isLoadingGiftList) {
     return <Spinner />;
@@ -40,28 +33,23 @@ export function Sidebar() {
     <>
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black opacity-5 z-10 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-5 z-40 md:hidden"
           onClick={closeSidebar}
         ></div>
       )}
-      <button
-        className="md:hidden p-4 fixed z-20"
-        onClick={toggleSidebar}
-        aria-label="Toggle sidebar"
-      >
-        {isSidebarOpen ? (
-          <XIcon className="h-6 w-6" />
-        ) : (
-          <MenuIcon className="h-6 w-6" />
-        )}
-      </button>
       <aside
-        className={`bg-background border-r border-border p-4 fixed md:relative z-20 h-full md:h-screen transition-transform transform ${
+        className={`bg-background border-r border-border p-4 fixed md:relative z-50 h-full md:h-screen transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 w-64 md:w-64`}
       >
         <div className="flex flex-col h-full justify-between">
           <div className="overflow-y-auto flex-1">
+            <div className="flex justify-between items-center md:hidden mb-4">
+              <h2 className="text-lg font-semibold">Menu</h2>
+              <Button variant="ghost" size="icon" onClick={closeSidebar}>
+                <XIcon className="h-6 w-6" />
+              </Button>
+            </div>
             <AvatarSection user={user} />
             <nav className="flex flex-col gap-4 mt-4">
               <div>
@@ -89,8 +77,8 @@ export function Sidebar() {
           </div>
           <div className="border-t border-border mt-8 pt-4">
             <Button
-              variant={"ghost"}
-              alignment={"left"}
+              variant="ghost"
+              alignment="left"
               className="w-full text-gray-500"
               onClick={handleLogout}
             >
