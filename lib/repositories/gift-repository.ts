@@ -60,3 +60,11 @@ export async function getGiftsByListIdRepo(listId: string): Promise<Gift[]> {
     })),
   }));
 }
+
+export async function deleteGiftRepo(giftId: string): Promise<void> {
+  const { error } = await supabase.from("gifts").delete().eq("id", giftId);
+
+  if (error) {
+    throw new Error(`Error deleting gift: ${error.message}`);
+  }
+}

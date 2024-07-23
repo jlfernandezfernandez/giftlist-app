@@ -5,7 +5,7 @@ import { useGiftList } from "@/context/gift-list-context";
 import { useRouter } from "next/navigation";
 
 export function useDeleteGiftList() {
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeletingGiftList, setIsDeleting] = useState(false);
   const { mutate } = useGiftList();
   const router = useRouter();
 
@@ -29,5 +29,5 @@ export function useDeleteGiftList() {
     }
   };
 
-  return { deleteGiftList, isDeleting };
+  return { deleteGiftList, isDeletingGiftList };
 }
