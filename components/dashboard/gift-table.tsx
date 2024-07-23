@@ -1,6 +1,5 @@
 // components/dashboard/gift-table.tsx
-
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useCallback, useState, useRef, useEffect } from "react";
 import { GiftListHeader } from "./gift-list-header";
 import { AddGiftCard } from "./add-gift-card";
 import { GiftCard } from "./gift-card";
@@ -8,8 +7,8 @@ import { GiftList } from "@/types/gift-list";
 import { Gift } from "@/types/gift";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { useAddGift } from "@/hooks/use-add-gift";
-import { useDeleteGiftList } from "@/hooks/use-delete-gift-list";
 import { useDeleteGift } from "@/hooks/use-delete-gift";
+import { useDeleteGiftList } from "@/hooks/use-delete-gift-list";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -25,32 +24,65 @@ export function GiftTable({
   isOwner,
 }: GiftTableProps) {
   const [newGiftId, setNewGiftId] = useState<string | null>(null);
-  const newGiftRef = useRef<HTMLDivElement>(null);
   const { isAddingGift, handleAddGift } = useAddGift(authenticatedUser);
-  const { deleteGiftList, isDeletingGiftList } = useDeleteGiftList();
   const { deleteGift, isDeletingGift } = useDeleteGift();
+  const { deleteGiftList, isDeletingGiftList } = useDeleteGiftList();
+  const giftListRef = useRef<HTMLDivElement>(null);
 
-  const handleAddGiftClick = async (url: string) => {
-    if (url) {
-      const newGift = await handleAddGift(currentList.id, url);
-      if (newGift && newGift.id) {
-        // Scroll al nuevo regalo después de que se haya renderizado
-        setTimeout(() => {
-          const newGiftElement = document.getElementById(`gift-${newGift.id}`);
-          if (newGiftElement) {
-            newGiftElement.scrollIntoView({ behavior: "smooth" });
-          }
-        }, 100);
+  const scrollToGift = useCallback((giftId: string) => {
+    const giftElement = document.getElementById(`gift-${giftId}`);
+    if (giftElement) {
+      giftElement.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (newGiftId) {
+      const observer = new MutationObserver((mutations, obs) => {
+        const giftElement = document.getElementById(`gift-${newGiftId}`);
+        if (giftElement) {
+          scrollToGift(newGiftId);
+          setNewGiftId(null);
+          obs.disconnect();
+        }
+      });
+
+      observer.observe(giftListRef.current!, {
+        childList: true,
+        subtree: true,
+      });
+
+      return () => observer.disconnect();
+    }
+  }, [newGiftId, scrollToGift]);
+
+  const handleAddGiftClick = useCallback(
+    async (url: string) => {
+      if (url) {
+        const newGift = await handleAddGift(currentList.id, url);
+        if (newGift && newGift.id) {
+          setNewGiftId(newGift.id);
+        }
       }
-    }
-  };
+    },
+    [currentList.id, handleAddGift]
+  );
 
-  const handleRemoveGift = async (giftId: string | undefined) => {
-    if (!giftId) return;
-    if (window.confirm("¿Estás seguro de que quieres eliminar este regalo?")) {
-      await deleteGift(currentList.id, giftId);
-    }
-  };
+  const handleRemoveGift = useCallback(
+    async (giftId: string) => {
+      if (
+        window.confirm("¿Estás seguro de que quieres eliminar este regalo?")
+      ) {
+        const success = await deleteGift(currentList.id, giftId);
+        if (success) {
+          console.log("Regalo eliminado con éxito");
+        } else {
+          console.error("No se pudo eliminar el regalo");
+        }
+      }
+    },
+    [currentList.id, deleteGift]
+  );
 
   const handleDeleteList = () => {
     if (window.confirm("¿Estás seguro de que quieres eliminar esta lista?")) {
@@ -58,24 +90,21 @@ export function GiftTable({
     }
   };
 
-  useEffect(() => {
-    if (newGiftId && newGiftRef.current) {
-      newGiftRef.current.scrollIntoView({ behavior: "smooth" });
-      setNewGiftId(null);
-    }
-  }, [newGiftId]);
+  const handleEditList = useCallback(() => {
+    // Implementar lógica de edición
+  }, []);
+
+  const handleShareList = useCallback(() => {
+    // Implementar lógica de compartir
+  }, []);
 
   return (
     <div className="space-y-4 px-2 sm:px-4 md:px-6">
       <GiftListHeader
         currentList={currentList}
         isOwner={isOwner}
-        handleEditList={() => {
-          /* Implementar lógica de edición */
-        }}
-        handleShareList={() => {
-          /* Implementar lógica de compartir */
-        }}
+        handleEditList={handleEditList}
+        handleShareList={handleShareList}
         handleDeleteList={handleDeleteList}
       />
       {isOwner && (
@@ -84,37 +113,37 @@ export function GiftTable({
           handleAddGift={handleAddGiftClick}
         />
       )}
-      {gifts.length > 0 ? (
-        <div className="space-y-3">
-          {gifts.map((gift) => (
+      <div ref={giftListRef} className="space-y-3">
+        {gifts.length > 0 ? (
+          gifts.map((gift) => (
             <div key={gift.id} id={`gift-${gift.id}`}>
               <GiftCard
                 authenticatedUser={authenticatedUser}
                 gift={gift}
                 isOwner={isOwner}
-                handleRemoveGift={() => handleRemoveGift(gift.id)}
+                handleRemoveGift={() => gift.id && handleRemoveGift(gift.id)}
                 handleAssignGift={() => {
-                  /* ... */
+                  /* Implementar lógica de asignación */
                 }}
                 handleUnassignGift={() => {
-                  /* ... */
+                  /* Implementar lógica de desasignación */
                 }}
               />
             </div>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-8">
-          <p className="text-lg font-semibold text-gray-600">
-            No hay regalos en esta lista aún
-          </p>
-          {!isOwner && (
-            <p className="mt-2 text-sm text-gray-500">
-              Vuelve más tarde para ver si se han añadido regalos
+          ))
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-lg font-semibold text-gray-600">
+              No hay regalos en esta lista aún
             </p>
-          )}
-        </div>
-      )}
+            {!isOwner && (
+              <p className="mt-2 text-sm text-gray-500">
+                Vuelve más tarde para ver si se han añadido regalos
+              </p>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
