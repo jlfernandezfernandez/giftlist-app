@@ -3,13 +3,14 @@
 import { useCallback } from "react";
 import { GiftList } from "@/types/gift-list";
 import { Button } from "@/components/ui/button";
-import { FilePenIcon, ShareIcon } from "../icons";
+import { FilePenIcon, ShareIcon, TrashIcon } from "@/components/icons";
 
 interface GiftListHeaderProps {
   currentList: GiftList;
   isOwner: boolean;
   handleEditList: () => void;
   handleShareList: () => void;
+  handleDeleteList: () => void;
 }
 
 export function GiftListHeader({
@@ -17,6 +18,7 @@ export function GiftListHeader({
   isOwner,
   handleEditList,
   handleShareList,
+  handleDeleteList,
 }: GiftListHeaderProps) {
   const formattedDate = useCallback(() => {
     return new Date(currentList.date).toLocaleDateString();
@@ -45,6 +47,9 @@ export function GiftListHeader({
             >
               <ShareIcon className="h-4 w-4 mr-2" />
               Share
+            </Button>
+            <Button onClick={handleDeleteList} variant="destructive">
+              <TrashIcon className="h-4 w-4" />
             </Button>
           </div>
         )}

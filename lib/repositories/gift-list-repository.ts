@@ -64,3 +64,11 @@ export async function getGiftListsByUserIdRepo(
     isOwner: item.is_owner,
   }));
 }
+
+export async function deleteGiftListRepo(giftListId: string): Promise<void> {
+  const { error } = await supabase.from("giftlists").delete().eq("id", giftListId);
+
+  if (error) {
+    throw new Error(`Error deleting gift list: ${error.message}`);
+  }
+}

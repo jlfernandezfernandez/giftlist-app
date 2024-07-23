@@ -8,6 +8,7 @@ import { GiftList } from "@/types/gift-list";
 import { Gift } from "@/types/gift";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { useAddGift } from "@/hooks/use-add-gift";
+import { useDeleteGiftList } from "@/hooks/use-delete-gift-list";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -25,6 +26,7 @@ export function GiftTable({
   const [newGiftId, setNewGiftId] = useState<string | null>(null);
   const newGiftRef = useRef<HTMLDivElement>(null);
   const { isAddingGift, handleAddGift } = useAddGift(authenticatedUser);
+  const { deleteGiftList, isDeleting } = useDeleteGiftList();
 
   const handleAddGiftClick = useCallback(
     async (url: string) => {
@@ -37,6 +39,12 @@ export function GiftTable({
     },
     [currentList.id, handleAddGift]
   );
+
+  const handleDeleteList = () => {
+    if (window.confirm("¿Estás seguro de que quieres eliminar esta lista?")) {
+      deleteGiftList(currentList.id);
+    }
+  };
 
   useEffect(() => {
     if (newGiftId && newGiftRef.current) {
@@ -56,6 +64,7 @@ export function GiftTable({
         handleShareList={() => {
           /* Implementar lógica de compartir */
         }}
+        handleDeleteList={handleDeleteList}
       />
       {isOwner && (
         <AddGiftCard
