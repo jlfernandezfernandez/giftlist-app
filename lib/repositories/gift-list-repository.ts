@@ -9,10 +9,10 @@ export async function createAndAssociateGiftListRepo(
   date: string
 ): Promise<GiftList> {
   const { data, error } = await supabase.rpc("create_and_associate_gift_list", {
-    user_id: userId,
-    list_name: name,
-    list_description: description,
-    list_date: date,
+    p_user_id: userId,
+    p_list_name: name,
+    p_list_description: description,
+    p_list_date: date,
   });
 
   if (error) {
@@ -66,7 +66,10 @@ export async function getGiftListsByUserIdRepo(
 }
 
 export async function deleteGiftListRepo(giftListId: string): Promise<void> {
-  const { error } = await supabase.from("giftlists").delete().eq("id", giftListId);
+  const { error } = await supabase
+    .from("giftlists")
+    .delete()
+    .eq("id", giftListId);
 
   if (error) {
     throw new Error(`Error deleting gift list: ${error.message}`);
