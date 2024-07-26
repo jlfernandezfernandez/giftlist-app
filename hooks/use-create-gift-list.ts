@@ -13,8 +13,8 @@ export const useCreateGiftList = () => {
 
   const createGiftList = async (
     name: string,
-    description: string,
-    date: string
+    description: string | null,
+    date: string | null
   ) => {
     setIsLoading(true);
 

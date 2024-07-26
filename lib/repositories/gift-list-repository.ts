@@ -5,8 +5,8 @@ import { GiftList } from "@/types/gift-list";
 export async function createAndAssociateGiftListRepo(
   userId: string,
   name: string,
-  description: string,
-  date: string
+  description: string | null,
+  date: string | null
 ): Promise<GiftList> {
   const { data, error } = await supabase.rpc("create_and_associate_gift_list", {
     p_user_id: userId,

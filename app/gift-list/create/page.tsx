@@ -8,20 +8,20 @@ import { useCreateGiftList } from "@/hooks/use-create-gift-list";
 export default function CreateGiftListPage() {
   const { createGiftList, isLoading } = useCreateGiftList();
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
+  const [description, setDescription] = useState<string | null>(null);
+  const [date, setDate] = useState<string | null>(null);
 
   const handleSubmit = async (data: {
     name: string;
-    description: string;
-    date: string;
+    description: string | null;
+    date: string | null;
   }) => {
     await createGiftList(data.name, data.description, data.date);
   };
 
   return (
-    <div className="flex min-h-screen w-full flex-col md:flex-row">
-      <main className="flex-1 p-6 ml-auto max-w-2xl">
+    <div className="flex min-h-screen w-full justify-center">
+      <main className="w-full max-w-6xl py-6">
         <div className="mb-6">
           <h1 className="text-2xl font-bold mb-2">Create a New Gift List</h1>
           <p className="text-gray-600">
@@ -32,9 +32,9 @@ export default function CreateGiftListPage() {
           name={name}
           setName={setName}
           description={description}
-          setDescription={setDescription}
-          date={date}
-          setDate={setDate}
+          setDescription={(value) => setDescription(value)}
+          date={date || ""}
+          setDate={(value) => setDate(value)}
           onSubmit={handleSubmit}
           isLoading={isLoading}
           submitText="Create Gift List"

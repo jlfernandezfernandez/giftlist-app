@@ -21,7 +21,8 @@ export function GiftListHeader({
   handleDeleteList,
 }: GiftListHeaderProps) {
   const formattedDate = useCallback(() => {
-    return new Date(currentList.date).toLocaleDateString();
+    if (currentList.date)
+      return new Date(currentList.date).toLocaleDateString();
   }, [currentList.date]);
 
   return (
