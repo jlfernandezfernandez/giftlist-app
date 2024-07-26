@@ -97,7 +97,7 @@ export function AddGiftCard({ isAddingGift, handleAddGift }: AddGiftCardProps) {
             />
             <Button
               onClick={toggleCustomDescription}
-              variant={showCustomDescription ? "destructive" : "blue"}
+              variant={showCustomDescription ? "destructive" : "outline"}
               size="sm"
               className="w-full sm:w-auto transition-colors duration-200"
             >
@@ -121,7 +121,8 @@ export function AddGiftCard({ isAddingGift, handleAddGift }: AddGiftCardProps) {
           <Button
             onClick={handleAddGiftClick}
             disabled={isAddingGift || (!showCustomDescription && !newGiftUrl)}
-            className="w-full sm:w-auto transition-colors duration-200 hover:bg-gray-100 text-sm"
+            variant="blue"
+            className="w-full sm:w-auto transition-colors duration-200 text-sm"
           >
             {isAddingGift ? (
               <SmallSpinner />
