@@ -50,7 +50,10 @@ export function GiftListForm({
   };
 
   const formatDate = (dateString: string) => {
-    const [year, month, day] = dateString.split("-");
+    const d = new Date(dateString);
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear();
     return `${day}/${month}/${year}`;
   };
 
@@ -105,15 +108,17 @@ export function GiftListForm({
         <Input
           id="date"
           type="date"
-          value={parseDate(date)}
-          onChange={(e) => setDate(formatDate(e.target.value))}
+          value={parseDate(formatDate(date))}
+          onChange={(e) => setDate(new Date(e.target.value).toISOString())}
           required
           min={new Date().toISOString().split("T")[0]}
         />
+        {dateError && <p className="text-xs text-red-500 mt-1">{dateError}</p>}
       </div>
       <Button
         type="submit"
-        disabled={isLoading || !name || !description || !date}
+        variant="blue"
+        disabled={isLoading || !name || !description || !date || !!dateError}
         className="w-full mt-6"
       >
         {isLoading ? "Updating..." : submitText}

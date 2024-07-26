@@ -39,7 +39,6 @@ export const EditGiftListModal: React.FC<EditGiftListModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} closeButtonActive>
       <div className="text-left">
-        <h2 className="text-2xl font-bold mb-4">Edit Gift List</h2>
         <GiftListForm
           name={name}
           setName={setName}
