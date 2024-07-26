@@ -9,7 +9,7 @@ import SmallSpinner from "../ui/small-spinner";
 
 interface AddGiftCardProps {
   isAddingGift: boolean;
-  handleAddGift: (url: string) => void;
+  handleAddGift: (url: string, details: string) => void;
 }
 
 const PLACEHOLDER_TEXTS = [
@@ -23,14 +23,13 @@ const MAX_DESCRIPTION_LENGTH = 30;
 
 export function AddGiftCard({ isAddingGift, handleAddGift }: AddGiftCardProps) {
   const [newGiftUrl, setNewGiftUrl] = useState<string>("");
-  const [customDescription, setCustomDescription] = useState<string>("");
-  const [showCustomDescription, setShowCustomDescription] =
-    useState<boolean>(false);
+  const [customDetails, setCustomDetails] = useState<string>("");
+  const [showCustomDetails, setShowCustomDetails] = useState<boolean>(false);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [typingPlaceholder, setTypingPlaceholder] = useState("");
 
   useEffect(() => {
-    if (!showCustomDescription) return;
+    if (!showCustomDetails) return;
 
     let currentText = "";
     let isDeleting = false;
@@ -62,26 +61,26 @@ export function AddGiftCard({ isAddingGift, handleAddGift }: AddGiftCardProps) {
     }, 100);
 
     return () => clearInterval(typeEffect);
-  }, [showCustomDescription, placeholderIndex]);
+  }, [showCustomDetails, placeholderIndex]);
 
   const handleAddGiftClick = useCallback(async () => {
-    await handleAddGift(newGiftUrl); // Send details
+    await handleAddGift(newGiftUrl, customDetails);
     setNewGiftUrl("");
-    setCustomDescription("");
-    setShowCustomDescription(false);
-  }, [newGiftUrl, customDescription, handleAddGift]);
+    setCustomDetails("");
+    setShowCustomDetails(false);
+  }, [newGiftUrl, customDetails, handleAddGift]);
 
-  const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDetailsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value.slice(0, MAX_DESCRIPTION_LENGTH);
-    setCustomDescription(newValue);
+    setCustomDetails(newValue);
   };
 
-  const toggleCustomDescription = useCallback(() => {
-    setShowCustomDescription((prev) => !prev);
-    if (showCustomDescription) {
-      setCustomDescription("");
+  const toggleCustomDetails = useCallback(() => {
+    setShowCustomDetails((prev) => !prev);
+    if (showCustomDetails) {
+      setCustomDetails("");
     }
-  }, [showCustomDescription]);
+  }, [showCustomDetails]);
 
   return (
     <Card className="bg-white shadow-sm">
@@ -96,31 +95,31 @@ export function AddGiftCard({ isAddingGift, handleAddGift }: AddGiftCardProps) {
               disabled={isAddingGift}
             />
             <Button
-              onClick={toggleCustomDescription}
-              variant={showCustomDescription ? "destructive" : "outline"}
+              onClick={toggleCustomDetails}
+              variant={showCustomDetails ? "destructive" : "outline"}
               size="sm"
               className="w-full sm:w-auto transition-colors duration-200"
             >
-              {showCustomDescription ? "Remove details" : "Add details"}
+              {showCustomDetails ? "Remove details" : "Add details"}
             </Button>
           </div>
-          {showCustomDescription && (
+          {showCustomDetails && (
             <div className="relative">
               <Input
-                value={customDescription}
-                onChange={handleDescriptionChange}
+                value={customDetails}
+                onChange={handleDetailsChange}
                 placeholder={typingPlaceholder}
                 className="text-sm pr-12"
                 maxLength={MAX_DESCRIPTION_LENGTH}
               />
               <span className="absolute right-2 bottom-2 text-xs text-gray-400">
-                {customDescription.length}/{MAX_DESCRIPTION_LENGTH}
+                {customDetails.length}/{MAX_DESCRIPTION_LENGTH}
               </span>
             </div>
           )}
           <Button
             onClick={handleAddGiftClick}
-            disabled={isAddingGift || (!showCustomDescription && !newGiftUrl)}
+            disabled={isAddingGift || (!showCustomDetails && !newGiftUrl)}
             variant="blue"
             className="w-full sm:w-auto transition-colors duration-200 text-sm"
           >

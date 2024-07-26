@@ -5,5 +5,5 @@ export async function getAffiliateLink(url: string): Promise<string> {
   if (url.includes("amazon")) {
     return url + "?tag=giftlistai-21";
   }
-  return url;
+  return "https://amazon.com";
 }

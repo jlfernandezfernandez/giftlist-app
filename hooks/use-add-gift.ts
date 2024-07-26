@@ -10,6 +10,7 @@ export const useAddGift = (authenticatedUser: AuthenticatedUser | null) => {
 
   const handleAddGift = async (
     listId: string,
+    details: string,
     link: string
   ): Promise<Gift | null> => {
     setIsAddingGift(true);
@@ -23,6 +24,7 @@ export const useAddGift = (authenticatedUser: AuthenticatedUser | null) => {
         body: JSON.stringify({
           giftListId: listId,
           link,
+          details,
           userId: authenticatedUser?.uid,
         }),
       });

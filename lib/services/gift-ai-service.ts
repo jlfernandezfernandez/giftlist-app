@@ -7,6 +7,7 @@ import { createGift } from "./gift-service";
 
 export async function processGift(
   url: string,
+  details: string,
   giftListId: string,
   userId: string
 ): Promise<Gift> {
@@ -16,7 +17,7 @@ export async function processGift(
   const newGift: Gift = {
     giftListId,
     name: productData.name ?? undefined,
-    description: productData.description ?? undefined,
+    description: details,
     link: affiliateLink,
     website: productData.website ?? undefined,
     price: productData.price ?? undefined,

@@ -57,9 +57,9 @@ export function GiftTable({
   }, [newGiftId, scrollToGift]);
 
   const handleAddGiftClick = useCallback(
-    async (url: string) => {
+    async (url: string, details: string) => {
       if (url) {
-        const newGift = await handleAddGift(currentList.id, url);
+        const newGift = await handleAddGift(currentList.id, details, url);
         if (newGift && newGift.id) {
           setNewGiftId(newGift.id);
         }

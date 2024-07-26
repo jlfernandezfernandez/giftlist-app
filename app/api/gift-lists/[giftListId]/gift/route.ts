@@ -26,7 +26,7 @@ export async function GET(
 }
 
 export async function POST(req: NextRequest) {
-  const { link, giftListId, userId } = await req.json();
+  const { link, details, giftListId, userId } = await req.json();
 
   if (!giftListId || !link || !userId) {
     return NextResponse.json(
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const newGift = await processGift(link, giftListId, userId);
+    const newGift = await processGift(link, details, giftListId, userId);
     return NextResponse.json(newGift, { status: 201 });
   } catch (error: any) {
     return NextResponse.json(
