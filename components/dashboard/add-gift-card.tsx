@@ -19,6 +19,8 @@ const PLACEHOLDER_TEXTS = [
   "Volume: 100ml",
 ];
 
+const MAX_DESCRIPTION_LENGTH = 30;
+
 export function AddGiftCard({ isAddingGift, handleAddGift }: AddGiftCardProps) {
   const [newGiftUrl, setNewGiftUrl] = useState<string>("");
   const [customDescription, setCustomDescription] = useState<string>("");
@@ -69,6 +71,11 @@ export function AddGiftCard({ isAddingGift, handleAddGift }: AddGiftCardProps) {
     setShowCustomDescription(false);
   }, [newGiftUrl, customDescription, handleAddGift]);
 
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value.slice(0, MAX_DESCRIPTION_LENGTH);
+    setCustomDescription(newValue);
+  };
+
   const toggleCustomDescription = useCallback(() => {
     setShowCustomDescription((prev) => !prev);
     if (showCustomDescription) {
@@ -98,12 +105,18 @@ export function AddGiftCard({ isAddingGift, handleAddGift }: AddGiftCardProps) {
             </Button>
           </div>
           {showCustomDescription && (
-            <Input
-              value={customDescription}
-              onChange={(e) => setCustomDescription(e.target.value)}
-              placeholder={typingPlaceholder}
-              className="text-sm"
-            />
+            <div className="relative">
+              <Input
+                value={customDescription}
+                onChange={handleDescriptionChange}
+                placeholder={typingPlaceholder}
+                className="text-sm pr-12"
+                maxLength={MAX_DESCRIPTION_LENGTH}
+              />
+              <span className="absolute right-2 bottom-2 text-xs text-gray-400">
+                {customDescription.length}/{MAX_DESCRIPTION_LENGTH}
+              </span>
+            </div>
           )}
           <Button
             onClick={handleAddGiftClick}
