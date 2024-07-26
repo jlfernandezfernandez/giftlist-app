@@ -9,6 +9,7 @@ import { AuthenticatedUser } from "@/types/authenticated-user";
 import { useAddGift } from "@/hooks/use-add-gift";
 import { useDeleteGift } from "@/hooks/use-delete-gift";
 import { useDeleteGiftList } from "@/hooks/use-delete-gift-list";
+import { EditGiftListModal } from "../edit-gift-list-modal";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -27,6 +28,7 @@ export function GiftTable({
   const { isAddingGift, handleAddGift } = useAddGift(authenticatedUser);
   const { deleteGift, isDeletingGift } = useDeleteGift();
   const { deleteGiftList, isDeletingGiftList } = useDeleteGiftList();
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const giftListRef = useRef<HTMLDivElement>(null);
 
   const scrollToGift = useCallback((giftId: string) => {
@@ -91,7 +93,7 @@ export function GiftTable({
   };
 
   const handleEditList = useCallback(() => {
-    // Implementar lógica de edición
+    setIsEditModalOpen(true);
   }, []);
 
   const handleShareList = useCallback(() => {
@@ -144,6 +146,11 @@ export function GiftTable({
           </div>
         )}
       </div>
+      <EditGiftListModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        giftList={currentList}
+      />
     </div>
   );
 }

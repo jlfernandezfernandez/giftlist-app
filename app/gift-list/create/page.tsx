@@ -2,17 +2,15 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { GiftListForm } from "@/components/gift-list-form";
+import { useCreateGiftList } from "@/hooks/use-create-gift-list";
 import {
+  Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
-  Card,
 } from "@/components/ui/card";
-import { useCreateGiftList } from "@/hooks/use-create-gift-list";
 
 export default function CreateGiftListPage() {
   const { createGiftList, isLoading } = useCreateGiftList();
@@ -20,9 +18,12 @@ export default function CreateGiftListPage() {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    createGiftList(name, description, date);
+  const handleSubmit = async (data: {
+    name: string;
+    description: string;
+    date: string;
+  }) => {
+    await createGiftList(data.name, data.description, data.date);
   };
 
   return (
@@ -36,58 +37,17 @@ export default function CreateGiftListPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit}>
-              <div className="mb-4">
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="name"
-                >
-                  Name
-                </label>
-                <Input
-                  id="name"
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="description"
-                >
-                  Description
-                </label>
-                <Input
-                  id="description"
-                  type="text"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <label
-                  className="block text-gray-700 text-sm font-bold mb-2"
-                  htmlFor="date"
-                >
-                  Date
-                </label>
-                <Input
-                  id="date"
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  required
-                />
-              </div>
-              <CardFooter className="flex justify-end">
-                <Button variant="blue" type="submit" disabled={isLoading}>
-                  {isLoading ? "Creating..." : "Create Gift List"}
-                </Button>
-              </CardFooter>
-            </form>
+            <GiftListForm
+              name={name}
+              setName={setName}
+              description={description}
+              setDescription={setDescription}
+              date={date}
+              setDate={setDate}
+              onSubmit={handleSubmit}
+              isLoading={isLoading}
+              submitText="Create Gift List"
+            />
           </CardContent>
         </Card>
       </main>
