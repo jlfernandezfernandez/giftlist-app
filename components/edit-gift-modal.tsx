@@ -4,8 +4,8 @@ import Modal from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Gift } from "@/types/gift";
-import { currencySymbol } from "@/lib/gift-utils";
 import { Input } from "./ui/input";
+import { PriceInput } from "./ui/price-input";
 
 const MAX_DESCRIPTION_LENGTH = 30;
 
@@ -25,11 +25,13 @@ export const EditGiftModal: React.FC<EditGiftModalProps> = ({
   const [name, setName] = useState(gift.name || "");
   const [description, setDescription] = useState(gift.description || "");
   const [price, setPrice] = useState(gift.price?.toString() || "");
+  const [currency, setCurrency] = useState(gift.currency || "EUR");
 
   useEffect(() => {
     setName(gift.name || "");
     setDescription(gift.description || "");
     setPrice(gift.price?.toString() || "");
+    setCurrency(gift.currency || "EUR");
   }, [gift]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -39,9 +41,15 @@ export const EditGiftModal: React.FC<EditGiftModalProps> = ({
       name,
       description,
       price: parseFloat(price) || undefined,
+      currency,
     };
     onSubmit(updatedGift);
     onClose();
+  };
+
+  const handlePriceChange = (newPrice: string, newCurrency: string) => {
+    setPrice(newPrice);
+    setCurrency(newCurrency);
   };
 
   return (
@@ -79,13 +87,10 @@ export const EditGiftModal: React.FC<EditGiftModalProps> = ({
           </div>
           <div className="space-y-2">
             <Label htmlFor="price">Price</Label>
-            <Input
-              id="price"
-              type="number"
+            <PriceInput
               value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              labelRight={currencySymbol(gift.currency || "EUR")}
-              step="0.01"
+              currency={currency}
+              onChange={handlePriceChange}
             />
           </div>
           <Button type="submit" variant="blue" className="w-full mt-6">
