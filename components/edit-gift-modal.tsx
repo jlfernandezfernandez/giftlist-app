@@ -60,7 +60,7 @@ export const EditGiftModal: React.FC<EditGiftModalProps> = ({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
+            <Label htmlFor="description">Details</Label>
             <div className="relative">
               <Input
                 id="description"
