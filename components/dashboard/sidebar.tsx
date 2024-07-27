@@ -58,7 +58,7 @@ export function Sidebar() {
             <nav className="flex flex-col gap-4 mt-4">
               <div>
                 <div className="flex items-center font-medium text-muted-foreground mb-2">
-                  Mis Listas
+                  My Lists
                 </div>
                 <div className="space-y-2">
                   {ownGiftLists.map((list) => (

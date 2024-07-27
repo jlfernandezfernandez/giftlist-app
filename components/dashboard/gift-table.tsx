@@ -157,11 +157,11 @@ export function GiftTable({
         ) : (
           <div className="text-center py-8">
             <p className="text-lg font-semibold text-gray-600">
-              No hay regalos en esta lista aún
+              There are no gifts in this list yet
             </p>
             {!isOwner && (
               <p className="mt-2 text-sm text-gray-500">
-                Vuelve más tarde para ver si se han añadido regalos
+                Check back later to see if any gifts have been added
               </p>
             )}
           </div>
