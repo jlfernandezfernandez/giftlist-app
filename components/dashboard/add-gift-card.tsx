@@ -14,12 +14,6 @@ interface AddGiftCardProps {
 
 const MAX_DESCRIPTION_LENGTH = 30;
 
-const URL_PLACEHOLDERS = [
-  "Paste url to add with AI",
-  "Enter product link here",
-  "Add gift from any website",
-];
-
 const DETAILS_PLACEHOLDERS = [
   "Size: XL",
   "Capacity: 128GB, Color: Space Gray",
@@ -56,7 +50,7 @@ export function AddGiftCard({ isAddingGift, handleAddGift }: AddGiftCardProps) {
       <CardContent className="p-3 sm:p-4">
         <div className="flex flex-col space-y-2">
           <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">
-          <Input
+            <Input
               value={newGiftUrl}
               onChange={(e) => setNewGiftUrl(e.target.value)}
               placeholder="Paste url to add with AI"

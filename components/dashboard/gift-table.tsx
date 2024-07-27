@@ -10,6 +10,7 @@ import { useAddGift } from "@/hooks/use-add-gift";
 import { useDeleteGift } from "@/hooks/use-delete-gift";
 import { useDeleteGiftList } from "@/hooks/use-delete-gift-list";
 import { EditGiftListModal } from "../edit-gift-list-modal";
+import { useUpdateGift } from "@/hooks/use-update-gift";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -27,6 +28,7 @@ export function GiftTable({
   const [newGiftId, setNewGiftId] = useState<string | null>(null);
   const { isAddingGift, handleAddGift } = useAddGift(authenticatedUser);
   const { deleteGift, isDeletingGift } = useDeleteGift();
+  const { updateGift, isUpdatingGift } = useUpdateGift();
   const { deleteGiftList, isDeletingGiftList } = useDeleteGiftList();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const giftListRef = useRef<HTMLDivElement>(null);
@@ -86,6 +88,24 @@ export function GiftTable({
     [currentList.id, deleteGift]
   );
 
+  const handleEditGift = useCallback(
+    async (updatedGift: Gift) => {
+      if (updatedGift.id) {
+        const success = await updateGift(
+          currentList.id,
+          updatedGift.id,
+          updatedGift
+        );
+        if (success) {
+          console.log("Regalo actualizado con éxito");
+        } else {
+          console.error("No se pudo actualizar el regalo");
+        }
+      }
+    },
+    [currentList.id, updateGift]
+  );
+
   const handleDeleteList = () => {
     if (window.confirm("¿Estás seguro de que quieres eliminar esta lista?")) {
       deleteGiftList(currentList.id);
@@ -124,6 +144,7 @@ export function GiftTable({
                 gift={gift}
                 isOwner={isOwner}
                 handleRemoveGift={() => gift.id && handleRemoveGift(gift.id)}
+                handleEditGift={handleEditGift}
                 handleAssignGift={() => {
                   /* Implementar lógica de asignación */
                 }}
