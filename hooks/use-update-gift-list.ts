@@ -14,8 +14,8 @@ export const useUpdateGiftList = () => {
   const updateGiftList = async (
     giftListId: string,
     name: string,
-    description: string,
-    date: string
+    description: string | null,
+    date: string | null
   ) => {
     setIsLoading(true);
 

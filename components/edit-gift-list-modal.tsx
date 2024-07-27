@@ -17,8 +17,10 @@ export const EditGiftListModal: React.FC<EditGiftListModalProps> = ({
   giftList,
 }) => {
   const [name, setName] = useState(giftList.name);
-  const [description, setDescription] = useState(giftList.description);
-  const [date, setDate] = useState(giftList.date);
+  const [description, setDescription] = useState<string | null>(
+    giftList.description
+  );
+  const [date, setDate] = useState<string | null>(giftList.date);
   const { updateGiftList, isLoading } = useUpdateGiftList();
 
   useEffect(() => {
@@ -29,8 +31,8 @@ export const EditGiftListModal: React.FC<EditGiftListModalProps> = ({
 
   const handleSubmit = async (data: {
     name: string;
-    description: string;
-    date: string;
+    description: string | null;
+    date: string | null;
   }) => {
     await updateGiftList(giftList.id, data.name, data.description, data.date);
     onClose();
