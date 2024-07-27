@@ -38,6 +38,40 @@ export async function createAndAssociateGiftListRepo(
   };
 }
 
+export async function updateGiftListRepo(
+  giftListId: string,
+  name: string,
+  description: string | null,
+  date: string | null
+): Promise<GiftList> {
+  const { data, error } = await supabase.rpc("update_gift_list", {
+    p_gift_list_id: giftListId,
+    p_name: name,
+    p_description: description,
+    p_date: date,
+  });
+
+  if (error) {
+    throw new Error(`Error updating gift list: ${error.message}`);
+  }
+
+  const updatedGiftListEntity = data[0];
+  return {
+    id: updatedGiftListEntity.id,
+    name: updatedGiftListEntity.name,
+    description: updatedGiftListEntity.description,
+    date: updatedGiftListEntity.date,
+    isOwner: true, // Asumimos que si puede actualizar, es propietario
+    users: updatedGiftListEntity.users.map((user: any) => ({
+      userId: user.userId,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    })),
+    gifts: [],
+  };
+}
+
 export async function getGiftListsByUserIdRepo(
   userId: string
 ): Promise<GiftList[]> {

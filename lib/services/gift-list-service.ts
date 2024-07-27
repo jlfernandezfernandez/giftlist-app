@@ -3,6 +3,7 @@ import {
   getGiftListsByUserIdRepo,
   createAndAssociateGiftListRepo,
   deleteGiftListRepo,
+  updateGiftListRepo,
 } from "@/lib/repositories/gift-list-repository";
 import { GiftList } from "@/types/gift-list";
 
@@ -32,6 +33,26 @@ export async function createGiftList(
   } catch (error) {
     console.error("Error creating gift list:", error);
     throw new Error("Failed to create gift list");
+  }
+}
+
+export async function updateGiftList(
+  giftListId: string,
+  name: string,
+  description: string | null,
+  date: string | null
+): Promise<GiftList> {
+  try {
+    const updatedGiftList = await updateGiftListRepo(
+      giftListId,
+      name,
+      description,
+      date
+    );
+    return updatedGiftList;
+  } catch (error) {
+    console.error("Error updating gift list:", error);
+    throw new Error("Failed to update gift list");
   }
 }
 
