@@ -28,13 +28,13 @@ export function useUpdateGift() {
 
       const updatedGiftData: Gift = await response.json();
 
-      // Actualizar el caché de SWR para la lista de regalos
+      // Update the SWR cache for the gift list
       mutate(`/api/gift-lists/${giftListId}/gift`);
 
       return updatedGiftData;
     } catch (error) {
       console.error("Error updating gift:", error);
-      return null;
+      throw error;
     } finally {
       setIsUpdatingGift(false);
     }

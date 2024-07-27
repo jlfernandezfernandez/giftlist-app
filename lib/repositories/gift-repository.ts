@@ -34,6 +34,40 @@ export async function createGiftRepo(gift: Gift): Promise<Gift> {
   };
 }
 
+export async function updateGiftRepo(
+  giftId: string,
+  updatedGift: Partial<Gift>
+): Promise<Gift> {
+  const { data, error } = await supabase.rpc("update_gift", {
+    p_gift_id: giftId,
+    p_name: updatedGift.name,
+    p_description: updatedGift.description,
+    p_link: updatedGift.link,
+    p_website: updatedGift.website,
+    p_price: updatedGift.price,
+    p_currency: updatedGift.currency,
+    p_state: updatedGift.state,
+  });
+
+  if (error) {
+    throw new Error(`Error updating gift: ${error.message}`);
+  }
+
+  const updatedGiftData = data[0];
+
+  return {
+    id: updatedGiftData.id,
+    giftListId: updatedGiftData.giftlist_id,
+    name: updatedGiftData.name,
+    description: updatedGiftData.description,
+    link: updatedGiftData.link,
+    website: updatedGiftData.website,
+    price: updatedGiftData.price,
+    currency: updatedGiftData.currency,
+    state: updatedGiftData.state,
+  };
+}
+
 export async function getGiftsByListIdRepo(listId: string): Promise<Gift[]> {
   const { data, error } = await supabase.rpc("get_gifts_by_list_id", {
     list_id: listId,
