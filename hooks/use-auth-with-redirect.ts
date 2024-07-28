@@ -15,7 +15,8 @@ export function useAuthWithRedirect() {
   }, [searchParams]);
 
   const redirect = useCallback(() => {
-    router.push(getRedirectPath());
+    const redirectPath = getRedirectPath();
+    router.push(redirectPath);
   }, [router, getRedirectPath]);
 
   const handleRegisterWithRedirect = async (

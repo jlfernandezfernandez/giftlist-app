@@ -27,12 +27,12 @@ export default function ClientRegister() {
       />
       <div className="text-center mt-4">
         <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-          ¿Ya tienes una cuenta?{" "}
+          Already have an account?{" "}
           <Link
             href={`/login?redirect=${encodeURIComponent(getRedirectPath())}`}
             className="font-medium text-gray-600 hover:underline dark:text-gray-500"
           >
-            Inicia sesión
+            Sign in
           </Link>
         </p>
       </div>
@@ -43,7 +43,7 @@ export default function ClientRegister() {
           className="w-full"
           onClick={handleGoogleSignInWithRedirect}
         >
-          Iniciar sesión con Google
+          Sign in with Google
           <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
         </Button>
       </div>

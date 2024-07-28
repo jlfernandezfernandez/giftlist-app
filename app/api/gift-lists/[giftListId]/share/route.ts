@@ -17,8 +17,8 @@ export async function POST(
   }
 
   try {
-    const result = await associateUserToGiftList(giftListId, userId, role);
-    return NextResponse.json(result, { status: 200 });
+    await associateUserToGiftList(giftListId, userId, role);
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error("Error associating user to gift list:", error);
     return NextResponse.json(
