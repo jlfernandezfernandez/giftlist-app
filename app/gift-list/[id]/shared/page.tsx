@@ -1,59 +1,49 @@
 // app/gift-list/[id]/shared/page.tsx
-
 "use client";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/ui/spinner";
+import { useUser } from "@/context/user-context";
+import { useAssociateUserToGiftList } from "@/hooks/use-associate-user-to-gift-list";
 
 export default function SharedGiftList({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const { user, isLoadingUser } = useUser();
+  const { associateUserToGiftList, isLoading, error } =
+    useAssociateUserToGiftList();
+  const [associationError, setAssociationError] = useState<string | null>(null);
 
   useEffect(() => {
-    const checkAuthAndAssociate = async () => {
-      try {
-        // Verificar si el usuario está autenticado
-        const userResponse = await fetch("/api/get-authenticated-user");
-        if (!userResponse.ok) {
-          // Si no está autenticado, redirigir al login
-          router.push(
-            `/login?redirect=${encodeURIComponent(
-              `/gift-list/${params.id}/shared`
-            )}`
-          );
-          return;
-        }
+    const handleAssociation = async () => {
+      if (isLoadingUser) return;
 
-        // Si está autenticado, asociar el usuario a la lista de regalos
-        const shareResponse = await fetch(
-          `/api/gift-lists/${params.id}/share`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ role: "guest" }),
-          }
+      if (!user) {
+        router.push(
+          `/login?redirect=${encodeURIComponent(
+            `/gift-list/${params.id}/shared`
+          )}`
         );
+        return;
+      }
 
-        if (!shareResponse.ok) {
-          throw new Error("Failed to associate user");
-        }
-
-        // Redirigir a la página de la lista de regalos
+      const result = await associateUserToGiftList(params.id, "guest");
+      if (result) {
         router.push(`/gift-list/${params.id}`);
-      } catch (error) {
-        console.error("Error:", error);
-        setError("Failed to join the gift list. Please try again.");
+      } else {
+        setAssociationError("Failed to join the gift list. Please try again.");
       }
     };
 
-    checkAuthAndAssociate();
-  }, [params.id, router]);
+    handleAssociation();
+  }, [user, isLoadingUser, params.id, router, associateUserToGiftList]);
 
-  if (error) {
-    return <div>{error}</div>;
+  if (isLoadingUser || isLoading) {
+    return <Spinner />;
   }
-  return <Spinner />;
+
+  if (error || associationError) {
+    return <div>{error || associationError}</div>;
+  }
+
+  return null;
 }

@@ -1,5 +1,4 @@
 // app/api/gift-lists/[giftListId]/share/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
 import { associateUserToGiftList } from "@/lib/services/gift-list-service";
 
@@ -8,21 +7,17 @@ export async function POST(
   { params }: { params: { giftListId: string } }
 ) {
   const { giftListId } = params;
-  const { role } = await request.json();
+  const { userId, role } = await request.json();
 
-  if (!role) {
-    return NextResponse.json({ error: "Missing role" }, { status: 400 });
+  if (!userId || !role) {
+    return NextResponse.json(
+      { error: "Missing userId or role" },
+      { status: 400 }
+    );
   }
 
   try {
-    // Obtener el usuario autenticado
-    const userResponse = await fetch("/api/get-authenticated-user");
-    if (!userResponse.ok) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-    const user = await userResponse.json();
-
-    const result = await associateUserToGiftList(giftListId, user.uid, role);
+    const result = await associateUserToGiftList(giftListId, userId, role);
     return NextResponse.json(result, { status: 200 });
   } catch (error) {
     console.error("Error associating user to gift list:", error);

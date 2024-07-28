@@ -1,5 +1,4 @@
 // app/api/get-authenticated-user/route.ts
-
 import { NextResponse } from "next/server";
 import { getTokens } from "next-firebase-auth-edge";
 import { cookies } from "next/headers";
@@ -19,7 +18,7 @@ export async function GET() {
       return NextResponse.json({ error: "No tokens found" }, { status: 401 });
     }
 
-    const decodedToken = tokens?.decodedToken;
+    const decodedToken = tokens.decodedToken;
 
     if (!decodedToken.email) {
       return NextResponse.json(
@@ -30,6 +29,13 @@ export async function GET() {
 
     const dbUser = await getUserByEmail(decodedToken.email);
 
+    if (!dbUser) {
+      return NextResponse.json(
+        { error: "User not found in database" },
+        { status: 404 }
+      );
+    }
+
     const user = {
       uid: dbUser.id,
       displayName: decodedToken.name,
@@ -39,6 +45,7 @@ export async function GET() {
 
     return NextResponse.json(user);
   } catch (error) {
+    console.error("Failed to fetch authenticated user:", error);
     return NextResponse.json(
       { error: "Failed to fetch authenticated user" },
       { status: 500 }

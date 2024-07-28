@@ -1,3 +1,4 @@
+// context/user-context.tsx
 "use client";
 
 import {
@@ -31,20 +32,22 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     const fetchUser = async () => {
       try {
         const response = await fetch("/api/get-authenticated-user");
-        if (!response.ok) {
-          throw new Error("Failed to fetch authenticated user");
+        if (response.ok) {
+          const user = await response.json();
+          setUser(user);
+        } else {
+          setUser(null);
         }
-        const user = await response.json();
-        setUser(user);
       } catch (error) {
         console.error("Failed to fetch authenticated user:", error);
+        setUser(null);
       } finally {
         setIsLoadingUser(false);
       }
     };
 
     fetchUser();
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     if (!isLoadingUser && !user) {

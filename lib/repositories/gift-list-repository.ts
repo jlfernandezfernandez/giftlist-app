@@ -76,16 +76,16 @@ export async function associateUserToGiftListRepo(
   giftListId: string,
   userId: string,
   role: string
-): Promise<void> {
-  const { error } = await supabase.rpc("associate_user_to_gift_list", {
+): Promise<any> {
+  const { data, error } = await supabase.rpc("associate_user_to_gift_list", {
     p_gift_list_id: giftListId,
     p_user_id: userId,
     p_role: role,
   });
 
-  if (error) {
-    throw new Error(`Error associating user to gift list: ${error.message}`);
-  }
+  if (error) throw error;
+
+  return data;
 }
 
 export async function getGiftListsByUserIdRepo(

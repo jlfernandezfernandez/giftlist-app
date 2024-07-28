@@ -24,7 +24,6 @@ export async function createUser(authenticatedUser: AuthenticatedUser) {
   const { data, error } = await supabase
     .from("users")
     .insert({
-      id: authenticatedUser.uid,
       name: authenticatedUser.displayName,
       email: authenticatedUser.email,
     })
