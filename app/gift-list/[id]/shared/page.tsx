@@ -1,6 +1,6 @@
 // app/gift-list/[id]/shared/page.tsx
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/ui/spinner";
 import { useUser } from "@/context/user-context";
@@ -12,30 +12,25 @@ export default function SharedGiftList({ params }: { params: { id: string } }) {
   const { associateUserToGiftList, isLoading, error } =
     useAssociateUserToGiftList();
   const [associationError, setAssociationError] = useState<string | null>(null);
+  const [hasAttemptedAssociation, setHasAttemptedAssociation] = useState(false);
 
-  useEffect(() => {
-    const handleAssociation = async () => {
-      if (isLoadingUser) return;
-
-      if (!user) {
-        router.push(
-          `/login?redirect=${encodeURIComponent(
-            `/gift-list/${params.id}/shared`
-          )}`
-        );
-        return;
-      }
-
+  const handleAssociation = useCallback(async () => {
+    if (!hasAttemptedAssociation) {
+      setHasAttemptedAssociation(true);
       const result = await associateUserToGiftList(params.id, "guest");
       if (result) {
         router.push(`/gift-list/${params.id}`);
       } else {
         setAssociationError("Failed to join the gift list. Please try again.");
       }
-    };
+    }
+  }, [hasAttemptedAssociation, associateUserToGiftList, params.id, router]);
 
-    handleAssociation();
-  }, [user, isLoadingUser, params.id, router, associateUserToGiftList]);
+  useEffect(() => {
+    if (user) {
+      handleAssociation();
+    }
+  }, [user, handleAssociation]);
 
   if (isLoadingUser || isLoading) {
     return <Spinner />;
