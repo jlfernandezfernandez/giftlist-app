@@ -1,4 +1,4 @@
-// pages/gift-list/[currentListId].tsx
+// pages/gift-list/[id].tsx
 
 "use client";
 

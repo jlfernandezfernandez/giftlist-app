@@ -4,6 +4,7 @@ import {
   createAndAssociateGiftListRepo,
   deleteGiftListRepo,
   updateGiftListRepo,
+  associateUserToGiftListRepo,
 } from "@/lib/repositories/gift-list-repository";
 import { GiftList } from "@/types/gift-list";
 
@@ -53,6 +54,19 @@ export async function updateGiftList(
   } catch (error) {
     console.error("Error updating gift list:", error);
     throw new Error("Failed to update gift list");
+  }
+}
+
+export async function associateUserToGiftList(
+  giftListId: string,
+  userId: string,
+  role: string = "guest"
+): Promise<void> {
+  try {
+    await associateUserToGiftListRepo(giftListId, userId, role);
+  } catch (error) {
+    console.error("Error associating user to gift list:", error);
+    throw new Error("Failed to associate user to gift list");
   }
 }
 

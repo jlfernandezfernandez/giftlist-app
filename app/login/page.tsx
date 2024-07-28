@@ -1,6 +1,7 @@
 // app/login/page.tsx
-
+import { Suspense } from "react";
 import ClientLogin from "@/components/client-login";
+import Spinner from "@/components/ui/spinner";
 
 export default function LoginPage() {
   return (
@@ -10,7 +11,9 @@ export default function LoginPage() {
           <h1 className="text-xl font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
             Inicia sesión en tu cuenta
           </h1>
-          <ClientLogin />
+          <Suspense fallback={<Spinner />}>
+            <ClientLogin />
+          </Suspense>
         </div>
       </div>
     </main>

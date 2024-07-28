@@ -1,3 +1,4 @@
+// lib/services/user-service.ts
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import {
   getUserByEmail,
@@ -5,20 +6,19 @@ import {
   updateUser,
 } from "@/lib/repositories/user-repository";
 
-export async function syncUserWithSupabase(authenticatedUser: AuthenticatedUser) {
+export async function syncUserWithSupabase(
+  authenticatedUser: AuthenticatedUser
+) {
   try {
     const existingUser = await getUserByEmail(authenticatedUser.email);
+
     if (existingUser) {
-      // Update user if necessary
       if (existingUser.name !== authenticatedUser.displayName) {
-        const updatedUser = await updateUser(authenticatedUser);
-        return updatedUser;
+        return await updateUser(authenticatedUser);
       }
       return existingUser;
     } else {
-      // Create new user
-      const newUser = await createUser(authenticatedUser);
-      return newUser;
+      return await createUser(authenticatedUser);
     }
   } catch (error) {
     console.error("Error syncing user with Supabase:", error);

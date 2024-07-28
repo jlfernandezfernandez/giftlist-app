@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 
 export interface RegisterFormProps {
   onSubmit: (name: string, email: string, password: string) => Promise<void>;
-  error: string;
+  error: string | null;
   isPending: boolean;
 }
 

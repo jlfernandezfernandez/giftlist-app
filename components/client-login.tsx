@@ -1,26 +1,33 @@
+// components/client-login.tsx
 "use client";
 
-import { useAuth } from "@/lib/auth";
+import { useAuthWithRedirect } from "@/hooks/use-auth-with-redirect";
 import LoginForm from "@/components/login-form";
 import Spinner from "@/components/ui/spinner";
 import Link from "next/link";
 
 export default function ClientLogin() {
-  const { error, isPending, handleLogin, handleGoogleSignIn } = useAuth();
+  const {
+    error,
+    isPending,
+    handleLoginWithRedirect,
+    handleGoogleSignInWithRedirect,
+    getRedirectPath,
+  } = useAuthWithRedirect();
 
   return (
     <>
       {isPending && <Spinner />}
       <LoginForm
-        onSubmit={handleLogin}
-        onGoogleSignIn={handleGoogleSignIn}
+        onSubmit={handleLoginWithRedirect}
+        onGoogleSignIn={handleGoogleSignInWithRedirect}
         error={error}
         isPending={isPending}
       />
       <p className="text-sm font-light text-gray-500 dark:text-gray-400">
         ¿Eres nuevo en GiftList?{" "}
         <Link
-          href="/register"
+          href={`/register?redirect=${encodeURIComponent(getRedirectPath())}`}
           className="font-medium text-gray-600 hover:underline dark:text-gray-500"
         >
           Crea una cuenta

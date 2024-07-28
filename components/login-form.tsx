@@ -12,7 +12,7 @@ import { Button } from "./ui/button";
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => Promise<void>;
   onGoogleSignIn: () => Promise<void>;
-  error: string;
+  error: string | null;
   isPending: boolean;
 }
 

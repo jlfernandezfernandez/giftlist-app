@@ -1,14 +1,12 @@
-"use client";
+// app/page.tsx
 import Link from "next/link";
-import { useAuth } from "@/lib/auth";
+import { Suspense } from "react";
+import ClientHome from "@/components/client-home";
 import Spinner from "@/components/ui/spinner";
 
 export default function Home() {
-  const { error, isPending, handleGoogleSignIn } = useAuth();
-
   return (
     <div className="relative flex flex-col min-h-screen bg-animated-gradient">
-      {isPending && <Spinner />}
       <header className="relative bg-transparent p-6 z-10">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold text-white">GiftList AI</h1>
@@ -29,22 +27,9 @@ export default function Home() {
           comparte y lleva un seguimiento de todas tus ocasiones especiales en
           un solo lugar.
         </p>
-        <div className="space-y-4 sm:space-y-0 sm:space-x-4 flex flex-col sm:flex-row">
-          <Link
-            href="/register"
-            className="bg-black text-white px-6 py-3 rounded-full text-lg hover:bg-gray-800 transition"
-          >
-            Empezar Ahora
-          </Link>
-          <button
-            onClick={handleGoogleSignIn}
-            className="bg-blue-600 text-white px-6 py-3 rounded-full text-lg hover:bg-blue-700 transition"
-            disabled={isPending}
-          >
-            {isPending ? "Cargando..." : "Empezar con Google"}
-          </button>
-        </div>
-        {error && <p className="text-red-500 mt-4">{error}</p>}
+        <Suspense fallback={<Spinner />}>
+          <ClientHome />
+        </Suspense>
       </main>
       <footer className="relative bg-white shadow z-10">
         <div className="container mx-auto px-4 py-4 text-center">

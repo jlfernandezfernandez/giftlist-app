@@ -11,6 +11,7 @@ import { useDeleteGift } from "@/hooks/use-delete-gift";
 import { useDeleteGiftList } from "@/hooks/use-delete-gift-list";
 import { EditGiftListModal } from "../edit-gift-list-modal";
 import { useUpdateGift } from "@/hooks/use-update-gift";
+import { ShareGiftListModal } from "../share-gift-list-modal";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -31,6 +32,7 @@ export function GiftTable({
   const { updateGift, isUpdatingGift } = useUpdateGift();
   const { deleteGiftList, isDeletingGiftList } = useDeleteGiftList();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const giftListRef = useRef<HTMLDivElement>(null);
 
   const scrollToGift = useCallback((giftId: string) => {
@@ -117,7 +119,7 @@ export function GiftTable({
   }, []);
 
   const handleShareList = useCallback(() => {
-    // Implementar lógica de compartir
+    setIsShareModalOpen(true);
   }, []);
 
   return (
@@ -170,6 +172,11 @@ export function GiftTable({
       <EditGiftListModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
+        giftList={currentList}
+      />
+      <ShareGiftListModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
         giftList={currentList}
       />
     </div>

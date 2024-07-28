@@ -7,78 +7,37 @@ import {
   authenticateWithGoogle,
   registerWithEmailAndPassword,
 } from "@/lib/firebase_auth";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { AuthenticatedUser } from "@/types/authenticated-user";
 
 export function useAuth() {
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
-  const router = useRouter();
 
-  const handleRegister = async (
-    name: string,
-    email: string,
-    password: string
-  ) => {
-    setError("");
+  const handleAuth = async (
+    authFunction: () => Promise<AuthenticatedUser>
+  ): Promise<AuthenticatedUser | null> => {
+    setError(null);
     setIsPending(true);
     try {
-      const user = await registerWithEmailAndPassword(name, email, password);
-      if (user) {
-        await syncUserWithSupabase(user);
-        router.push("/gift-list/create");
-      }
+      const user = await authFunction();
+      await syncUserWithSupabase(user);
+      return user;
     } catch (e) {
-      setError((e as Error).message);
+      setError(e instanceof Error ? e.message : "An unknown error occurred");
+      return null;
+    } finally {
+      setIsPending(false);
     }
-    setIsPending(false);
   };
 
-  const handleLogin = async (email: string, password: string) => {
-    setError("");
-    setIsPending(true);
-    try {
-      const user = await authenticateWithCredentials(email, password);
-      if (user) {
-        await syncUserWithSupabase(user);
-        console.log("Usuario autenticado:", user.email);
-        await fetch("/api/login", {
-          headers: {
-            Authorization: `Bearer ${user.idToken}`,
-          },
-        });
-        router.push("/gift-list/create");
-      }
-    } catch (error) {
-      setError(
-        error instanceof Error ? error.message : "Something went wrong."
-      );
-    }
-    setIsPending(false);
-  };
+  const handleRegister = (name: string, email: string, password: string) =>
+    handleAuth(() => registerWithEmailAndPassword(name, email, password));
 
-  const handleGoogleSignIn = async () => {
-    setError("");
-    setIsPending(true);
-    try {
-      const user = await authenticateWithGoogle();
-      if (user) {
-        await syncUserWithSupabase(user);
-        console.log("Usuario autenticado con Google:", user.email);
-        await fetch("/api/login", {
-          headers: {
-            Authorization: `Bearer ${user.idToken}`,
-          },
-        });
-        router.push("/gift-list/create");
-      } else {
-        setError("Failed to sign in with Google");
-      }
-    } catch (error) {
-      setError("Failed to sign in with Google");
-    }
-    setIsPending(false);
-  };
+  const handleLogin = (email: string, password: string) =>
+    handleAuth(() => authenticateWithCredentials(email, password));
+
+  const handleGoogleSignIn = () => handleAuth(authenticateWithGoogle);
 
   return {
     error,

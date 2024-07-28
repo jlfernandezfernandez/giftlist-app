@@ -1,3 +1,4 @@
+// lib/repositories/user-repository.ts
 import { supabase } from "@/lib/supabase.client";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 
@@ -8,8 +9,10 @@ export async function getUserByEmail(email: string) {
     .eq("email", email)
     .single();
 
-  if (error && error.code !== "PGRST116") {
-    // 'PGRST116' is the 'no rows found' error
+  if (error) {
+    if (error.code === "PGRST116") {
+      return null; // User not found
+    }
     console.error("Error fetching user by email:", error);
     throw new Error("Failed to fetch user by email");
   }
@@ -25,7 +28,8 @@ export async function createUser(authenticatedUser: AuthenticatedUser) {
       name: authenticatedUser.displayName,
       email: authenticatedUser.email,
     })
-    .select();
+    .select()
+    .single();
 
   if (error) {
     console.error("Error creating user:", error);
@@ -42,7 +46,8 @@ export async function updateUser(authenticatedUser: AuthenticatedUser) {
       name: authenticatedUser.displayName,
     })
     .eq("email", authenticatedUser.email)
-    .select();
+    .select()
+    .single();
 
   if (error) {
     console.error("Error updating user:", error);
