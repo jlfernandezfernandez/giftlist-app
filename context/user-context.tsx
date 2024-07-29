@@ -8,6 +8,7 @@ import {
   useState,
   useEffect,
   useCallback,
+  useMemo,
 } from "react";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { useRouter } from "next/navigation";
@@ -18,11 +19,7 @@ interface UserContextProps {
   isLoadingUser: boolean;
 }
 
-const UserContext = createContext<UserContextProps>({
-  user: null,
-  setUser: () => {},
-  isLoadingUser: true,
-});
+const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUserState] = useState<AuthenticatedUser | null>(null);
@@ -68,11 +65,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [isLoadingUser, user, router]);
 
-  return (
-    <UserContext.Provider value={{ user, setUser, isLoadingUser }}>
-      {children}
-    </UserContext.Provider>
+  const value = useMemo(
+    () => ({ user, setUser, isLoadingUser }),
+    [user, setUser, isLoadingUser]
   );
+
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
-export const useUser = () => useContext(UserContext);
+export const useUser = () => {
+  const context = useContext(UserContext);
+  if (context === undefined) {
+    throw new Error("useUser must be used within a UserProvider");
+  }
+  return context;
+};

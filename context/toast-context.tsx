@@ -7,6 +7,7 @@ import React, {
   useState,
   ReactNode,
   useCallback,
+  useMemo,
 } from "react";
 
 interface Toast {
@@ -33,17 +34,17 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     }, 3000);
   }, []);
 
+  const value = useMemo(() => ({ toasts, addToast }), [toasts, addToast]);
+
   return (
-    <ToastContext.Provider value={{ toasts, addToast }}>
-      {children}
-    </ToastContext.Provider>
+    <ToastContext.Provider value={value}>{children}</ToastContext.Provider>
   );
 }
 
-export function useToast() {
+export const useToast = () => {
   const context = useContext(ToastContext);
   if (context === undefined) {
     throw new Error("useToast must be used within a ToastProvider");
   }
   return context;
-}
+};

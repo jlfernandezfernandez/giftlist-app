@@ -3,21 +3,29 @@
 
 import { useAuth } from "@/lib/auth";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export function useAuthWithRedirect() {
   const auth = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [shouldRedirect, setShouldRedirect] = useState(false);
 
   const getRedirectPath = useCallback(() => {
     return searchParams?.get("redirect") || "/gift-list/create";
   }, [searchParams]);
 
+  useEffect(() => {
+    if (shouldRedirect) {
+      const redirectPath = getRedirectPath();
+      router.push(redirectPath);
+      setShouldRedirect(false);
+    }
+  }, [shouldRedirect, router, getRedirectPath]);
+
   const redirect = useCallback(() => {
-    const redirectPath = getRedirectPath();
-    router.push(redirectPath);
-  }, [router, getRedirectPath]);
+    setShouldRedirect(true);
+  }, []);
 
   const handleRegisterWithRedirect = async (
     name: string,
