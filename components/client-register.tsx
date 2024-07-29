@@ -6,7 +6,7 @@ import RegisterForm from "@/components/register-form";
 import Spinner from "@/components/ui/spinner";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { ArrowRightIcon } from "@heroicons/react/20/solid";
+import { ArrowRight } from "lucide-react";
 
 export default function ClientRegister() {
   const {
@@ -44,7 +44,7 @@ export default function ClientRegister() {
           onClick={handleGoogleSignInWithRedirect}
         >
           Sign in with Google
-          <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+          <ArrowRight className="h-4 w-4" />
         </Button>
       </div>
     </>

@@ -1,4 +1,6 @@
 // app/api/get-authenticated-user/route.ts
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
 import { getTokens } from "next-firebase-auth-edge";
 import { cookies } from "next/headers";

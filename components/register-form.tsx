@@ -1,7 +1,9 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { EyeIcon, EyeOffIcon } from "lucide-react"; // Asegúrate de importar estos iconos o usa los que prefieras
 
 export interface RegisterFormProps {
   onSubmit: (name: string, email: string, password: string) => Promise<void>;
@@ -20,24 +22,29 @@ export default function RegisterForm({
     password: "",
     confirmation: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-
     if (form.password !== form.confirmation) {
       alert("Passwords don't match");
       return;
     }
-
     await onSubmit(form.name, form.email, form.password);
+  };
+
+  const togglePasswordVisibility = (field: "password" | "confirmation") => {
+    if (field === "password") {
+      setShowPassword(!showPassword);
+    } else {
+      setShowConfirmation(!showConfirmation);
+    }
   };
 
   return (
@@ -47,16 +54,15 @@ export default function RegisterForm({
           htmlFor="name"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Tu nombre
+          Your name
         </label>
-        <input
+        <Input
           type="text"
           name="name"
+          id="name"
           value={form.name}
           onChange={handleChange}
-          id="name"
-          className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Tu nombre"
+          placeholder="Your name"
           required
         />
       </div>
@@ -65,15 +71,14 @@ export default function RegisterForm({
           htmlFor="email"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Tu email
+          Your email
         </label>
-        <input
+        <Input
           type="email"
           name="email"
+          id="email"
           value={form.email}
           onChange={handleChange}
-          id="email"
-          className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="name@company.com"
           required
         />
@@ -83,17 +88,28 @@ export default function RegisterForm({
           htmlFor="password"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Contraseña
+          Password
         </label>
-        <input
-          type="password"
+        <Input
+          type={showPassword ? "text" : "password"}
           name="password"
+          id="password"
           value={form.password}
           onChange={handleChange}
-          id="password"
           placeholder="••••••••"
-          className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           required
+          labelRight={
+            <button
+              type="button"
+              onClick={() => togglePasswordVisibility("password")}
+            >
+              {showPassword ? (
+                <EyeOffIcon className="h-4 w-4" />
+              ) : (
+                <EyeIcon className="h-4 w-4" />
+              )}
+            </button>
+          }
         />
       </div>
       <div>
@@ -101,16 +117,15 @@ export default function RegisterForm({
           htmlFor="confirmation"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Repite la contraseña
+          Confirm password
         </label>
-        <input
-          type="password"
+        <Input
+          type={showConfirmation ? "text" : "password"}
           name="confirmation"
+          id="confirmation"
           value={form.confirmation}
           onChange={handleChange}
-          id="confirmation"
           placeholder="••••••••"
-          className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           required
         />
       </div>
@@ -125,11 +140,11 @@ export default function RegisterForm({
       <Button
         type="submit"
         variant="default"
-        alignment="left"
+        size="lg"
         className="w-full"
-        aria-disabled={isPending}
+        disabled={isPending}
       >
-        Crear una cuenta
+        Create an account
       </Button>
     </form>
   );

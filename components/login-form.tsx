@@ -2,12 +2,9 @@
 "use client";
 
 import { useState, FormEvent } from "react";
-import {
-  AtSymbolIcon,
-  KeyIcon,
-  ArrowRightIcon,
-} from "@heroicons/react/24/outline";
+import { AtSign, EyeIcon, EyeOffIcon, ArrowRight } from "lucide-react";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => Promise<void>;
@@ -26,18 +23,20 @@ export default function LoginForm({
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     await onSubmit(form.email, form.password);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -47,46 +46,44 @@ export default function LoginForm({
           htmlFor="email"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Tu email
+          Your email
         </label>
-        <div className="mt-1 relative rounded-md shadow-sm">
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            id="email"
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="name@company.com"
-            required
-          />
-          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-            <AtSymbolIcon className="h-5 w-5 text-gray-400" />
-          </div>
-        </div>
+        <Input
+          type="email"
+          name="email"
+          id="email"
+          value={form.email}
+          onChange={handleChange}
+          placeholder="name@company.com"
+          required
+          labelRight={<AtSign className="h-4 w-4" />}
+        />
       </div>
       <div>
         <label
           htmlFor="password"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
         >
-          Contraseña
+          Password
         </label>
-        <div className="mt-1 relative rounded-md shadow-sm">
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            id="password"
-            placeholder="••••••••"
-            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            required
-          />
-          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-            <KeyIcon className="h-5 w-5 text-gray-400" />
-          </div>
-        </div>
+        <Input
+          type={showPassword ? "text" : "password"}
+          name="password"
+          id="password"
+          value={form.password}
+          onChange={handleChange}
+          placeholder="••••••••"
+          required
+          labelRight={
+            <button type="button" onClick={togglePasswordVisibility}>
+              {showPassword ? (
+                <EyeOffIcon className="h-4 w-4" />
+              ) : (
+                <EyeIcon className="h-4 w-4" />
+              )}
+            </button>
+          }
+        />
       </div>
       {error && (
         <div
@@ -100,22 +97,23 @@ export default function LoginForm({
         <Button
           type="submit"
           variant="default"
-          alignment="left"
+          size="lg"
           className="w-full"
-          aria-disabled={isPending}
+          disabled={isPending}
         >
-          Iniciar sesión
+          Sign in
         </Button>
       </div>
       <div className="text-center mt-6">
         <Button
           type="button"
           variant="blue"
+          size="lg"
           className="w-full"
           onClick={onGoogleSignIn}
         >
-          Iniciar sesión con Google
-          <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
+          Sign in with Google
+          <ArrowRight className="h-4 w-4" />
         </Button>
       </div>
     </form>

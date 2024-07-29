@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import ClientHome from "@/components/client-home";
 import Spinner from "@/components/ui/spinner";
+import { GiftIcon, ShareIcon, UserGroupIcon } from "@/components/icons";
 
 export default function Home() {
   return (
@@ -14,28 +15,75 @@ export default function Home() {
             href="/login"
             className="bg-white text-black px-4 py-2 rounded-full text-base hover:bg-gray-800 transition"
           >
-            Iniciar Sesión
+            Sign In
           </Link>
         </div>
       </header>
       <main className="relative flex-grow flex flex-col items-center justify-center text-center p-8 z-10">
         <h2 className="text-5xl font-extrabold text-white mb-6">
-          Crea tus listas de regalos con IA
+          Organize and share your gift lists
         </h2>
-        <p className="text-xl text-white mb-8">
-          Organiza y gestiona tus listas de regalos con facilidad. Crea,
-          comparte y lleva un seguimiento de todas tus ocasiones especiales en
-          un solo lugar.
+        <p className="text-xl text-white mb-12 max-w-2xl">
+          Create, manage, and share gift lists for any occasion. Collaborate
+          with friends and family to make every event special.
         </p>
+
+        <div className="grid md:grid-cols-3 gap-8 mb-12">
+          {features.map((feature, index) => (
+            <FeatureCard key={index} {...feature} />
+          ))}
+        </div>
+
         <Suspense fallback={<Spinner />}>
           <ClientHome />
         </Suspense>
       </main>
       <footer className="relative bg-white shadow z-10">
         <div className="container mx-auto px-4 py-4 text-center">
-          <p className="text-gray-700">© 2024 GiftList AI</p>
+          <p className="text-gray-700">
+            © 2024 GiftList AI - Simplifying gift management
+          </p>
         </div>
       </footer>
+    </div>
+  );
+}
+
+const features = [
+  {
+    icon: <GiftIcon className="h-12 w-12 text-white" />,
+    title: "Create Gift Lists",
+    description:
+      "Create and customize gift lists for any occasion with name, description, and event date.",
+  },
+  {
+    icon: <ShareIcon className="h-12 w-12 text-white" />,
+    title: "Share Easily",
+    description:
+      "Share your lists via a link and collaborate with others as an admin or guest.",
+  },
+  {
+    icon: <UserGroupIcon className="h-12 w-12 text-white" />,
+    title: "Collaborative Management",
+    description:
+      "Assign gifts, make group purchases, and keep everyone updated with notifications.",
+  },
+];
+
+function FeatureCard({
+  icon,
+  title,
+  description,
+}: {
+  icon: JSX.Element;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="bg-white bg-opacity-10 p-6 rounded-lg shadow-md backdrop-blur-sm">
+      <div className="flex justify-center mb-4">{icon}</div>
+      <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
+      <p className="text-white text-opacity-80">{description}</p>
     </div>
   );
 }

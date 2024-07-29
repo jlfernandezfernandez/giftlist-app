@@ -16,14 +16,14 @@ export default function ClientHome() {
           href={`/register?redirect=${encodeURIComponent(getRedirectPath())}`}
           className="bg-black text-white px-6 py-3 rounded-full text-lg hover:bg-gray-800 transition"
         >
-          Empezar Ahora
+          Start Now
         </Link>
         <button
           onClick={handleGoogleSignInWithRedirect}
           className="bg-blue-600 text-white px-6 py-3 rounded-full text-lg hover:bg-blue-700 transition"
           disabled={isPending}
         >
-          {isPending ? "Cargando..." : "Empezar con Google"}
+          {isPending ? "Loading..." : "Start with Google"}
         </button>
       </div>
       {error && <p className="text-red-500 mt-4">{error}</p>}
