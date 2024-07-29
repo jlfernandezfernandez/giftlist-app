@@ -4,19 +4,37 @@
 import { useParams } from "next/navigation";
 import { useSharedGiftList } from "@/hooks/use-shared-gift-list";
 import Spinner from "@/components/ui/spinner";
+import { Button } from "@/components/ui/button";
 
 export default function SharedGiftListPage() {
   const { id } = useParams();
-  const { isLoading, error } = useSharedGiftList(id as string);
+  const { status, error } = useSharedGiftList(id as string);
 
-  if (isLoading) {
-    return <Spinner />;
+  if (status === "loading") {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <Spinner />
+        <p className="mt-4 text-lg">Associating you with the gift list...</p>
+      </div>
+    );
   }
 
-  if (error) {
-    return <div>Error: {error}</div>;
+  if (status === "error") {
+    alert(`Error: ${error}`);
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <Button onClick={() => window.location.reload()}>Try Again</Button>
+      </div>
+    );
   }
 
-  // Esta página no renderizará nada más, ya que redirigirá a la página principal de la lista de regalos
+  if (status === "success") {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen">
+        <p>Redirecting you to the gift list...</p>
+      </div>
+    );
+  }
+
   return null;
 }

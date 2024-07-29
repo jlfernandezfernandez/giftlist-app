@@ -61,10 +61,20 @@ export async function associateUserToGiftList(
   giftListId: string,
   userId: string,
   role: string = "guest"
-): Promise<void> {
+): Promise<{ success: boolean; message: string }> {
   try {
     await associateUserToGiftListRepo(giftListId, userId, role);
-  } catch (error) {
+    return {
+      success: true,
+      message: "User successfully associated with gift list",
+    };
+  } catch (error: any) {
+    if (error.code === "23505") {
+      return {
+        success: true,
+        message: "User is already associated with this gift list",
+      };
+    }
     console.error("Error associating user to gift list:", error);
     throw new Error("Failed to associate user to gift list");
   }

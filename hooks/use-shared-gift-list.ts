@@ -8,50 +8,46 @@ export const useSharedGiftList = (giftListId: string) => {
   const router = useRouter();
   const { user, isLoadingUser } = useUser();
   const { mutate } = useGiftList();
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!isLoadingUser && !user) {
-      const currentPath = `/gift-list/${giftListId}/shared`;
-      router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
-    }
-  }, [user, isLoadingUser, giftListId, router]);
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
 
   useEffect(() => {
     const associateUser = async () => {
-      if (user && !isLoading) {
-        setIsLoading(true);
+      if (user && status === "idle") {
+        setStatus("loading");
         setError(null);
 
         try {
           const response = await fetch(`/api/gift-lists/${giftListId}/share`, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ userId: user.uid, role: "guest" }),
           });
 
           if (response.status === 200 || response.status === 409) {
-            // 200: Asociación exitosa, 409: Usuario ya asociado
-            await mutate(); // Actualizamos el contexto de las listas de regalos
+            await mutate();
+            setStatus("success");
             router.push(`/gift-list/${giftListId}`);
           } else {
-            throw new Error("Failed to associate user with gift list");
+            const errorData = await response.json();
+            throw new Error(
+              errorData.message || "Failed to associate user with gift list"
+            );
           }
         } catch (err) {
           setError(
             err instanceof Error ? err.message : "An unknown error occurred"
           );
-        } finally {
-          setIsLoading(false);
+          setStatus("error");
         }
       }
     };
 
     associateUser();
-  }, [user, giftListId, router, mutate]);
+  }, [user, giftListId, router, mutate, status]);
 
-  return { isLoading, error };
+  return { status, error };
 };
