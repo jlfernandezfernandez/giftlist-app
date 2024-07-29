@@ -19,7 +19,14 @@ export async function POST(
   try {
     await associateUserToGiftList(giftListId, userId, role);
     return NextResponse.json({ success: true }, { status: 200 });
-  } catch (error) {
+  } catch (error: any) {
+    if (error.code === "23505") {
+      // Usuario ya asociado, devolvemos un 409 Conflict
+      return NextResponse.json(
+        { error: "User already associated with this gift list" },
+        { status: 409 }
+      );
+    }
     console.error("Error associating user to gift list:", error);
     return NextResponse.json(
       { error: "Failed to associate user" },

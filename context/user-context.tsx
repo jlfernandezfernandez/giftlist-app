@@ -51,7 +51,15 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (!isLoadingUser && !user) {
-      router.push("/login");
+      const currentPath = window.location.pathname;
+      const searchParams = new URLSearchParams(window.location.search);
+      const redirect = searchParams.get("redirect");
+
+      if (redirect) {
+        router.push(`/login?redirect=${encodeURIComponent(redirect)}`);
+      } else if (currentPath !== "/login" && currentPath !== "/register") {
+        router.push(`/login?redirect=${encodeURIComponent(currentPath)}`);
+      }
     }
   }, [isLoadingUser, user, router]);
 
