@@ -44,59 +44,54 @@ export function Sidebar() {
       <aside
         className={`bg-background border-r border-border p-4 fixed md:relative z-50 h-full md:h-screen transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 w-64 md:w-64`}
+        } md:translate-x-0 w-64 md:w-64 flex flex-col overflow-hidden`}
       >
-        <div className="flex flex-col h-full justify-between">
-          <div className="overflow-y-auto flex-1">
-            <div className="flex justify-between items-center md:hidden mb-4">
-              <h2 className="text-lg font-semibold">Menu</h2>
-              <Button variant="ghost" size="icon" onClick={closeSidebar}>
-                <XIcon className="h-6 w-6" />
+        <div className="flex justify-end items-center md:hidden mb-4">
+          <Button variant="ghost" size="icon" onClick={closeSidebar}>
+            <XIcon className="h-6 w-6" />
+          </Button>
+        </div>
+        <AvatarSection user={user} />
+        <nav className="flex-1 overflow-y-auto mt-4">
+          <div>
+            <div className="flex items-center font-medium text-muted-foreground mb-2">
+              My Lists
+            </div>
+            <div className="space-y-2">
+              {ownGiftLists.map((list) => (
+                <OwnGiftList
+                  key={list.id}
+                  list={list}
+                  onClick={() => handleListClick(`/gift-list/${list.id}`)}
+                />
+              ))}
+              <Button
+                className="mt-2 w-full"
+                onClick={() => {
+                  router.push("/gift-list/create");
+                  closeSidebar();
+                }}
+              >
+                Add Gift List
               </Button>
             </div>
-            <AvatarSection user={user} />
-            <nav className="flex flex-col gap-4 mt-4">
-              <div>
-                <div className="flex items-center font-medium text-muted-foreground mb-2">
-                  My Lists
-                </div>
-                <div className="space-y-2">
-                  {ownGiftLists.map((list) => (
-                    <OwnGiftList
-                      key={list.id}
-                      list={list}
-                      onClick={() => handleListClick(`/gift-list/${list.id}`)}
-                    />
-                  ))}
-                  <Button
-                    className="mt-2 w-full"
-                    onClick={() => {
-                      router.push("/gift-list/create");
-                      closeSidebar();
-                    }}
-                  >
-                    Add Gift List
-                  </Button>
-                </div>
-              </div>
-              <div className="mt-2 space-y-2">
-                <GuestGiftList
-                  lists={guestGiftLists}
-                  onListClick={handleListClick}
-                />
-              </div>
-            </nav>
           </div>
-          <div className="border-t border-border mt-8 pt-4">
-            <Button
-              variant="ghost"
-              alignment="left"
-              className="w-full text-gray-500"
-              onClick={handleLogout}
-            >
-              Logout
-            </Button>
+          <div className="mt-5 space-y-2">
+            <GuestGiftList
+              lists={guestGiftLists}
+              onListClick={handleListClick}
+            />
           </div>
+        </nav>
+        <div className="border-t border-border mt-8 pt-4">
+          <Button
+            variant="ghost"
+            alignment="left"
+            className="w-full text-gray-500"
+            onClick={handleLogout}
+          >
+            Logout
+          </Button>
         </div>
       </aside>
     </>

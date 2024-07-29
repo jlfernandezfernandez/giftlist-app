@@ -17,18 +17,16 @@ export default function GiftListPage() {
   const selectedList = giftLists?.find((list) => list.id === currentListId);
 
   return (
-    <div className="flex min-h-screen w-full flex-col md:flex-row">
-      <main className="flex-1 p-2 sm:p-6">
-        {user && selectedList && (
-          <GiftTable
-            key={selectedList.id}
-            authenticatedUser={user}
-            currentList={selectedList}
-            gifts={gifts}
-            isOwner={selectedList.isOwner}
-          />
-        )}
-      </main>
+    <div className="h-full px-2 py-4 sm:p-6 overflow-y-auto">
+      {user && selectedList && (
+        <GiftTable
+          key={selectedList.id}
+          authenticatedUser={user}
+          currentList={selectedList}
+          gifts={gifts}
+          isOwner={selectedList.isOwner}
+        />
+      )}
     </div>
   );
 }

@@ -8,15 +8,18 @@ import { Button } from "@/components/ui/button";
 
 export default function SharedGiftListPage() {
   const { id } = useParams();
-  const { status, error, retryAssociation } = useAssociateUserToGiftList(
-    id as string
-  );
+  const { status, error, retryAssociation, isLoadingUser } =
+    useAssociateUserToGiftList(id as string);
 
-  if (status === "loading") {
+  if (isLoadingUser || status === "loading") {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen">
         <Spinner />
-        <p className="mt-4 text-lg">Associating you with the gift list...</p>
+        <p className="mt-4 text-lg">
+          {isLoadingUser
+            ? "Loading user information..."
+            : "Associating you with the gift list..."}
+        </p>
       </div>
     );
   }
