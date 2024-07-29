@@ -80,13 +80,10 @@ export function Sidebar() {
                 </div>
               </div>
               <div className="mt-2 space-y-2">
-                {guestGiftLists.map((list) => (
-                  <GuestGiftList
-                    key={list.id}
-                    list={list}
-                    onClick={() => handleListClick(`/gift-list/${list.id}`)}
-                  />
-                ))}
+                <GuestGiftList
+                  lists={guestGiftLists}
+                  onListClick={handleListClick}
+                />
               </div>
             </nav>
           </div>
