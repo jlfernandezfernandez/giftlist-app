@@ -1,19 +1,33 @@
 // hooks/use-associate-user-to-gift-list.ts
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useUser } from "@/context/user-context";
+import { useToast } from "@/context/toast-context";
+import { useRouter } from "next/navigation";
 
-export const useAssociateUserToGiftList = () => {
-  const [isLoading, setIsLoading] = useState(false);
+export const useAssociateUserToGiftList = (
+  giftListId: string,
+  role: string = "guest"
+) => {
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [error, setError] = useState<string | null>(null);
-  const { user } = useUser();
+  const { user, isLoadingUser } = useUser();
+  const { addToast } = useToast();
+  const router = useRouter();
 
-  const associateUserToGiftList = async (giftListId: string, role: string) => {
+  const associateUser = useCallback(async () => {
     if (!user) {
       setError("User not authenticated");
-      return null;
+      setStatus("error");
+      addToast({
+        title: "Error",
+        description: "User not authenticated. Please log in and try again.",
+      });
+      return;
     }
 
-    setIsLoading(true);
+    setStatus("loading");
     setError(null);
 
     try {
@@ -29,17 +43,35 @@ export const useAssociateUserToGiftList = () => {
         throw new Error("Failed to associate user to gift list");
       }
 
-      const result = await response.json();
-      return result;
+      setStatus("success");
+      addToast({
+        title: "Success",
+        description: "You've been successfully associated with the gift list.",
+      });
+      router.push(`/gift-list/${giftListId}`);
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "An unknown error occurred"
       );
-      return null;
-    } finally {
-      setIsLoading(false);
+      setStatus("error");
+      addToast({
+        title: "Error",
+        description: `Failed to associate with gift list: ${
+          err instanceof Error ? err.message : "Unknown error"
+        }`,
+      });
     }
+  }, [giftListId, user, addToast, router, role]);
+
+  useEffect(() => {
+    if (giftListId && !isLoadingUser && status === "idle") {
+      associateUser();
+    }
+  }, [giftListId, associateUser, status, isLoadingUser]);
+
+  const retryAssociation = () => {
+    setStatus("idle");
   };
 
-  return { associateUserToGiftList, isLoading, error };
+  return { status, error, retryAssociation, isLoadingUser };
 };
