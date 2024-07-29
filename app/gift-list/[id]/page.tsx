@@ -7,16 +7,10 @@ import { useUser } from "@/context/user-context";
 import { useGiftLists } from "@/hooks/use-gift-lists";
 import { useGifts } from "@/hooks/use-gifts";
 import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
-import { useToast } from "@/context/toast-context";
 
 export default function GiftListPage() {
   const { user } = useUser();
   const currentListId = useCurrentGiftListId();
-  const router = useRouter();
-  const { addToast } = useToast();
-
   const { giftLists } = useGiftLists(user?.uid);
   const { gifts } = useGifts(currentListId);
 
