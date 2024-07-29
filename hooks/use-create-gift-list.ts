@@ -4,12 +4,14 @@ import { useRouter } from "next/navigation";
 import { GiftList } from "@/types/gift-list";
 import { useGiftList } from "@/context/gift-list-context";
 import { useUser } from "@/context/user-context";
+import { useToast } from "@/context/toast-context";
 
 export const useCreateGiftList = () => {
   const { mutate } = useGiftList();
   const { user } = useUser();
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { addToast } = useToast();
 
   const createGiftList = async (
     name: string,
@@ -18,26 +20,38 @@ export const useCreateGiftList = () => {
   ) => {
     setIsLoading(true);
 
-    const response = await fetch("/api/gift-lists", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        name,
-        description,
-        date,
-        userId: user?.uid,
-      }),
-    });
+    try {
+      const response = await fetch("/api/gift-lists", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          description,
+          date,
+          userId: user?.uid,
+        }),
+      });
 
-    if (response.ok) {
-      const giftList: GiftList = await response.json();
-      mutate(); // Llamamos a mutate para actualizar el contexto
-      router.push(`/gift-list/${giftList.id}`);
-    } else {
+      if (response.ok) {
+        const giftList: GiftList = await response.json();
+        mutate();
+        addToast({
+          title: "Success",
+          description: "Gift list created successfully",
+        });
+        router.push(`/gift-list/${giftList.id}`);
+      } else {
+        throw new Error("Failed to create gift list");
+      }
+    } catch (error) {
+      addToast({
+        title: "Error",
+        description: "Failed to create gift list",
+      });
+    } finally {
       setIsLoading(false);
-      alert("Failed to create gift list");
     }
   };
 

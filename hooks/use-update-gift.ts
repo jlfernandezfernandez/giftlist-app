@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { mutate } from "swr";
 import { Gift } from "@/types/gift";
+import { useToast } from "@/context/toast-context";
 
 export function useUpdateGift() {
   const [isUpdatingGift, setIsUpdatingGift] = useState(false);
+  const { addToast } = useToast();
 
   const updateGift = async (
     giftListId: string,
@@ -31,8 +33,17 @@ export function useUpdateGift() {
       // Update the SWR cache for the gift list
       mutate(`/api/gift-lists/${giftListId}/gift`);
 
+      addToast({
+        title: "Success",
+        description: "Gift updated successfully",
+      });
+
       return updatedGiftData;
     } catch (error) {
+      addToast({
+        title: "Error",
+        description: "Failed to update gift",
+      });
       console.error("Error updating gift:", error);
       throw error;
     } finally {

@@ -12,6 +12,7 @@ import { useDeleteGiftList } from "@/hooks/use-delete-gift-list";
 import { EditGiftListModal } from "../edit-gift-list-modal";
 import { useUpdateGift } from "@/hooks/use-update-gift";
 import { ShareGiftListModal } from "../share-gift-list-modal";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -138,36 +139,50 @@ export function GiftTable({
         />
       )}
       <div ref={giftListRef} className="space-y-3">
-        {gifts.length > 0 ? (
-          gifts.map((gift) => (
-            <div key={gift.id} id={`gift-${gift.id}`}>
-              <GiftCard
-                authenticatedUser={authenticatedUser}
-                gift={gift}
-                isOwner={isOwner}
-                handleRemoveGift={() => gift.id && handleRemoveGift(gift.id)}
-                handleEditGift={handleEditGift}
-                handleAssignGift={() => {
-                  /* Implementar lógica de asignación */
-                }}
-                handleUnassignGift={() => {
-                  /* Implementar lógica de desasignación */
-                }}
-              />
-            </div>
-          ))
-        ) : (
-          <div className="text-center py-8">
-            <p className="text-lg font-semibold text-gray-600">
-              There are no gifts in this list yet
-            </p>
-            {!isOwner && (
-              <p className="mt-2 text-sm text-gray-500">
-                Check back later to see if any gifts have been added
+        <AnimatePresence>
+          {gifts.length > 0 ? (
+            gifts.map((gift) => (
+              <motion.div
+                key={gift.id}
+                id={`gift-${gift.id}`}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                <GiftCard
+                  authenticatedUser={authenticatedUser}
+                  gift={gift}
+                  isOwner={isOwner}
+                  handleRemoveGift={() => gift.id && handleRemoveGift(gift.id)}
+                  handleEditGift={handleEditGift}
+                  handleAssignGift={() => {
+                    /* Implementar lógica de asignación */
+                  }}
+                  handleUnassignGift={() => {
+                    /* Implementar lógica de desasignación */
+                  }}
+                />
+              </motion.div>
+            ))
+          ) : (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="text-center py-8"
+            >
+              <p className="text-lg font-semibold text-gray-600">
+                There are no gifts in this list yet
               </p>
-            )}
-          </div>
-        )}
+              {!isOwner && (
+                <p className="mt-2 text-sm text-gray-500">
+                  Check back later to see if any gifts have been added
+                </p>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
       <EditGiftListModal
         isOpen={isEditModalOpen}

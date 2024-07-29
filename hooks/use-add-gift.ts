@@ -4,9 +4,11 @@ import { useState } from "react";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { Gift } from "@/types/gift";
 import { mutate } from "swr";
+import { useToast } from "@/context/toast-context";
 
 export const useAddGift = (authenticatedUser: AuthenticatedUser | null) => {
   const [isAddingGift, setIsAddingGift] = useState<boolean>(false);
+  const { addToast } = useToast();
 
   const handleAddGift = async (
     listId: string,
@@ -40,6 +42,10 @@ export const useAddGift = (authenticatedUser: AuthenticatedUser | null) => {
 
       return newGift;
     } catch (error) {
+      addToast({
+        title: "Error",
+        description: "Failed to add gift",
+      });
       console.error("Error adding gift:", error);
       return null;
     } finally {

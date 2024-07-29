@@ -6,6 +6,7 @@ import { GiftIcon, UserIcon } from "lucide-react";
 import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
 import { GiftList } from "@/types/gift-list";
 import { useSidebar } from "@/context/sidebar-context";
+import { motion } from "framer-motion";
 
 interface GuestGiftListProps {
   lists: GiftList[];
@@ -66,19 +67,25 @@ export function GuestGiftList({ lists, onListClick }: GuestGiftListProps) {
             </div>
           </div>
           {ownerLists.map((list) => (
-            <Link
+            <motion.div
               key={list.id}
-              href={`/gift-list/${list.id}`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => handleListClick(list.id)}
-              className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
-                list.id === currentListId ? "bg-muted text-foreground" : ""
-              }`}
+              className="cursor-pointer"
             >
-              <GiftIcon className="h-4 w-4 mr-1 flex-shrink-0" />
-              <span className="truncate" title={list.name}>
-                {list.name}
-              </span>
-            </Link>
+              <Link
+                href={`/gift-list/${list.id}`}
+                className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
+                  list.id === currentListId ? "bg-muted text-foreground" : ""
+                }`}
+              >
+                <GiftIcon className="h-4 w-4 mr-1 flex-shrink-0" />
+                <span className="truncate" title={list.name}>
+                  {list.name}
+                </span>
+              </Link>
+            </motion.div>
           ))}
         </div>
       ))}
