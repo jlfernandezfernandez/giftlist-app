@@ -7,6 +7,7 @@ import {
   ReactNode,
   useState,
   useEffect,
+  useCallback,
 } from "react";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { useRouter } from "next/navigation";
@@ -24,9 +25,13 @@ const UserContext = createContext<UserContextProps>({
 });
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<AuthenticatedUser | null>(null);
+  const [user, setUserState] = useState<AuthenticatedUser | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
   const router = useRouter();
+
+  const setUser = useCallback((newUser: AuthenticatedUser | null) => {
+    setUserState(newUser);
+  }, []);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -47,7 +52,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     };
 
     fetchUser();
-  }, []);
+  }, [setUser]);
 
   useEffect(() => {
     if (!isLoadingUser && !user) {
