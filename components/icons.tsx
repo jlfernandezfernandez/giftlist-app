@@ -47,7 +47,7 @@ export function ShareIcon(
   );
 }
 
-export function TrashIcon(
+export function Trash2Icon(
   props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>
 ) {
   return (

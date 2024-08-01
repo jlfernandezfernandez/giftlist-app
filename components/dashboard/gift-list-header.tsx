@@ -3,7 +3,11 @@
 import { useCallback } from "react";
 import { GiftList } from "@/types/gift-list";
 import { Button } from "@/components/ui/button";
-import { FilePenIcon, ShareIcon, TrashIcon } from "@/components/icons";
+import { FilePenIcon, ShareIcon, Trash2Icon, UsersIcon } from "lucide-react";
+import { InitialAvatar } from "@/components/ui/initial-avatar";
+import { ExtraUsersAvatar } from "@/components/ui/extra-users-avatar";
+import { Tooltip } from "@geist-ui/core";
+import { getFirstName } from "@/lib/utils";
 
 interface GiftListHeaderProps {
   currentList: GiftList;
@@ -26,34 +30,62 @@ export function GiftListHeader({
   }, [currentList.date]);
 
   return (
-    <div className="p-4 ">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-        <div className="mb-4 md:mb-0">
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div>
           <h1 className="text-2xl font-semibold">{currentList.name}</h1>
           <p className="text-gray-500 mt-1">{currentList.description}</p>
           <div className="text-sm text-gray-400 mt-1">{formattedDate()}</div>
         </div>
-        {isOwner && (
-          <div className="flex items-center gap-2">
-            <Button
-              onClick={handleEditList}
-              className="flex items-center transition-colors duration-200 hover:bg-gray-100"
-            >
-              <FilePenIcon className="h-4 w-4 mr-2" />
-              Edit List
-            </Button>
-            <Button
-              onClick={handleShareList}
-              className="flex items-center transition-colors duration-200 hover:bg-gray-100"
-            >
-              <ShareIcon className="h-4 w-4 mr-2" />
-              Share
-            </Button>
-            <Button onClick={handleDeleteList} variant="destructive">
-              <TrashIcon className="h-4 w-4" />
-            </Button>
-          </div>
-        )}
+        <div className="flex items-center gap-2 mt-4 sm:mt-0">
+          <Button
+            size="sm"
+            onClick={handleEditList}
+            variant="outline"
+            className="flex items-center"
+          >
+            <FilePenIcon className="h-4 w-4 mr-2" />
+            Edit
+          </Button>
+          <Button
+            size="sm"
+            onClick={handleShareList}
+            variant="outline"
+            className="flex items-center"
+          >
+            <ShareIcon className="h-4 w-4 mr-2" />
+            Share
+          </Button>
+          <Button
+            size="sm"
+            variant="destructive"
+            onClick={handleDeleteList}
+            className="flex items-center"
+          >
+            <Trash2Icon className="h-4 w-4 mr-2" />
+            Delete
+          </Button>
+        </div>
+      </div>
+
+      <div className="flex items-center space-x-2">
+        <UsersIcon className="h-5 w-5 text-gray-400" />
+        <div className="flex items-center space-x-1">
+          {currentList.users.slice(0, 5).map((user) => (
+            <Tooltip key={user.userId} text={getFirstName(user.name)}>
+              <InitialAvatar name={user.name} />
+            </Tooltip>
+          ))}
+          {currentList.users.length > 5 && (
+            <Tooltip text={`+${currentList.users.length - 5} more users`}>
+              <ExtraUsersAvatar count={currentList.users.length - 5} />
+            </Tooltip>
+          )}
+        </div>
+        <span className="text-sm text-gray-500">
+          {currentList.users.length} member
+          {currentList.users.length !== 1 ? "s" : ""}
+        </span>
       </div>
     </div>
   );
