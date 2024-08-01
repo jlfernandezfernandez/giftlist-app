@@ -1,6 +1,4 @@
-// components/dashboard/gift-card.tsx
-
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,17 +8,17 @@ import { Gift } from "@/types/gift";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { badgeVariant, currencySymbol } from "@/lib/gift-utils";
 import { InitialAvatar } from "@/components/ui/initial-avatar";
+import { ExtraUsersAvatar } from "../ui/extra-users-avatar";
+import { EditGiftModal } from "../edit-gift-modal";
+import { getFirstName } from "@/lib/utils";
 import {
-  TrashIcon,
-  FilePenIcon,
+  Trash2Icon,
+  PencilIcon,
   UserPlusIcon,
   UserMinusIcon,
   ShoppingCartIcon,
   InfoIcon,
-} from "@/components/icons";
-import { EditGiftModal } from "../edit-gift-modal";
-import { getFirstName } from "@/lib/utils";
-import { ExtraUsersAvatar } from "../ui/extra-users-avatar";
+} from "lucide-react";
 
 interface GiftCardProps {
   authenticatedUser: AuthenticatedUser;
@@ -59,14 +57,13 @@ export function GiftCard({
 
   return (
     <>
-      <Card className="p-3 sm:p-4 hover:shadow-sm transition-shadow duration-300">
-        <div className="flex flex-col sm:grid sm:grid-cols-12 sm:gap-4 sm:items-center w-full">
-          {/* Nombre del regalo y descripción */}
-          <div className="sm:col-span-4 flex items-center mb-2 sm:mb-0">
+      <Card className="p-4 hover:shadow-md transition-shadow duration-300">
+        <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+          <div className="sm:col-span-4 flex items-center space-x-2">
             <Link
               href={gift.link || "#"}
               target="_blank"
-              className="font-medium hover:underline text-sm sm:text-base truncate mr-2"
+              className="font-medium hover:underline text-lg truncate flex-grow"
               prefetch={false}
             >
               {gift.name}
@@ -76,87 +73,94 @@ export function GiftCard({
                 text={gift.description}
                 placement={isSM ? "top" : "left"}
               >
-                <InfoIcon className="h-4 w-4 text-gray-400" />
+                {" "}
+                <InfoIcon className="h-5 w-5 text-gray-400 cursor-help" />
               </Tooltip>
             )}
           </div>
 
-          {/* Precio, sitio web y estado */}
-          <div className="sm:col-span-3 flex items-center justify-between text-xs sm:text-sm mb-2 sm:mb-0">
-            <span>{priceDisplay}</span>
-            <span className="truncate max-w-[40%]">{gift.website}</span>
+          <div className="sm:col-span-3 flex items-center justify-between text-sm">
+            <span className="font-semibold">{priceDisplay}</span>
+            <span className="truncate max-w-[40%] text-gray-600">
+              {gift.website}
+            </span>
             <div className="w-24 flex justify-center">
-              <Badge variant={badgeVariant(gift.state || "default")}>
+              <Badge
+                variant={badgeVariant(gift.state || "default")}
+                className="capitalize"
+              >
                 {gift.state}
               </Badge>
             </div>
           </div>
 
-          {/* Usuarios asignados y botones de acción */}
-          <div className="flex justify-between items-center sm:col-span-5 sm:justify-end">
-            {/* Usuarios asignados */}
+          <div className="sm:col-span-5 flex justify-between items-center">
             <div className="flex items-center space-x-1">
               {gift.assignedUsers?.slice(0, 5).map((user) => (
                 <Tooltip
-                  key={user.userId}
                   text={getFirstName(user.name)}
+                  key={user.userId}
                   enterDelay={300}
+                  leaveDelay={50}
                 >
                   <InitialAvatar name={user.name} />
                 </Tooltip>
               ))}
               {gift.assignedUsers && gift.assignedUsers.length > 5 && (
-                <Tooltip
-                  text={`+${gift.assignedUsers.length - 5} more users`}
-                  enterDelay={300}
-                >
+                <Tooltip text={`+${gift.assignedUsers.length - 5} more users`}>
                   <ExtraUsersAvatar count={gift.assignedUsers.length - 5} />
                 </Tooltip>
               )}
             </div>
 
-            {/* Botones de acción */}
-            <div className="flex items-center space-x-1">
+            <div className="flex items-center space-x-2">
               {isOwner ? (
                 <>
                   <Button
                     size="sm"
-                    variant="ghost"
+                    variant="outline"
                     onClick={() => setIsEditModalOpen(true)}
-                    title="Edit Gift"
+                    className="text-blue-600 hover:text-blue-700"
                   >
-                    <FilePenIcon className="h-4 w-4" />
+                    <PencilIcon className="h-4 w-4 mr-1" />
+                    Edit
                   </Button>
                   <Button
                     size="sm"
                     variant="destructive"
                     onClick={handleRemoveGift}
-                    title="Delete Gift"
                   >
-                    <TrashIcon className="h-4 w-4" />
+                    <Trash2Icon className="h-4 w-4 mr-1" />
+                    Delete
                   </Button>
                 </>
               ) : (
                 <>
                   <Button
                     size="sm"
-                    variant="ghost"
+                    variant={isAssigned ? "destructive" : "outline"}
                     onClick={isAssigned ? handleUnassignGift : handleAssignGift}
-                    title={isAssigned ? "Unassign Gift" : "Assign Gift"}
                   >
                     {isAssigned ? (
-                      <UserMinusIcon className="h-4 w-4" />
+                      <>
+                        <UserMinusIcon className="h-4 w-4 mr-1" />
+                        Leave
+                      </>
                     ) : (
-                      <UserPlusIcon className="h-4 w-4" />
+                      <>
+                        <UserPlusIcon className="h-4 w-4 mr-1" />
+                        Join
+                      </>
                     )}
                   </Button>
                   <Button
                     size="sm"
-                    variant="ghost"
+                    variant="outline"
                     onClick={handleViewProduct}
-                    title="View Product"
+                    disabled={!isAssigned}
                   >
-                    <ShoppingCartIcon className="h-4 w-4" />
+                    <ShoppingCartIcon className="h-4 w-4 mr-1" />
+                    Buy
                   </Button>
                 </>
               )}
