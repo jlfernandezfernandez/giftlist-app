@@ -102,3 +102,30 @@ export async function deleteGiftRepo(giftId: string): Promise<void> {
     throw new Error(`Error deleting gift: ${error.message}`);
   }
 }
+
+export async function assignUserToGiftRepo(
+  giftId: string,
+  userId: string
+): Promise<void> {
+  const { error } = await supabase
+    .from("giftusers")
+    .insert({ gift_id: giftId, user_id: userId });
+
+  if (error) {
+    throw new Error(`Error assigning user to gift: ${error.message}`);
+  }
+}
+
+export async function unassignUserFromGiftRepo(
+  giftId: string,
+  userId: string
+): Promise<void> {
+  const { error } = await supabase
+    .from("giftusers")
+    .delete()
+    .match({ gift_id: giftId, user_id: userId });
+
+  if (error) {
+    throw new Error(`Error unassigning user from gift: ${error.message}`);
+  }
+}

@@ -1,8 +1,10 @@
 // lib/services/gift-service.ts
 import {
+  assignUserToGiftRepo,
   createGiftRepo,
   deleteGiftRepo,
   getGiftsByListIdRepo,
+  unassignUserFromGiftRepo,
   updateGiftRepo,
 } from "@/lib/repositories/gift-repository";
 import { Gift } from "@/types/gift";
@@ -11,7 +13,10 @@ export async function createGift(gift: Gift): Promise<Gift> {
   return await createGiftRepo(gift);
 }
 
-export async function updateGift(giftId: string, updatedGift: Partial<Gift>): Promise<Gift> {
+export async function updateGift(
+  giftId: string,
+  updatedGift: Partial<Gift>
+): Promise<Gift> {
   try {
     return await updateGiftRepo(giftId, updatedGift);
   } catch (error) {
@@ -30,5 +35,29 @@ export async function deleteGift(giftId: string): Promise<void> {
   } catch (error) {
     console.error("Error deleting gift:", error);
     throw new Error("Failed to delete gift");
+  }
+}
+
+export async function assignUserToGift(
+  giftId: string,
+  userId: string
+): Promise<void> {
+  try {
+    await assignUserToGiftRepo(giftId, userId);
+  } catch (error) {
+    console.error("Error assigning user to gift:", error);
+    throw new Error("Failed to assign user to gift");
+  }
+}
+
+export async function unassignUserFromGift(
+  giftId: string,
+  userId: string
+): Promise<void> {
+  try {
+    await unassignUserFromGiftRepo(giftId, userId);
+  } catch (error) {
+    console.error("Error unassigning user from gift:", error);
+    throw new Error("Failed to unassign user from gift");
   }
 }

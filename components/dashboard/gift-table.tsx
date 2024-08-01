@@ -13,6 +13,8 @@ import { EditGiftListModal } from "../edit-gift-list-modal";
 import { useUpdateGift } from "@/hooks/use-update-gift";
 import { ShareGiftListModal } from "../share-gift-list-modal";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAssignUserToGift } from "@/hooks/use-assign-user-to-gift";
+import { useUnassignUserFromGift } from "@/hooks/user-unassign-user-from-gift";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -31,6 +33,8 @@ export function GiftTable({
   const { isAddingGift, handleAddGift } = useAddGift(authenticatedUser);
   const { deleteGift, isDeletingGift } = useDeleteGift();
   const { updateGift, isUpdatingGift } = useUpdateGift();
+  const { assignUserToGift, isAssigningUser } = useAssignUserToGift();
+  const { unassignUserFromGift, isUnassigningUser } = useUnassignUserFromGift();
   const { deleteGiftList, isDeletingGiftList } = useDeleteGiftList();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -76,11 +80,12 @@ export function GiftTable({
   );
 
   const handleRemoveGift = useCallback(
-    async (giftId: string) => {
+    async (gift: Gift) => {
+      if (!gift.id) return;
       if (
         window.confirm("¿Estás seguro de que quieres eliminar este regalo?")
       ) {
-        const success = await deleteGift(currentList.id, giftId);
+        const success = await deleteGift(currentList.id, gift.id);
         if (success) {
           console.log("Regalo eliminado con éxito");
         } else {
@@ -93,20 +98,53 @@ export function GiftTable({
 
   const handleEditGift = useCallback(
     async (updatedGift: Gift) => {
-      if (updatedGift.id) {
-        const success = await updateGift(
-          currentList.id,
-          updatedGift.id,
-          updatedGift
-        );
-        if (success) {
-          console.log("Regalo actualizado con éxito");
-        } else {
-          console.error("No se pudo actualizar el regalo");
-        }
+      if (!updatedGift.id) return;
+      const success = await updateGift(
+        currentList.id,
+        updatedGift.id,
+        updatedGift
+      );
+      if (success) {
+        console.log("Regalo actualizado con éxito");
+      } else {
+        console.error("No se pudo actualizar el regalo");
       }
     },
     [currentList.id, updateGift]
+  );
+
+  const handleAssignGift = useCallback(
+    async (gift: Gift) => {
+      if (!gift.id) return;
+      const success = await assignUserToGift(
+        gift.id,
+        authenticatedUser.uid,
+        currentList.id
+      );
+      if (success) {
+        console.log("Usuario asignado al regalo con éxito");
+      } else {
+        console.error("No se pudo asignar el usuario al regalo");
+      }
+    },
+    [assignUserToGift, authenticatedUser.uid, currentList.id]
+  );
+
+  const handleUnassignGift = useCallback(
+    async (gift: Gift) => {
+      if (!gift.id) return;
+      const success = await unassignUserFromGift(
+        gift.id,
+        authenticatedUser.uid,
+        currentList.id
+      );
+      if (success) {
+        console.log("Usuario desasignado del regalo con éxito");
+      } else {
+        console.error("No se pudo desasignar el usuario del regalo");
+      }
+    },
+    [unassignUserFromGift, authenticatedUser.uid, currentList.id]
   );
 
   const handleDeleteList = () => {
@@ -154,14 +192,10 @@ export function GiftTable({
                   authenticatedUser={authenticatedUser}
                   gift={gift}
                   isOwner={isOwner}
-                  handleRemoveGift={() => gift.id && handleRemoveGift(gift.id)}
+                  handleRemoveGift={() => handleRemoveGift(gift)}
                   handleEditGift={handleEditGift}
-                  handleAssignGift={() => {
-                    /* Implementar lógica de asignación */
-                  }}
-                  handleUnassignGift={() => {
-                    /* Implementar lógica de desasignación */
-                  }}
+                  handleAssignGift={() => handleAssignGift(gift)}
+                  handleUnassignGift={() => handleUnassignGift(gift)}
                 />
               </motion.div>
             ))

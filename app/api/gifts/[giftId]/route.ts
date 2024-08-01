@@ -1,3 +1,5 @@
+//app/api/gifts/[giftId]/route.ts
+
 import { NextResponse } from "next/server";
 import { deleteGift, updateGift } from "@/lib/services/gift-service";
 

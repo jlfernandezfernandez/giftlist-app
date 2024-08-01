@@ -40,9 +40,7 @@ export default function Home() {
       </main>
       <footer className="relative bg-white shadow z-10">
         <div className="container mx-auto px-4 py-4 text-center">
-          <p className="text-gray-700">
-            © 2024 GiftList AI - Simplifying gift management
-          </p>
+          <p className="text-gray-700">© 2024 GiftList AI</p>
         </div>
       </footer>
     </div>
