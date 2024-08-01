@@ -20,6 +20,7 @@ import {
 } from "@/components/icons";
 import { EditGiftModal } from "../edit-gift-modal";
 import { getFirstName } from "@/lib/utils";
+import { ExtraUsersAvatar } from "../ui/extra-users-avatar";
 
 interface GiftCardProps {
   authenticatedUser: AuthenticatedUser;
@@ -59,39 +60,41 @@ export function GiftCard({
   return (
     <>
       <Card className="p-3 sm:p-4 hover:shadow-sm transition-shadow duration-300">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:w-3/4 space-y-2 sm:space-y-0 sm:space-x-4">
-            <div className="flex items-center justify-between sm:w-1/3">
-              <Link
-                href={gift.link || "#"}
-                target="_blank"
-                className="font-medium hover:underline text-sm sm:text-base truncate"
-                prefetch={false}
+        <div className="flex flex-col sm:grid sm:grid-cols-12 sm:gap-4 sm:items-center w-full">
+          {/* Nombre del regalo y descripción */}
+          <div className="sm:col-span-4 flex items-center mb-2 sm:mb-0">
+            <Link
+              href={gift.link || "#"}
+              target="_blank"
+              className="font-medium hover:underline text-sm sm:text-base truncate mr-2"
+              prefetch={false}
+            >
+              {gift.name}
+            </Link>
+            {gift.description && (
+              <Tooltip
+                text={gift.description}
+                placement={isSM ? "top" : "left"}
               >
-                {gift.name}
-              </Link>
-              {gift.description && (
-                <Tooltip
-                  text={gift.description}
-                  placement={isSM ? "top" : "left"}
-                >
-                  <InfoIcon className="h-4 w-4 ml-1 text-gray-400" />
-                </Tooltip>
-              )}
-            </div>
-
-            <div className="flex items-center justify-between sm:justify-start sm:w-2/3 text-xs sm:text-sm space-x-2">
-              <span>{priceDisplay}</span>
-              <span className="truncate max-w-[40%]">{gift.website}</span>
-              <Badge variant={badgeVariant(gift.state || "default")}>
-                {gift.state}
-              </Badge>
-            </div>
+                <InfoIcon className="h-4 w-4 text-gray-400" />
+              </Tooltip>
+            )}
           </div>
 
-          <div className="flex items-center justify-between sm:w-1/4">
+          {/* Precio, sitio web y estado */}
+          <div className="sm:col-span-3 flex items-center justify-between text-xs sm:text-sm mb-2 sm:mb-0">
+            <span>{priceDisplay}</span>
+            <span className="truncate max-w-[40%]">{gift.website}</span>
+            <Badge variant={badgeVariant(gift.state || "default")}>
+              {gift.state}
+            </Badge>
+          </div>
+
+          {/* Usuarios asignados y botones de acción */}
+          <div className="flex justify-between items-center sm:col-span-5 sm:justify-end">
+            {/* Usuarios asignados */}
             <div className="flex items-center space-x-1">
-              {gift.assignedUsers?.map((user) => (
+              {gift.assignedUsers?.slice(0, 5).map((user) => (
                 <Tooltip
                   key={user.userId}
                   text={getFirstName(user.name)}
@@ -100,8 +103,17 @@ export function GiftCard({
                   <InitialAvatar name={user.name} />
                 </Tooltip>
               ))}
+              {gift.assignedUsers && gift.assignedUsers.length > 5 && (
+                <Tooltip
+                  text={`+${gift.assignedUsers.length - 5} more users`}
+                  enterDelay={300}
+                >
+                  <ExtraUsersAvatar count={gift.assignedUsers.length - 5} />
+                </Tooltip>
+              )}
             </div>
 
+            {/* Botones de acción */}
             <div className="flex items-center space-x-1">
               {isOwner ? (
                 <>
