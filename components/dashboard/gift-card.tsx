@@ -85,9 +85,11 @@ export function GiftCard({
           <div className="sm:col-span-3 flex items-center justify-between text-xs sm:text-sm mb-2 sm:mb-0">
             <span>{priceDisplay}</span>
             <span className="truncate max-w-[40%]">{gift.website}</span>
-            <Badge variant={badgeVariant(gift.state || "default")}>
-              {gift.state}
-            </Badge>
+            <div className="w-24 flex justify-center">
+              <Badge variant={badgeVariant(gift.state || "default")}>
+                {gift.state}
+              </Badge>
+            </div>
           </div>
 
           {/* Usuarios asignados y botones de acción */}

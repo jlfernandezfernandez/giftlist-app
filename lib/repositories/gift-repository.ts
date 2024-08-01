@@ -107,9 +107,10 @@ export async function assignUserToGiftRepo(
   giftId: string,
   userId: string
 ): Promise<void> {
-  const { error } = await supabase
-    .from("giftusers")
-    .insert({ gift_id: giftId, user_id: userId });
+  const { error } = await supabase.rpc("assign_user_to_gift", {
+    p_gift_id: giftId,
+    p_user_id: userId,
+  });
 
   if (error) {
     throw new Error(`Error assigning user to gift: ${error.message}`);
@@ -120,10 +121,10 @@ export async function unassignUserFromGiftRepo(
   giftId: string,
   userId: string
 ): Promise<void> {
-  const { error } = await supabase
-    .from("giftusers")
-    .delete()
-    .match({ gift_id: giftId, user_id: userId });
+  const { error } = await supabase.rpc("unassign_user_from_gift", {
+    p_gift_id: giftId,
+    p_user_id: userId,
+  });
 
   if (error) {
     throw new Error(`Error unassigning user from gift: ${error.message}`);
