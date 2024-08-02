@@ -54,11 +54,11 @@ export function GuestGiftList({ lists, onListClick }: GuestGiftListProps) {
   };
 
   return (
-    <div className="space-y-4 mt-2">
+    <div className="space-y-6 mt-2">
       {Object.entries(groupedLists).map(([ownerNames, ownerLists]) => (
-        <div key={ownerNames} className="space-y-1">
-          <div className="text-xs font-medium text-muted-foreground flex items-center">
-            <UserIcon className="h-3 w-3 mr-1" />
+        <div key={ownerNames} className="space-y-2 pb-4">
+          <div className="text-xs font-semibold text-muted-foreground flex items-center mb-2">
+            <UserIcon className="h-4 w-4 mr-2" />
             <span className="truncate" title={ownerNames}>
               {ownerNames}
             </span>
@@ -73,7 +73,7 @@ export function GuestGiftList({ lists, onListClick }: GuestGiftListProps) {
             >
               <Link
                 href={`/gift-list/${list.id}`}
-                className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
+                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
                   list.id === currentListId ? "bg-muted text-foreground" : ""
                 }`}
               >
