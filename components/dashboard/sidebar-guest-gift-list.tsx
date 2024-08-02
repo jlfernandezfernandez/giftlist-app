@@ -54,10 +54,10 @@ export function GuestGiftList({ lists, onListClick }: GuestGiftListProps) {
   };
 
   return (
-    <div className="space-y-6 mt-4 ml-1">
+    <div className="space-y-4 mt-4 ml-1">
       {Object.entries(groupedLists).map(([ownerNames, ownerLists]) => (
-        <div key={ownerNames} className="space-y- pb-4">
-          <div className="text-xs font-semibold text-muted-foreground flex items-center mb-2">
+        <div key={ownerNames} className="space-y-1">
+          <div className="text-xs font-semibold text-muted-foreground flex items-center">
             <UserIcon className="h-4 w-4 mr-2" />
             <span className="truncate" title={ownerNames}>
               {ownerNames}
