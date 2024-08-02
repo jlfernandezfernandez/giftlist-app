@@ -1,5 +1,4 @@
 // components/dashboard/sidebar-guest-gift-list.tsx
-
 import React, { useMemo } from "react";
 import Link from "next/link";
 import { GiftIcon, UserIcon } from "lucide-react";
@@ -55,22 +54,20 @@ export function GuestGiftList({ lists, onListClick }: GuestGiftListProps) {
   };
 
   return (
-    <>
+    <div className="space-y-4 mt-2">
       {Object.entries(groupedLists).map(([ownerNames, ownerLists]) => (
-        <div key={ownerNames} className="mb-4">
-          <div className="flex items-center font-medium text-muted-foreground mb-2">
-            <div className="flex items-center">
-              <UserIcon className="h-4 w-4 mr-1 flex-shrink-0" />
-              <span className="truncate" title={ownerNames}>
-                {ownerNames}
-              </span>
-            </div>
+        <div key={ownerNames} className="space-y-1">
+          <div className="text-xs font-medium text-muted-foreground flex items-center">
+            <UserIcon className="h-3 w-3 mr-1" />
+            <span className="truncate" title={ownerNames}>
+              {ownerNames}
+            </span>
           </div>
           {ownerLists.map((list) => (
             <motion.div
               key={list.id}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => handleListClick(list.id)}
               className="cursor-pointer"
             >
@@ -80,7 +77,7 @@ export function GuestGiftList({ lists, onListClick }: GuestGiftListProps) {
                   list.id === currentListId ? "bg-muted text-foreground" : ""
                 }`}
               >
-                <GiftIcon className="h-4 w-4 mr-1 flex-shrink-0" />
+                <GiftIcon className="h-4 w-4 flex-shrink-0" />
                 <span className="truncate" title={list.name}>
                   {list.name}
                 </span>
@@ -89,6 +86,6 @@ export function GuestGiftList({ lists, onListClick }: GuestGiftListProps) {
           ))}
         </div>
       ))}
-    </>
+    </div>
   );
 }

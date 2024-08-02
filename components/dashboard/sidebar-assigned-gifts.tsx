@@ -17,10 +17,15 @@ export function AssignedGifts() {
   const currentListId = useCurrentGiftListId();
 
   if (!user || isLoading) return null;
-  if (isError) return <div>Error loading assigned gifts</div>;
+  if (isError)
+    return (
+      <div className="text-sm text-red-500">Error loading assigned gifts</div>
+    );
 
   if (assignedGifts.length === 0) {
-    return null;
+    return (
+      <div className="text-sm text-muted-foreground">No assigned gifts</div>
+    );
   }
 
   const handleGiftClick = () => {
@@ -28,15 +33,12 @@ export function AssignedGifts() {
   };
 
   return (
-    <div className="mb-4">
-      <div className="flex items-center font-medium text-muted-foreground mb-2">
-        Assigned Gifts
-      </div>{" "}
+    <div className="space-y-1 mt-2">
       {assignedGifts.map((gift) => (
         <motion.div
           key={gift.id}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           onClick={handleGiftClick}
           className="cursor-pointer"
         >
@@ -48,7 +50,7 @@ export function AssignedGifts() {
                 : ""
             }`}
           >
-            <GiftIcon className="h-4 w-4 mr-1 flex-shrink-0" />
+            <GiftIcon className="h-4 w-4 flex-shrink-0" />
             <span className="truncate" title={gift.name}>
               {gift.name}
             </span>

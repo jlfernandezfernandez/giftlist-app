@@ -16,8 +16,8 @@ export function OwnGiftList({ list, onClick }: OwnGiftListProps) {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
       onClick={onClick}
       className="cursor-pointer"
     >
@@ -27,7 +27,7 @@ export function OwnGiftList({ list, onClick }: OwnGiftListProps) {
           list.id === currentListId ? "bg-muted text-foreground" : ""
         }`}
       >
-        <GiftIcon className="h-4 w-4 mr-1 flex-shrink-0" />
+        <GiftIcon className="h-4 w-4 flex-shrink-0" />
         <span className="truncate" title={list.name}>
           {list.name}
         </span>

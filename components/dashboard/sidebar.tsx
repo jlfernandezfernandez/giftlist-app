@@ -1,5 +1,4 @@
 // components/dashboard/sidebar.tsx
-
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -53,45 +52,58 @@ export function Sidebar() {
           </Button>
         </div>
         <AvatarSection user={user} />
-        <nav className="flex-1 overflow-y-auto mt-4">
-          <div>
-            <div className="flex items-center font-medium text-muted-foreground mb-2">
-              My Lists
-            </div>
-            <div className="space-y-2">
-              {ownGiftLists.map((list) => (
-                <OwnGiftList
-                  key={list.id}
-                  list={list}
-                  onClick={() => handleListClick(`/gift-list/${list.id}`)}
+        <nav className="flex-1 overflow-y-auto mt-6">
+          <div className="space-y-6">
+            <section>
+              <div className="flex items-center font-medium text-muted-foreground mb-2">
+                My Lists
+              </div>
+              <div className="space-y-2 ml-2">
+                {ownGiftLists.map((list) => (
+                  <OwnGiftList
+                    key={list.id}
+                    list={list}
+                    onClick={() => handleListClick(`/gift-list/${list.id}`)}
+                  />
+                ))}
+                <Button
+                  className="mt-3 w-full"
+                  onClick={() => {
+                    router.push("/gift-list/create");
+                    closeSidebar();
+                  }}
+                >
+                  New Gift List
+                </Button>
+              </div>
+            </section>
+
+            <section>
+              <div className="flex items-center font-medium text-muted-foreground mb-2">
+                Assigned Gifts
+              </div>
+              <div className="ml-2">
+                <AssignedGifts />
+              </div>
+            </section>
+
+            <section>
+              <div className="flex items-center font-medium text-muted-foreground mb-2">
+                Shared
+              </div>
+              <div className="ml-2">
+                <GuestGiftList
+                  lists={guestGiftLists}
+                  onListClick={handleListClick}
                 />
-              ))}
-              <Button
-                className="mt-2 w-full"
-                onClick={() => {
-                  router.push("/gift-list/create");
-                  closeSidebar();
-                }}
-              >
-                New Gift List
-              </Button>
-            </div>
-          </div>
-          <div className="mt-5 space-y-2">
-            <AssignedGifts />
-          </div>
-          <div className="mt-5 space-y-2">
-            <GuestGiftList
-              lists={guestGiftLists}
-              onListClick={handleListClick}
-            />
+              </div>
+            </section>
           </div>
         </nav>
         <div className="border-t border-border mt-8 pt-4">
           <Button
             variant="ghost"
-            alignment="left"
-            className="w-full text-gray-500"
+            className="w-full justify-start text-gray-500"
             onClick={handleLogout}
           >
             Logout
