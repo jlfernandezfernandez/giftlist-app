@@ -13,8 +13,6 @@ import { useSidebar } from "@/context/sidebar-context";
 import { OwnGiftList } from "./sidebar-own-gift-list";
 import { GuestGiftList } from "./sidebar-guest-gift-list";
 import { AssignedGifts } from "./sidebar-assigned-gifts";
-import Link from "next/link";
-import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
 
 export function Sidebar() {
   const { isSidebarOpen, closeSidebar } = useSidebar();
@@ -22,7 +20,6 @@ export function Sidebar() {
   const { giftLists, isLoadingGiftList } = useGiftList();
   const router = useRouter();
   const handleLogout = useLogout();
-  const currentListId = useCurrentGiftListId();
 
   if (isLoadingUser || isLoadingGiftList) {
     return <Spinner />;
@@ -44,7 +41,7 @@ export function Sidebar() {
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 w-64 flex flex-col overflow-hidden`}
       >
-        <div className="p-4 border-b border-border">
+        <div className="p-4">
           <AvatarSection user={user} />
         </div>
         <nav className="flex-1 overflow-y-auto p-4">
@@ -53,28 +50,17 @@ export function Sidebar() {
               <h3 className="text-xs font-semibold text-muted-foreground uppercase mb-2">
                 My Lists
               </h3>
-              {ownGiftLists.map((list) => (
-                <OwnGiftList
-                  key={list.id}
-                  list={list}
-                  onClick={() => {
-                    router.push(`/gift-list/${list.id}`);
-                    closeSidebar();
-                  }}
-                />
-              ))}
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full mt-4"
-                onClick={() => {
+              <OwnGiftList
+                lists={ownGiftLists}
+                onCreateNewList={() => {
                   router.push("/gift-list/create");
                   closeSidebar();
                 }}
-              >
-                <PlusIcon className="h-4 w-4 mr-2" />
-                New Gift List
-              </Button>
+                onListClick={(url) => {
+                  router.push(url);
+                  closeSidebar();
+                }}
+              />
             </section>
 
             <section>

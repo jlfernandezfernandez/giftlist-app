@@ -6,7 +6,6 @@ import { useUser } from "@/context/user-context";
 import { useAssignedGifts } from "@/hooks/use-assigned-gifts";
 import { motion } from "framer-motion";
 import { GiftIcon } from "lucide-react";
-import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
 
 export function AssignedGifts() {
   const { closeSidebar } = useSidebar();
@@ -14,7 +13,6 @@ export function AssignedGifts() {
   const { assignedGifts, isLoading, isError } = useAssignedGifts(
     user?.uid || ""
   );
-  const currentListId = useCurrentGiftListId();
 
   if (!user || isLoading) return null;
   if (isError)
@@ -44,11 +42,7 @@ export function AssignedGifts() {
         >
           <Link
             href={`/gift-list/${gift.giftListId}#${gift.id}`}
-            className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
-              gift.giftListId === currentListId
-                ? "bg-muted text-foreground"
-                : ""
-            }`}
+            className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground`}
           >
             <GiftIcon className="h-4 w-4 flex-shrink-0" />
             <span className="truncate" title={gift.name}>
