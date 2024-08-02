@@ -13,6 +13,7 @@ import { useGiftList } from "@/context/gift-list-context";
 import { OwnGiftList } from "./sidebar-own-gift-list";
 import { GuestGiftList } from "./sidebar-guest-gift-list";
 import { useSidebar } from "@/context/sidebar-context";
+import { AssignedGifts } from "./sidebar-assigned-gifts";
 
 export function Sidebar() {
   const { isSidebarOpen, closeSidebar } = useSidebar();
@@ -72,9 +73,12 @@ export function Sidebar() {
                   closeSidebar();
                 }}
               >
-                Add Gift List
+                New Gift List
               </Button>
             </div>
+          </div>
+          <div className="mt-5 space-y-2">
+            <AssignedGifts />
           </div>
           <div className="mt-5 space-y-2">
             <GuestGiftList

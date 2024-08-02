@@ -130,3 +130,32 @@ export async function unassignUserFromGiftRepo(
     throw new Error(`Error unassigning user from gift: ${error.message}`);
   }
 }
+
+export async function getAssignedGiftsByUserIdRepo(
+  userId: string
+): Promise<Gift[]> {
+  const { data, error } = await supabase.rpc("get_assigned_gifts_by_user_id", {
+    p_user_id: userId,
+  });
+
+  if (error) {
+    throw new Error(`Error fetching assigned gifts for user: ${error.message}`);
+  }
+
+  return data.map((gift: any) => ({
+    id: gift.id,
+    giftListId: gift.gift_list_id,
+    name: gift.name,
+    description: gift.description,
+    link: gift.link,
+    website: gift.website,
+    price: gift.price,
+    currency: gift.currency,
+    state: gift.state,
+    assignedUsers: gift.assigned_users.map((user: any) => ({
+      userId: user.user_id,
+      name: user.name,
+      email: user.email,
+    })),
+  }));
+}

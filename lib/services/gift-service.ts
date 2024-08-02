@@ -3,6 +3,7 @@ import {
   assignUserToGiftRepo,
   createGiftRepo,
   deleteGiftRepo,
+  getAssignedGiftsByUserIdRepo,
   getGiftsByListIdRepo,
   unassignUserFromGiftRepo,
   updateGiftRepo,
@@ -59,5 +60,16 @@ export async function unassignUserFromGift(
   } catch (error) {
     console.error("Error unassigning user from gift:", error);
     throw new Error("Failed to unassign user from gift");
+  }
+}
+
+export async function getAssignedGiftsByUserId(
+  userId: string
+): Promise<Gift[]> {
+  try {
+    return await getAssignedGiftsByUserIdRepo(userId);
+  } catch (error) {
+    console.error("Error fetching assigned gifts for user:", error);
+    throw new Error("Failed to fetch assigned gifts for user");
   }
 }
