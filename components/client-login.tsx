@@ -24,11 +24,11 @@ export default function ClientLogin() {
         error={error}
         isPending={isPending}
       />
-      <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+      <p className="text-sm font-light text-gray-500">
         New to GiftList AI?{" "}
         <Link
           href={`/register?redirect=${encodeURIComponent(getRedirectPath())}`}
-          className="font-medium text-gray-600 hover:underline dark:text-gray-500"
+          className="font-medium text-gray-600 hover:underline"
         >
           Create an account
         </Link>

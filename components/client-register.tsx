@@ -26,11 +26,11 @@ export default function ClientRegister() {
         isPending={isPending}
       />
       <div className="text-center mt-4">
-        <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+        <p className="text-sm font-light text-gray-500">
           Already have an account?{" "}
           <Link
             href={`/login?redirect=${encodeURIComponent(getRedirectPath())}`}
-            className="font-medium text-gray-600 hover:underline dark:text-gray-500"
+            className="font-medium text-gray-600 hover:underline"
           >
             Sign in
           </Link>
