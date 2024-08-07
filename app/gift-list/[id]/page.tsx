@@ -1,5 +1,4 @@
 // app/gift-list/[id]/page.tsx
-
 "use client";
 
 import { useMemo } from "react";
@@ -33,7 +32,7 @@ export default function GiftListPage() {
   }
 
   return (
-    <div className="h-full px-2 py-4 sm:p-6 overflow-y-auto">
+    <div className="min-h-full px-2 py-4 sm:p-6 pb-safe">
       {user && selectedList && (
         <GiftTable
           key={selectedList.id}
