@@ -9,9 +9,6 @@ export default {
         heading: ["var(--font-heading)", ...fontFamily.sans],
         body: ["var(--font-body)", ...fontFamily.sans],
       },
-      padding: {
-        safe: "env(safe-area-inset-bottom)",
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

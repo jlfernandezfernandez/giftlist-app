@@ -32,7 +32,7 @@ export default function GiftListPage() {
   }
 
   return (
-    <div className="min-h-full px-2 py-4 sm:p-6 pb-safe">
+    <>
       {user && selectedList && (
         <GiftTable
           key={selectedList.id}
@@ -42,6 +42,6 @@ export default function GiftListPage() {
           isOwner={selectedList.isOwner}
         />
       )}
-    </div>
+    </>
   );
 }

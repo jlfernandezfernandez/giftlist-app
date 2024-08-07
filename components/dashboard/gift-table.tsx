@@ -162,7 +162,7 @@ export function GiftTable({
   }, []);
 
   return (
-    <div className="space-y-4 px-2 sm:px-4 md:px-6">
+    <div className="space-y-4">
       <GiftListHeader
         currentList={currentList}
         isOwner={isOwner}
