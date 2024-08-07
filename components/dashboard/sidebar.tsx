@@ -32,14 +32,14 @@ export function Sidebar() {
     <>
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-5 z-40 md:hidden"
+          className="fixed inset-0 bg-black bg-opacity-5 z-40 lg:hidden"
           onClick={closeSidebar}
         />
       )}
       <aside
-        className={`bg-background border-r border-border fixed md:relative z-50 h-full md:h-screen transition-transform duration-300 ease-in-out ${
+        className={`bg-background border-r border-border fixed lg:relative z-50 h-full lg:h-screen transition-transform duration-300 ease-in-out ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:translate-x-0 w-64 flex flex-col overflow-hidden`}
+        } lg:translate-x-0 w-64 flex flex-col overflow-hidden`}
       >
         <div className="p-4">
           <AvatarSection user={user} />

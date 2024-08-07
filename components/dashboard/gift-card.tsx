@@ -53,13 +53,13 @@ export function GiftCard({
     window.open(gift.link || "", "_blank");
   }, [gift.link]);
 
-  const isSM = useMediaQuery("sm");
+  const isLG = useMediaQuery("lg");
 
   return (
     <>
       <Card className="p-4 hover:shadow-md transition-shadow duration-300">
-        <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
-          <div className="sm:col-span-4 flex items-center space-x-2">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+          <div className="lg:col-span-4 flex items-center space-x-2">
             <Link
               href={gift.link || "#"}
               target="_blank"
@@ -71,7 +71,7 @@ export function GiftCard({
             {gift.description && (
               <Tooltip
                 text={gift.description}
-                placement={isSM ? "top" : "left"}
+                placement={isLG ? "top" : "left"}
               >
                 {" "}
                 <InfoIcon className="h-5 w-5 text-gray-400 cursor-help" />
@@ -79,7 +79,7 @@ export function GiftCard({
             )}
           </div>
 
-          <div className="sm:col-span-3 flex items-center justify-between text-sm">
+          <div className="lg:col-span-3 flex items-center justify-between text-sm">
             <span className="font-semibold">{priceDisplay}</span>
             <span className="truncate max-w-[40%] text-gray-600">
               {gift.website}
@@ -94,7 +94,7 @@ export function GiftCard({
             </div>
           </div>
 
-          <div className="sm:col-span-5 flex justify-between items-center">
+          <div className="lg:col-span-5 flex justify-between items-center">
             <div className="flex items-center space-x-1">
               {gift.assignedUsers?.slice(0, 5).map((user) => (
                 <Tooltip

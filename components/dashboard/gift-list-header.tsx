@@ -79,7 +79,12 @@ export function GiftListHeader({
         <UsersIcon className="h-5 w-5 text-gray-400" />
         <div className="flex items-center space-x-1">
           {members.slice(0, 5).map((user: User) => (
-            <Tooltip key={user.userId} text={getFirstName(user.name)}>
+            <Tooltip
+              key={user.userId}
+              text={getFirstName(user.name)}
+              enterDelay={300}
+              leaveDelay={50}
+            >
               <InitialAvatar name={user.name} />
             </Tooltip>
           ))}
