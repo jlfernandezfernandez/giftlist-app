@@ -75,7 +75,6 @@ export function GiftCard({
                 leaveDelay={50}
                 type="dark"
               >
-                {" "}
                 <InfoIcon className="h-5 w-5 text-gray-400 cursor-help" />
               </Tooltip>
             )}

@@ -54,8 +54,8 @@ export function GiftListHeader({
               variant="outline"
               className="text-blue-600 hover:text-blue-700"
             >
-              <PencilIcon className="h-4 w-4 sm:mr-2" />
-              <span className="hidden sm:inline">Edit</span>
+              <PencilIcon className="h-4 w-4 mr-1" />
+              <span className="inline">Edit</span>
             </Button>
             <Button
               size="sm"
@@ -63,8 +63,8 @@ export function GiftListHeader({
               variant="outline"
               className="rounded-full"
             >
-              <ShareIcon className="h-4 w-4 sm:mr-2" />
-              <span className="hidden sm:inline">Share</span>
+              <ShareIcon className="h-4 w-4 mr-1" />
+              <span className="inline">Share</span>
             </Button>
             <Button
               size="sm"
@@ -72,8 +72,8 @@ export function GiftListHeader({
               onClick={handleDeleteList}
               className="rounded-full"
             >
-              <Trash2Icon className="h-4 w-4 sm:mr-2" />
-              <span className="hidden sm:inline">Delete</span>
+              <Trash2Icon className="h-4 w-4 mr-1" />
+              <span className="inline">Delete</span>
             </Button>
           </div>
         )}
