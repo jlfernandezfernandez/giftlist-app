@@ -14,16 +14,7 @@ import {
   UserPlus,
   UserMinus,
   ExternalLink,
-  ChevronDown,
-  ChevronUp,
-  MoreVertical,
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 interface GiftCardProps {
   authenticatedUser: AuthenticatedUser;
@@ -45,7 +36,6 @@ export function GiftCard({
   handleUnassignGift,
 }: GiftCardProps) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [showDescription, setShowDescription] = useState(false);
   const isAssigned = gift.assignedUsers?.some(
     (assignedUser) => assignedUser.userId === authenticatedUser.uid
   );
@@ -84,9 +74,7 @@ export function GiftCard({
         </div>
 
         {gift.description && (
-          <p className="text-sm text-gray-500 line-clamp-2">
-            {gift.description}
-          </p>
+          <p className="text-sm text-gray-500">{gift.description}</p>
         )}
 
         <div className="flex flex-wrap items-center justify-between gap-2">
@@ -152,37 +140,17 @@ export function GiftCard({
                 </Button>
               </>
             )}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="sm" variant="ghost" className="rounded-full">
-                  <MoreVertical className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem
-                  onSelect={() => window.open(gift.link || "", "_blank")}
-                >
-                  <ExternalLink className="h-4 w-4 mr-2" />
-                  Open Link
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onSelect={() => setShowDescription(!showDescription)}
-                >
-                  {showDescription ? (
-                    <ChevronUp className="h-4 w-4 mr-2" />
-                  ) : (
-                    <ChevronDown className="h-4 w-4 mr-2" />
-                  )}
-                  {showDescription ? "Hide Description" : "Show Description"}
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => window.open(gift.link || "", "_blank")}
+              className="rounded-full"
+            >
+              <ExternalLink className="h-4 w-4 sm:mr-1" />
+              <span className="hidden sm:inline">Open</span>
+            </Button>
           </div>
         </div>
-
-        {showDescription && gift.description && (
-          <p className="mt-2 text-sm text-gray-600">{gift.description}</p>
-        )}
       </div>
 
       <EditGiftModal
