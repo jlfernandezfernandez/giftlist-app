@@ -59,7 +59,7 @@ export function GiftCard({
 
   return (
     <Card className="overflow-hidden transition-shadow duration-300 hover:shadow-md">
-      <div className="p-4 space-y-3 sm:space-y-0 sm:grid sm:grid-cols-12 sm:gap-4 sm:items-center">
+      <div className="p-4 space-y-4 sm:space-y-0 sm:grid sm:grid-cols-12 sm:gap-4 sm:items-center">
         <div className="sm:col-span-4 space-y-1">
           <div className="flex items-center justify-between">
             <h3 className="text-lg font-semibold text-gray-900 truncate">
@@ -79,14 +79,14 @@ export function GiftCard({
           )}
         </div>
 
-        <div className="sm:col-span-3 flex items-center justify-between text-sm">
+        <div className="sm:col-span-3 grid grid-cols-3 items-center text-sm">
           <span className="font-medium">{priceDisplay}</span>
-          <span className="text-gray-500 truncate max-w-[40%]">
+          <span className="text-gray-500 truncate justify-self-center">
             {gift.website}
           </span>
           <Badge
             variant={badgeVariant(gift.state || "default")}
-            className="lowercase hidden sm:inline-flex"
+            className="lowercase hidden sm:inline-flex justify-self-end"
           >
             {gift.state}
           </Badge>
@@ -111,7 +111,6 @@ export function GiftCard({
                   size="sm"
                   variant="outline"
                   onClick={() => setIsEditModalOpen(true)}
-                  className="text-blue-600 hover:text-blue-700"
                 >
                   <Pencil className="h-4 w-4 sm:mr-1" />
                   <span className="hidden sm:inline">Edit</span>
@@ -143,7 +142,7 @@ export function GiftCard({
                 </Button>
                 <Button
                   size="sm"
-                  variant="outline"
+                  variant="blue"
                   onClick={handleBuy}
                   disabled={gift.state !== "reserved"}
                 >
@@ -156,7 +155,6 @@ export function GiftCard({
               size="sm"
               variant="ghost"
               onClick={() => window.open(gift.link || "", "_blank")}
-              className="text-gray-500 hover:text-gray-700"
             >
               <ExternalLink className="h-4 w-4" />
             </Button>
