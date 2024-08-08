@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Gift } from "@/types/gift";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { badgeVariant, currencySymbol } from "@/lib/gift-utils";
 import { InitialAvatar } from "@/components/ui/initial-avatar";
 import { EditGiftModal } from "../edit-gift-modal";
 import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   ShoppingBag,
-  ChevronRight,
   Pencil,
   Trash2,
+  UserPlus,
+  UserMinus,
+  ExternalLink,
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
@@ -44,31 +48,51 @@ export function GiftCard({
       ? `${currencySymbol(gift.currency)}${gift.price.toFixed(2)}`
       : "N/A";
 
-  const handleBuy = () => {
-    if (gift.state === "reserved") {
-      window.open(gift.link || "", "_blank");
-    }
-  };
+  const handleBuy = useCallback(() => {
+    window.open(gift.link || "", "_blank");
+  }, [gift.link]);
+
+  const truncatedDescription =
+    gift.description && gift.description.length > 30
+      ? `${gift.description.substring(0, 30)}...`
+      : gift.description;
 
   return (
-    <div className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
-      <div className="p-4 space-y-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-gray-900">{gift.name}</h3>
+    <Card className="overflow-hidden transition-shadow duration-300 hover:shadow-md">
+      <div className="p-4 space-y-3 sm:space-y-0 sm:grid sm:grid-cols-12 sm:gap-4 sm:items-center">
+        <div className="sm:col-span-4 space-y-1">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-semibold text-gray-900 truncate">
+              {gift.name}
+            </h3>
+            <Badge
+              variant={badgeVariant(gift.state || "default")}
+              className="lowercase sm:hidden"
+            >
+              {gift.state}
+            </Badge>
+          </div>
+          {truncatedDescription && (
+            <p className="text-sm text-gray-500 line-clamp-1">
+              {truncatedDescription}
+            </p>
+          )}
+        </div>
+
+        <div className="sm:col-span-3 flex items-center justify-between text-sm">
+          <span className="font-medium">{priceDisplay}</span>
+          <span className="text-gray-500 truncate max-w-[40%]">
+            {gift.website}
+          </span>
           <Badge
             variant={badgeVariant(gift.state || "default")}
-            className="lowercase"
+            className="lowercase hidden sm:inline-flex"
           >
             {gift.state}
           </Badge>
         </div>
 
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-500">{gift.website}</span>
-          <span className="font-medium">{priceDisplay}</span>
-        </div>
-
-        <div className="flex items-center justify-between">
+        <div className="sm:col-span-5 flex items-center justify-between">
           <div className="flex items-center space-x-1">
             {gift.assignedUsers?.slice(0, 3).map((user) => (
               <InitialAvatar key={user.userId} name={user.name} />
@@ -79,80 +103,87 @@ export function GiftCard({
               </div>
             )}
           </div>
-          <button
-            onClick={() => window.open(gift.link || "", "_blank")}
-            className="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center"
-          >
-            View
-            <ChevronRight size={16} className="ml-1" />
-          </button>
-        </div>
 
-        {gift.description && (
-          <div>
-            <button
-              onClick={() => setShowDescription(!showDescription)}
-              className="text-sm text-gray-500 flex items-center"
-            >
-              {showDescription ? (
-                <ChevronUp size={16} className="mr-1" />
-              ) : (
-                <ChevronDown size={16} className="mr-1" />
-              )}
-              {showDescription ? "Hide details" : "Show details"}
-            </button>
-            {showDescription && (
-              <p className="mt-2 text-sm text-gray-600">{gift.description}</p>
+          <div className="flex items-center space-x-2">
+            {isOwner ? (
+              <>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setIsEditModalOpen(true)}
+                  className="text-blue-600 hover:text-blue-700"
+                >
+                  <Pencil className="h-4 w-4 sm:mr-1" />
+                  <span className="hidden sm:inline">Edit</span>
+                </Button>
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={handleRemoveGift}
+                >
+                  <Trash2 className="h-4 w-4 sm:mr-1" />
+                  <span className="hidden sm:inline">Remove</span>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  size="sm"
+                  variant={isAssigned ? "destructive" : "outline"}
+                  onClick={isAssigned ? handleUnassignGift : handleAssignGift}
+                >
+                  {isAssigned ? (
+                    <UserMinus className="h-4 w-4 sm:mr-1" />
+                  ) : (
+                    <UserPlus className="h-4 w-4 sm:mr-1" />
+                  )}
+                  <span className="hidden sm:inline">
+                    {isAssigned ? "Leave" : "Join"}
+                  </span>
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleBuy}
+                  disabled={gift.state !== "reserved"}
+                >
+                  <ShoppingBag className="h-4 w-4 sm:mr-1" />
+                  <span className="hidden sm:inline">Buy</span>
+                </Button>
+              </>
             )}
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => window.open(gift.link || "", "_blank")}
+              className="text-gray-500 hover:text-gray-700"
+            >
+              <ExternalLink className="h-4 w-4" />
+            </Button>
           </div>
-        )}
+        </div>
       </div>
 
-      <div className="bg-gray-50 px-4 py-3 flex justify-between items-center border-t border-gray-200">
-        {isOwner ? (
-          <>
-            <button
-              onClick={() => setIsEditModalOpen(true)}
-              className="text-indigo-600 hover:text-indigo-800 text-sm font-medium flex items-center"
-            >
-              <Pencil size={16} className="mr-1" />
-              Edit
-            </button>
-            <button
-              onClick={handleRemoveGift}
-              className="text-red-600 hover:text-red-800 text-sm font-medium flex items-center"
-            >
-              <Trash2 size={16} className="mr-1" />
-              Remove
-            </button>
-          </>
-        ) : (
-          <>
-            <button
-              onClick={isAssigned ? handleUnassignGift : handleAssignGift}
-              className={`px-3 py-1.5 text-sm font-medium rounded-md ${
-                isAssigned
-                  ? "text-red-600 hover:text-red-800"
-                  : "text-green-600 hover:text-green-800"
-              }`}
-            >
-              {isAssigned ? "Leave" : "Join"}
-            </button>
-            <button
-              onClick={handleBuy}
-              disabled={gift.state !== "reserved"}
-              className={`inline-flex items-center px-3 py-1.5 text-sm font-medium rounded-md ${
-                gift.state === "reserved"
-                  ? "text-white bg-indigo-600 hover:bg-indigo-700"
-                  : "text-gray-400 bg-gray-100 cursor-not-allowed"
-              }`}
-            >
-              <ShoppingBag size={16} className="mr-2" />
-              Buy
-            </button>
-          </>
-        )}
-      </div>
+      {gift.description && gift.description.length > 30 && (
+        <div className="px-4 pb-3">
+          <button
+            onClick={() => setShowDescription(!showDescription)}
+            className="text-sm text-gray-500 flex items-center"
+          >
+            {showDescription ? (
+              <ChevronUp size={16} className="mr-1" />
+            ) : (
+              <ChevronDown size={16} className="mr-1" />
+            )}
+            {showDescription
+              ? "Hide full description"
+              : "Show full description"}
+          </button>
+          {showDescription && (
+            <p className="mt-2 text-sm text-gray-600">{gift.description}</p>
+          )}
+        </div>
+      )}
 
       <EditGiftModal
         isOpen={isEditModalOpen}
@@ -160,6 +191,6 @@ export function GiftCard({
         gift={gift}
         onSubmit={handleEditGift}
       />
-    </div>
+    </Card>
   );
 }
