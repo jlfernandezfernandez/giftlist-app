@@ -1,19 +1,23 @@
-import React, { useState, useCallback } from "react";
+import React, { useCallback, useState } from "react";
+import Link from "next/link";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tooltip, useMediaQuery } from "@geist-ui/core";
 import { Gift } from "@/types/gift";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { badgeVariant, currencySymbol } from "@/lib/gift-utils";
 import { InitialAvatar } from "@/components/ui/initial-avatar";
+import { ExtraUsersAvatar } from "../ui/extra-users-avatar";
 import { EditGiftModal } from "../edit-gift-modal";
-import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { getFirstName } from "@/lib/utils";
 import {
-  ShoppingBag,
-  Pencil,
-  Trash2,
-  UserPlus,
-  UserMinus,
-  ExternalLink,
+  Trash2Icon,
+  PencilIcon,
+  UserPlusIcon,
+  UserMinusIcon,
+  ShoppingCartIcon,
+  InfoIcon,
 } from "lucide-react";
 
 interface GiftCardProps {
@@ -45,120 +49,134 @@ export function GiftCard({
       ? `${currencySymbol(gift.currency)}${gift.price.toFixed(2)}`
       : "N/A";
 
-  const handleBuy = useCallback(() => {
+  const handleViewProduct = useCallback(() => {
     window.open(gift.link || "", "_blank");
   }, [gift.link]);
 
+  const isLG = useMediaQuery("lg");
+
   return (
-    <Card className="overflow-hidden transition-all duration-300 hover:shadow-md border border-gray-200 bg-white">
-      <div className="p-4 space-y-4">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center justify-between mb-2 sm:mb-0">
-            <h3 className="text-lg font-semibold text-gray-900 truncate pr-2">
-              {gift.name}
-            </h3>
-            <Badge
-              variant={badgeVariant(gift.state || "default")}
-              className="text-xs font-medium px-1.5 py-0.5"
+    <>
+      <Card className="p-4 hover:shadow-md transition-shadow duration-300">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
+          <div className="lg:col-span-4 flex items-center space-x-2">
+            <Link
+              href={gift.link || "#"}
+              target="_blank"
+              className="font-medium hover:underline text-lg truncate flex-grow"
+              prefetch={false}
             >
-              {gift.state}
-            </Badge>
+              {gift.name}
+            </Link>
+            {gift.description && (
+              <Tooltip
+                text={gift.description}
+                placement={isLG ? "top" : "topEnd"}
+                leaveDelay={50}
+                type="dark"
+              >
+                {" "}
+                <InfoIcon className="h-5 w-5 text-gray-400 cursor-help" />
+              </Tooltip>
+            )}
           </div>
 
-          <div className="flex items-center space-x-2">
-            <span className="font-medium text-lg">{priceDisplay}</span>
-            <span className="text-sm text-gray-500 truncate">
+          <div className="lg:col-span-3 flex items-center justify-between text-sm">
+            <span className="font-semibold">{priceDisplay}</span>
+            <span className="truncate max-w-[40%] text-gray-600">
               {gift.website}
             </span>
+            <div className="w-24 flex justify-center">
+              <Badge
+                variant={badgeVariant(gift.state || "default")}
+                className="capitalize"
+              >
+                {gift.state}
+              </Badge>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5 flex justify-between items-center">
+            <div className="flex items-center space-x-1">
+              {gift.assignedUsers?.slice(0, 5).map((user) => (
+                <Tooltip
+                  text={getFirstName(user.name)}
+                  key={user.userId}
+                  enterDelay={300}
+                  leaveDelay={50}
+                >
+                  <InitialAvatar name={user.name} />
+                </Tooltip>
+              ))}
+              {gift.assignedUsers && gift.assignedUsers.length > 5 && (
+                <Tooltip text={`+${gift.assignedUsers.length - 5} more users`}>
+                  <ExtraUsersAvatar count={gift.assignedUsers.length - 5} />
+                </Tooltip>
+              )}
+            </div>
+
+            <div className="flex items-center space-x-2">
+              {isOwner ? (
+                <>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setIsEditModalOpen(true)}
+                    className="text-blue-600 hover:text-blue-700"
+                  >
+                    <PencilIcon className="h-4 w-4 mr-1" />
+                    Edit
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="destructive"
+                    onClick={handleRemoveGift}
+                  >
+                    <Trash2Icon className="h-4 w-4 mr-1" />
+                    Delete
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    size="sm"
+                    variant={isAssigned ? "destructive" : "outline"}
+                    onClick={isAssigned ? handleUnassignGift : handleAssignGift}
+                  >
+                    {isAssigned ? (
+                      <>
+                        <UserMinusIcon className="h-4 w-4 mr-1" />
+                        Leave
+                      </>
+                    ) : (
+                      <>
+                        <UserPlusIcon className="h-4 w-4 mr-1" />
+                        Join
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleViewProduct}
+                    disabled={!isAssigned}
+                    className="text-blue-600 hover:text-blue-700"
+                  >
+                    <ShoppingCartIcon className="h-4 w-4 mr-1" />
+                    Buy
+                  </Button>
+                </>
+              )}
+            </div>
           </div>
         </div>
-
-        {gift.description && (
-          <p className="text-sm text-gray-500">{gift.description}</p>
-        )}
-
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center space-x-1">
-            {gift.assignedUsers?.slice(0, 3).map((user) => (
-              <InitialAvatar key={user.userId} name={user.name} />
-            ))}
-            {gift.assignedUsers && gift.assignedUsers.length > 3 && (
-              <div className="flex items-center justify-center w-5 h-5 rounded-full bg-gray-100 text-xs font-medium text-gray-500">
-                +{gift.assignedUsers.length - 3}
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center space-x-2">
-            {isOwner ? (
-              <>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => setIsEditModalOpen(true)}
-                  className="rounded-full"
-                >
-                  <Pencil className="h-4 w-4 sm:mr-1" />
-                  <span className="hidden sm:inline">Edit</span>
-                </Button>
-                <Button
-                  size="sm"
-                  variant="destructive"
-                  onClick={handleRemoveGift}
-                  className="rounded-full"
-                >
-                  <Trash2 className="h-4 w-4 sm:mr-1" />
-                  <span className="hidden sm:inline">Remove</span>
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button
-                  size="sm"
-                  variant={isAssigned ? "destructive" : "outline"}
-                  onClick={isAssigned ? handleUnassignGift : handleAssignGift}
-                  className="rounded-full"
-                >
-                  {isAssigned ? (
-                    <UserMinus className="h-4 w-4 sm:mr-1" />
-                  ) : (
-                    <UserPlus className="h-4 w-4 sm:mr-1" />
-                  )}
-                  <span className="hidden sm:inline">
-                    {isAssigned ? "Leave" : "Join"}
-                  </span>
-                </Button>
-                <Button
-                  size="sm"
-                  variant="blue"
-                  onClick={handleBuy}
-                  disabled={gift.state !== "reserved"}
-                  className="rounded-full"
-                >
-                  <ShoppingBag className="h-4 w-4 sm:mr-1" />
-                  <span className="hidden sm:inline">Buy</span>
-                </Button>
-              </>
-            )}
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => window.open(gift.link || "", "_blank")}
-              className="rounded-full"
-            >
-              <ExternalLink className="h-4 w-4 sm:mr-1" />
-              <span className="hidden sm:inline">Open</span>
-            </Button>
-          </div>
-        </div>
-      </div>
-
+      </Card>
       <EditGiftModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         gift={gift}
         onSubmit={handleEditGift}
       />
-    </Card>
+    </>
   );
 }

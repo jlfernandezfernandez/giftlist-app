@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import { GiftList } from "@/types/gift-list";
 import { Button } from "@/components/ui/button";
-import { FilePenIcon, ShareIcon, Trash2Icon, UsersIcon } from "lucide-react";
+import { PencilIcon, ShareIcon, Trash2Icon, UsersIcon } from "lucide-react";
 import { InitialAvatar } from "@/components/ui/initial-avatar";
 import { ExtraUsersAvatar } from "@/components/ui/extra-users-avatar";
 import { Tooltip } from "@geist-ui/core";
@@ -37,7 +37,7 @@ export function GiftListHeader({
   }, [currentList.users]);
 
   return (
-    <div className="space-y-6 pb-6">
+    <div className="space-y-6 pb-4">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-2">
           <h1 className="text-3xl font-semibold text-gray-900">
@@ -52,9 +52,9 @@ export function GiftListHeader({
               size="sm"
               onClick={handleEditList}
               variant="outline"
-              className="rounded-full"
+              className="text-blue-600 hover:text-blue-700"
             >
-              <FilePenIcon className="h-4 w-4 sm:mr-2" />
+              <PencilIcon className="h-4 w-4 sm:mr-2" />
               <span className="hidden sm:inline">Edit</span>
             </Button>
             <Button
