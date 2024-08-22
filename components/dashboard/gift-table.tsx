@@ -162,7 +162,7 @@ export function GiftTable({
   }, []);
 
   return (
-    <div className="space-y-4 pb-10 lg:pb-0">
+    <div className="space-y-7 pb-10 lg:pb-0">
       <GiftListHeader
         currentList={currentList}
         isOwner={isOwner}
@@ -176,7 +176,7 @@ export function GiftTable({
           handleAddGift={handleAddGiftClick}
         />
       )}
-      <div ref={giftListRef} className="space-y-3">
+      <div ref={giftListRef} className="space-y-5">
         <AnimatePresence>
           {gifts.length > 0 ? (
             gifts.map((gift) => (
