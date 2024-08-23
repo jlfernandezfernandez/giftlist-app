@@ -47,7 +47,7 @@ export function AddGiftCard({ isAddingGift, handleAddGift }: AddGiftCardProps) {
 
   return (
     <Card className="bg-white shadow-sm">
-      <CardContent className="p-3 sm:p-4">
+      <CardContent className="p-6">
         <div className="flex flex-col space-y-2">
           <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2">
             <Input

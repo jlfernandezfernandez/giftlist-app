@@ -176,7 +176,10 @@ export function GiftTable({
           handleAddGift={handleAddGiftClick}
         />
       )}
-      <div ref={giftListRef} className="space-y-5">
+      <div
+        ref={giftListRef}
+        className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5"
+      >
         <AnimatePresence>
           {gifts.length > 0 ? (
             gifts.map((gift) => (
@@ -204,7 +207,7 @@ export function GiftTable({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="text-center py-8"
+              className="col-span-full text-center py-8"
             >
               <p className="text-lg font-semibold text-gray-600">
                 There are no gifts in this list yet
