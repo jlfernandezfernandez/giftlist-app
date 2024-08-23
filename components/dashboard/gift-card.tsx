@@ -63,7 +63,7 @@ export function GiftCard({
         {/* Mobile layout */}
         <div className="lg:hidden">
           {/* Header */}
-          <div className="bg-red-100 p-4 flex justify-between items-center">
+          <div className="border-b p-4 flex justify-between items-center">
             <div className="flex items-center space-x-2 text-sm text-gray-600">
               <UsersIcon className="h-5 w-5" aria-hidden="true" />
               <span>{gift.assignedUsers?.length || 0} assigned</span>
@@ -97,7 +97,7 @@ export function GiftCard({
             </div>
           </div>
           {/* Footer */}
-          <div className="bg-gray-50 p-4 flex justify-end space-x-2">
+          <div className="border-t bg-gray-50 p-4 flex justify-end space-x-2">
             {isOwner ? (
               <>
                 <Button
