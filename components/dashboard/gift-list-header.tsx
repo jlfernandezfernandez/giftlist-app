@@ -38,7 +38,7 @@ export function GiftListHeader({
   }, [currentList.users]);
 
   return (
-    <Card className="p-6 overflow-hidden transition-shadow duration-300 hover:shadow-md">
+    <Card className="p-6 overflow-hidden">
       <div className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-2">
