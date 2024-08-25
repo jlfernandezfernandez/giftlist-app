@@ -16,7 +16,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAssignUserToGift } from "@/hooks/use-assign-user-to-gift";
 import { useUnassignUserFromGift } from "@/hooks/user-unassign-user-from-gift";
 import { useFilteredGifts } from "@/hooks/use-filtered-gifts";
+import { useSortGifts } from "@/hooks/use-sort-gifts";
 import GiftFilter from "./gift-filter";
+import { SortGifts } from "./sort-gifts";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -44,6 +46,7 @@ export function GiftTable({
   const giftListRef = useRef<HTMLDivElement>(null);
 
   const filteredGifts = useFilteredGifts({ gifts, filter });
+  const { sortedGifts, sortBy, setSortBy } = useSortGifts(filteredGifts);
 
   const scrollToGift = useCallback((giftId: string) => {
     const giftElement = document.getElementById(`gift-${giftId}`);
@@ -181,25 +184,23 @@ export function GiftTable({
           handleAddGift={handleAddGiftClick}
         />
       )}
-      <GiftFilter filter={filter} setFilter={setFilter} />
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
+        <GiftFilter filter={filter} setFilter={setFilter} />
+        <SortGifts sortBy={sortBy} setSortBy={setSortBy} />
+      </div>
       <div
         ref={giftListRef}
         className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5"
       >
         <AnimatePresence>
-          {gifts.map((gift) => (
+          {sortedGifts.map((gift) => (
             <motion.div
               key={`gift-${gift.id}`}
               id={`gift-${gift.id}`}
               initial={false}
-              animate={{
-                opacity: filteredGifts.includes(gift) ? 1 : 0,
-                scale: filteredGifts.includes(gift) ? 1 : 0.8,
-              }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.2 }}
-              style={{
-                display: filteredGifts.includes(gift) ? "block" : "none",
-              }}
             >
               <GiftCard
                 authenticatedUser={authenticatedUser}
@@ -213,7 +214,7 @@ export function GiftTable({
             </motion.div>
           ))}
         </AnimatePresence>
-        {filteredGifts.length === 0 && (
+        {sortedGifts.length === 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
