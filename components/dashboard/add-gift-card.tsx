@@ -15,10 +15,10 @@ interface AddGiftCardProps {
 const MAX_DESCRIPTION_LENGTH = 30;
 
 const DETAILS_PLACEHOLDERS = [
-  "Size: XL",
-  "Capacity: 128GB, Color: Space Gray",
-  "Edition: Collector's, Language: Spanish",
-  "Volume: 100ml",
+  "e.g. Size: XL",
+  "e.g. Capacity: 128GB, Color: Space Gray",
+  "e.g. Edition: Collector's, Language: Spanish",
+  "e.g. Volume: 100ml",
 ];
 
 export function AddGiftCard({ isAddingGift, handleAddGift }: AddGiftCardProps) {

@@ -62,20 +62,15 @@ export function GiftListHeader({
           </div>
           {isOwner && (
             <div className="flex items-center gap-3 mt-4 sm:mt-0">
-              <Button size="sm" onClick={handleEditList} variant="outline">
+              <Button onClick={handleEditList} variant="outline">
                 <PencilIcon className="h-4 w-4 mr-1" />
                 <span className="inline">Edit</span>
               </Button>
-              <Button
-                size="sm"
-                onClick={handleDeleteList}
-                className="rounded-full"
-              >
+              <Button onClick={handleDeleteList} className="rounded-full">
                 <Trash2Icon className="h-4 w-4 mr-1" />
                 <span className="inline">Delete</span>
               </Button>
               <Button
-                size="sm"
                 onClick={handleShareList}
                 variant="black"
                 className="rounded-full"

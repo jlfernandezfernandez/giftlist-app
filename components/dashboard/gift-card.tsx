@@ -96,18 +96,15 @@ export function GiftCard({
             {isOwner ? (
               <>
                 <Button
-                  size="sm"
                   variant="outline"
                   onClick={() => setIsEditModalOpen(true)}
-                  className="text-blue-600 hover:text-blue-700"
                 >
                   <PencilIcon className="h-4 w-4 mr-1" aria-hidden="true" />
                   Edit
                 </Button>
                 <Button
-                  size="sm"
-                  variant="destructive"
                   onClick={handleRemoveGift}
+                  className="text-red-600 hover:text-red-500"
                 >
                   <Trash2Icon className="h-4 w-4 mr-1" aria-hidden="true" />
                   Delete
@@ -116,7 +113,6 @@ export function GiftCard({
             ) : (
               <>
                 <Button
-                  size="sm"
                   variant={isAssigned ? "destructive" : "outline"}
                   onClick={isAssigned ? handleUnassignGift : handleAssignGift}
                 >
@@ -139,7 +135,6 @@ export function GiftCard({
                   )}
                 </Button>
                 <Button
-                  size="sm"
                   variant="outline"
                   onClick={handleViewProduct}
                   disabled={!isAssigned}

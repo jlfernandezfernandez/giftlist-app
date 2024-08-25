@@ -4,47 +4,26 @@ import { Input, InputProps } from "./input";
 
 interface AnimatedInputProps extends Omit<InputProps, "placeholder"> {
   placeholders: string[];
-  animationSpeed?: number;
-  delayBetweenAnimations?: number;
+  delayBetweenPlaceholders?: number;
 }
 
 export function AnimatedInput({
   placeholders,
-  animationSpeed = 100,
-  delayBetweenAnimations = 1000,
+  delayBetweenPlaceholders = 5000,
   ...props
 }: AnimatedInputProps) {
-  const [placeholder, setPlaceholder] = useState("");
+  const [placeholder, setPlaceholder] = useState(placeholders[0]);
 
   useEffect(() => {
     let index = 0;
-    let isDeleting = false;
-    let text = "";
 
     const interval = setInterval(() => {
-      if (!isDeleting) {
-        text = placeholders[index].substring(0, text.length + 1);
-        setPlaceholder(text);
-
-        if (text === placeholders[index]) {
-          isDeleting = true;
-          setTimeout(() => {
-            isDeleting = true;
-          }, delayBetweenAnimations);
-        }
-      } else {
-        text = placeholders[index].substring(0, text.length - 1);
-        setPlaceholder(text);
-
-        if (text === "") {
-          isDeleting = false;
-          index = (index + 1) % placeholders.length;
-        }
-      }
-    }, animationSpeed);
+      index = (index + 1) % placeholders.length;
+      setPlaceholder(placeholders[index]);
+    }, delayBetweenPlaceholders);
 
     return () => clearInterval(interval);
-  }, [placeholders, animationSpeed, delayBetweenAnimations]);
+  }, [placeholders, delayBetweenPlaceholders]);
 
   return <Input {...props} placeholder={placeholder} />;
 }
