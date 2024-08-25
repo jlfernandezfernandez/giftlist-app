@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useUser } from "@/context/user-context";
 import { useToast } from "@/context/toast-context";
 import { useRouter } from "next/navigation";
+import { useGiftList } from "@/context/gift-list-context";
 
 export const useAssociateUserToGiftList = (
   giftListId: string,
@@ -15,6 +16,7 @@ export const useAssociateUserToGiftList = (
   const { user, isLoadingUser } = useUser();
   const { addToast } = useToast();
   const router = useRouter();
+  const { mutate } = useGiftList();
 
   const associateUser = useCallback(async () => {
     if (!user) {
@@ -48,6 +50,7 @@ export const useAssociateUserToGiftList = (
         title: "Success",
         description: "You've been successfully associated with the gift list.",
       });
+      mutate(); // Reload the gift list context
       router.push(`/gift-list/${giftListId}`);
     } catch (err) {
       setError(
@@ -61,7 +64,7 @@ export const useAssociateUserToGiftList = (
         }`,
       });
     }
-  }, [giftListId, user, addToast, router, role]);
+  }, [giftListId, user, addToast, router, role, mutate]);
 
   useEffect(() => {
     if (giftListId && !isLoadingUser && status === "idle") {
