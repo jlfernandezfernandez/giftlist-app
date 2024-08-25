@@ -76,7 +76,10 @@ export function GiftCard({
               </p>
             </div>
             <div className="flex justify-between items-center">
-              <div className="flex items-center truncate max-w-[50%] text-sm">
+              <div
+                className="flex items-center truncate max-w-[50%] text-sm cursor-pointer"
+                onClick={handleViewProduct}
+              >
                 <ExternalLinkIcon
                   className="h-4 w-4 mr-1 text-gray-400 flex-shrink-0"
                   aria-hidden="true"
