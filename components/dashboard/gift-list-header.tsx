@@ -9,7 +9,6 @@ import {
   UsersIcon,
 } from "lucide-react";
 
-
 interface GiftListHeaderProps {
   currentList: GiftList;
   isOwner: boolean;
@@ -47,10 +46,12 @@ export function GiftListHeader({
               {currentList.name}
             </h1>
             <p className="text-gray-600">{currentList.description}</p>
-            <div className="flex items-center mt-2 text-sm text-gray-500">
-              <CalendarIcon className="w-4 h-4 mr-1" />
-              <span>{formattedDate()}</span>
-            </div>
+            {currentList.date && (
+              <div className="flex items-center mt-2 text-sm text-gray-500">
+                <CalendarIcon className="w-4 h-4 mr-1" />
+                <span>{formattedDate()}</span>
+              </div>
+            )}
             <div className="flex items-center mt-1 text-sm text-gray-500">
               <UsersIcon className="w-4 h-4 mr-1" />
               <span>

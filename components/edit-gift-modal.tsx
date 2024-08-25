@@ -93,7 +93,7 @@ export const EditGiftModal: React.FC<EditGiftModalProps> = ({
               onChange={handlePriceChange}
             />
           </div>
-          <Button type="submit" variant="blue" className="w-full mt-6">
+          <Button type="submit" variant="black" className="w-full mt-6">
             Update Gift
           </Button>
         </form>

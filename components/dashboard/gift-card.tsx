@@ -57,7 +57,7 @@ export function GiftCard({
           {/* Header */}
           <div className="border-b px-6 pt-6 pb-4 flex justify-between items-center">
             <div className="flex items-center space-x-2 text-sm text-gray-600">
-              <UsersIcon className="h-5 w-5" aria-hidden="true" />
+              <UsersIcon className="h-4 w-4" aria-hidden="true" />
               <span>{gift.assignedUsers?.length || 0} assigned</span>
             </div>
             <Badge
