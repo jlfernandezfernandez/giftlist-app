@@ -15,6 +15,8 @@ import { ShareGiftListModal } from "../share-gift-list-modal";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAssignUserToGift } from "@/hooks/use-assign-user-to-gift";
 import { useUnassignUserFromGift } from "@/hooks/user-unassign-user-from-gift";
+import { useFilteredGifts } from "@/hooks/use-filtered-gifts";
+import GiftFilter from "./gift-filter";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -30,6 +32,7 @@ export function GiftTable({
   isOwner,
 }: GiftTableProps) {
   const [newGiftId, setNewGiftId] = useState<string | null>(null);
+  const [filter, setFilter] = useState("All Gifts");
   const { isAddingGift, handleAddGift } = useAddGift(authenticatedUser);
   const { deleteGift, isDeletingGift } = useDeleteGift();
   const { updateGift, isUpdatingGift } = useUpdateGift();
@@ -39,6 +42,8 @@ export function GiftTable({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const giftListRef = useRef<HTMLDivElement>(null);
+
+  const filteredGifts = useFilteredGifts({ gifts, filter });
 
   const scrollToGift = useCallback((giftId: string) => {
     const giftElement = document.getElementById(`gift-${giftId}`);
@@ -176,50 +181,57 @@ export function GiftTable({
           handleAddGift={handleAddGiftClick}
         />
       )}
+      <GiftFilter filter={filter} setFilter={setFilter} />
       <div
         ref={giftListRef}
         className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5"
       >
         <AnimatePresence>
-          {gifts.length > 0 ? (
-            gifts.map((gift) => (
-              <motion.div
-                key={gift.id}
-                id={`gift-${gift.id}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                <GiftCard
-                  authenticatedUser={authenticatedUser}
-                  gift={gift}
-                  isOwner={isOwner}
-                  handleRemoveGift={() => handleRemoveGift(gift)}
-                  handleEditGift={handleEditGift}
-                  handleAssignGift={() => handleAssignGift(gift)}
-                  handleUnassignGift={() => handleUnassignGift(gift)}
-                />
-              </motion.div>
-            ))
-          ) : (
+          {gifts.map((gift) => (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="col-span-full text-center py-8"
+              key={`gift-${gift.id}`}
+              id={`gift-${gift.id}`}
+              initial={false}
+              animate={{
+                opacity: filteredGifts.includes(gift) ? 1 : 0,
+                scale: filteredGifts.includes(gift) ? 1 : 0.8,
+              }}
+              transition={{ duration: 0.2 }}
+              style={{
+                display: filteredGifts.includes(gift) ? "block" : "none",
+              }}
             >
-              <p className="text-lg font-semibold text-gray-600">
-                There are no gifts in this list yet
-              </p>
-              {!isOwner && (
-                <p className="mt-2 text-sm text-gray-500">
-                  Check back later to see if any gifts have been added
-                </p>
-              )}
+              <GiftCard
+                authenticatedUser={authenticatedUser}
+                gift={gift}
+                isOwner={isOwner}
+                handleRemoveGift={() => handleRemoveGift(gift)}
+                handleEditGift={handleEditGift}
+                handleAssignGift={() => handleAssignGift(gift)}
+                handleUnassignGift={() => handleUnassignGift(gift)}
+              />
             </motion.div>
-          )}
+          ))}
         </AnimatePresence>
+        {filteredGifts.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="col-span-full text-center py-8"
+          >
+            <p className="text-lg font-semibold text-gray-600">
+              {filter === "All Gifts"
+                ? "There are no gifts in this list yet"
+                : "No gifts match the selected filter"}
+            </p>
+            {!isOwner && filter === "All Gifts" && (
+              <p className="mt-2 text-sm text-gray-500">
+                Check back later to see if any gifts have been added
+              </p>
+            )}
+          </motion.div>
+        )}
       </div>
       <EditGiftListModal
         isOpen={isEditModalOpen}
