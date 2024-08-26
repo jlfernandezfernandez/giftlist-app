@@ -113,7 +113,9 @@ export function GiftCard({
             ) : (
               <>
                 <Button
-                  variant={isAssigned ? "destructive" : "outline"}
+                  className={
+                    isAssigned ? "text-red-600 hover:text-red-500" : ""
+                  }
                   onClick={isAssigned ? handleUnassignGift : handleAssignGift}
                 >
                   {isAssigned ? (

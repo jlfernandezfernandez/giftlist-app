@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import "./globals.css";
@@ -39,6 +39,16 @@ export const metadata: Metadata = {
     ],
   },
   manifest: "/site.webmanifest",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  height: "device-height",
+  initialScale: 1,
+  minimumScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

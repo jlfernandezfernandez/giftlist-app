@@ -6,8 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Gift } from "@/types/gift";
 import { Input } from "./ui/input";
 import { PriceInput } from "./ui/price-input";
+import { InputWithCounter } from "./ui/input-with-counter";
 
-const MAX_DESCRIPTION_LENGTH = 30;
+const MAX_DESCRIPTION_LENGTH = 50;
 
 interface EditGiftModalProps {
   isOpen: boolean;
@@ -69,21 +70,14 @@ export const EditGiftModal: React.FC<EditGiftModalProps> = ({
           </div>
           <div className="space-y-2">
             <Label htmlFor="description">Details</Label>
-            <div className="relative">
-              <Input
-                id="description"
-                value={description}
-                onChange={(e) =>
-                  setDescription(
-                    e.target.value.slice(0, MAX_DESCRIPTION_LENGTH)
-                  )
-                }
-                maxLength={MAX_DESCRIPTION_LENGTH}
-              />
-              <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400">
-                {description.length}/{MAX_DESCRIPTION_LENGTH}
-              </span>
-            </div>
+            <InputWithCounter
+              id="description"
+              value={description}
+              onChange={(e) =>
+                setDescription(e.target.value.slice(0, MAX_DESCRIPTION_LENGTH))
+              }
+              maxLength={MAX_DESCRIPTION_LENGTH}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="price">Price</Label>

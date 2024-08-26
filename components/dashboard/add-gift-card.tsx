@@ -12,12 +12,12 @@ interface AddGiftCardProps {
   handleAddGift: (url: string, details: string) => void;
 }
 
-const MAX_DESCRIPTION_LENGTH = 30;
+const MAX_DESCRIPTION_LENGTH = 50;
 
 const DETAILS_PLACEHOLDERS = [
   "e.g. Size: XL",
-  "e.g. Capacity: 128GB, Color: Space Gray",
-  "e.g. Edition: Collector's, Language: Spanish",
+  "e.g. Capacity: 128GB",
+  "e.g. Color: Space Gray",
   "e.g. Volume: 100ml",
 ];
 
@@ -67,19 +67,13 @@ export function AddGiftCard({ isAddingGift, handleAddGift }: AddGiftCardProps) {
                 (optional)
               </span>
             </label>
-            <div className="relative">
-              <AnimatedInput
-                id="giftDetails"
-                value={customDetails}
-                onChange={handleDetailsChange}
-                placeholders={DETAILS_PLACEHOLDERS}
-                className="w-full"
-                maxLength={MAX_DESCRIPTION_LENGTH}
-              />
-              <span className="absolute right-2 bottom-2 text-xs text-gray-400">
-                {customDetails.length}/{MAX_DESCRIPTION_LENGTH}
-              </span>
-            </div>
+            <AnimatedInput
+              id="giftDetails"
+              value={customDetails}
+              onChange={handleDetailsChange}
+              placeholders={DETAILS_PLACEHOLDERS}
+              maxLength={MAX_DESCRIPTION_LENGTH}
+            />
           </div>
           <Button
             type="submit"

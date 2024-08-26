@@ -19,6 +19,8 @@ import { useFilteredGifts } from "@/hooks/use-filtered-gifts";
 import { useSortGifts } from "@/hooks/use-sort-gifts";
 import GiftFilter from "./gift-filter";
 import { SortGifts } from "./sort-gifts";
+import { useSearchGifts } from "@/hooks/use-search-gifts";
+import { SearchGifts } from "@/components/dashboard/search-gifts";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -47,6 +49,8 @@ export function GiftTable({
 
   const filteredGifts = useFilteredGifts({ gifts, filter });
   const { sortedGifts, sortBy, setSortBy } = useSortGifts(filteredGifts);
+  const { searchTerm, setSearchTerm, searchedGifts } =
+    useSearchGifts(sortedGifts);
 
   const scrollToGift = useCallback((giftId: string) => {
     const giftElement = document.getElementById(`gift-${giftId}`);
@@ -184,23 +188,27 @@ export function GiftTable({
           handleAddGift={handleAddGiftClick}
         />
       )}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
-        <GiftFilter filter={filter} setFilter={setFilter} />
-        <SortGifts sortBy={sortBy} setSortBy={setSortBy} />
+      <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+          <GiftFilter filter={filter} setFilter={setFilter} />
+          <SortGifts sortBy={sortBy} setSortBy={setSortBy} />
+        </div>
+        <SearchGifts searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       </div>
       <div
         ref={giftListRef}
-        className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5"
+        className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-5"
       >
         <AnimatePresence>
-          {sortedGifts.map((gift) => (
+          {searchedGifts.map((gift) => (
             <motion.div
               key={`gift-${gift.id}`}
               id={`gift-${gift.id}`}
-              initial={false}
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.2 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.1 }}
+              layout
             >
               <GiftCard
                 authenticatedUser={authenticatedUser}
@@ -214,19 +222,19 @@ export function GiftTable({
             </motion.div>
           ))}
         </AnimatePresence>
-        {sortedGifts.length === 0 && (
+        {searchedGifts.length === 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.2 }}
             className="col-span-full text-center py-8"
           >
             <p className="text-lg font-semibold text-gray-600">
-              {filter === "All Gifts"
+              {filter === "All Gifts" && searchTerm === ""
                 ? "There are no gifts in this list yet"
-                : "No gifts match the selected filter"}
+                : "No gifts match the selected filter or search term"}
             </p>
-            {!isOwner && filter === "All Gifts" && (
+            {!isOwner && filter === "All Gifts" && searchTerm === "" && (
               <p className="mt-2 text-sm text-gray-500">
                 Check back later to see if any gifts have been added
               </p>

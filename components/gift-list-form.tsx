@@ -72,21 +72,15 @@ export function GiftListForm({
       </div>
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
-        <div className="relative">
-          <AnimatedInput
-            id="description"
-            value={description ?? ""}
-            onChange={(e) =>
-              setDescription(e.target.value.slice(0, MAX_DESCRIPTION_LENGTH))
-            }
-            placeholders={DESCRIPTION_PLACEHOLDERS}
-            maxLength={MAX_DESCRIPTION_LENGTH}
-            className="pr-16"
-          />
-          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-400">
-            {description?.length || 0}/{MAX_DESCRIPTION_LENGTH}
-          </span>
-        </div>
+        <AnimatedInput
+          id="description"
+          value={description ?? ""}
+          onChange={(e) =>
+            setDescription(e.target.value.slice(0, MAX_DESCRIPTION_LENGTH))
+          }
+          placeholders={DESCRIPTION_PLACEHOLDERS}
+          maxLength={MAX_DESCRIPTION_LENGTH}
+        />
       </div>
       <div className="space-y-2">
         <Label htmlFor="date">Event Date</Label>
