@@ -1,17 +1,17 @@
 import { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
 
-const fontHeading = Inter({
+const fontHeading = Plus_Jakarta_Sans({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-heading",
 });
 
-const fontBody = Inter({
+const fontBody = Plus_Jakarta_Sans({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-body",
