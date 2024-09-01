@@ -14,7 +14,10 @@ export const useAddGift = (authenticatedUser: AuthenticatedUser | null) => {
     async (
       listId: string,
       details: string,
-      link: string
+      link: string,
+      name?: string,
+      price?: number,
+      currency?: string
     ): Promise<Gift | null> => {
       setIsAddingGift(true);
 
@@ -28,6 +31,9 @@ export const useAddGift = (authenticatedUser: AuthenticatedUser | null) => {
             giftListId: listId,
             link,
             details,
+            name,
+            price,
+            currency,
             userId: authenticatedUser?.uid,
           }),
         });

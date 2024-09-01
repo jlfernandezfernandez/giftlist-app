@@ -10,6 +10,12 @@ interface PriceInputProps {
 
 const CURRENCIES = ["EUR", "USD", "GBP"];
 
+interface PriceInputProps {
+  value: string;
+  currency: string;
+  onChange: (value: string, currency: string) => void;
+}
+
 export const PriceInput: React.FC<PriceInputProps> = ({
   value,
   currency,
@@ -51,7 +57,7 @@ export const PriceInput: React.FC<PriceInputProps> = ({
     <div className="relative">
       <div
         className={`flex rounded-md border ${
-          isFocused ? "border-blue-500 ring-2 ring-blue-200" : "border-gray-300"
+          isFocused ? "border-gray-300 ring-2 ring-gray-300" : ""
         } overflow-hidden`}
       >
         <input

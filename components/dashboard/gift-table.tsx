@@ -80,10 +80,10 @@ export function GiftTable({
   }, [newGiftId, scrollToGift]);
 
   const handleAddGiftClick = useCallback(
-    async (url: string, details: string) => {
+    async (url: string, details: string, name?: string, price?: number, currency?: string) => {
       if (url) {
-        const newGift = await handleAddGift(currentList.id, details, url);
-        if (newGift && newGift.id) {
+        const newGift = await handleAddGift(currentList.id, details, url, name, price, currency);
+        if (newGift?.id) {
           setNewGiftId(newGift.id);
         }
       }
@@ -94,15 +94,9 @@ export function GiftTable({
   const handleRemoveGift = useCallback(
     async (gift: Gift) => {
       if (!gift.id) return;
-      if (
-        window.confirm("¿Estás seguro de que quieres eliminar este regalo?")
-      ) {
+      if (window.confirm("Are you sure you want to delete this gift?")) {
         const success = await deleteGift(currentList.id, gift.id);
-        if (success) {
-          console.log("Regalo eliminado con éxito");
-        } else {
-          console.error("No se pudo eliminar el regalo");
-        }
+        console.log(success ? "Gift deleted successfully" : "Failed to delete gift");
       }
     },
     [currentList.id, deleteGift]
@@ -111,16 +105,8 @@ export function GiftTable({
   const handleEditGift = useCallback(
     async (updatedGift: Gift) => {
       if (!updatedGift.id) return;
-      const success = await updateGift(
-        currentList.id,
-        updatedGift.id,
-        updatedGift
-      );
-      if (success) {
-        console.log("Regalo actualizado con éxito");
-      } else {
-        console.error("No se pudo actualizar el regalo");
-      }
+      const success = await updateGift(currentList.id, updatedGift.id, updatedGift);
+      console.log(success ? "Gift updated successfully" : "Failed to update gift");
     },
     [currentList.id, updateGift]
   );
@@ -128,16 +114,8 @@ export function GiftTable({
   const handleAssignGift = useCallback(
     async (gift: Gift) => {
       if (!gift.id) return;
-      const success = await assignUserToGift(
-        gift.id,
-        authenticatedUser.uid,
-        currentList.id
-      );
-      if (success) {
-        console.log("Usuario asignado al regalo con éxito");
-      } else {
-        console.error("No se pudo asignar el usuario al regalo");
-      }
+      const success = await assignUserToGift(gift.id, authenticatedUser.uid, currentList.id);
+      console.log(success ? "User assigned to gift successfully" : "Failed to assign user to gift");
     },
     [assignUserToGift, authenticatedUser.uid, currentList.id]
   );
@@ -145,25 +123,17 @@ export function GiftTable({
   const handleUnassignGift = useCallback(
     async (gift: Gift) => {
       if (!gift.id) return;
-      const success = await unassignUserFromGift(
-        gift.id,
-        authenticatedUser.uid,
-        currentList.id
-      );
-      if (success) {
-        console.log("Usuario desasignado del regalo con éxito");
-      } else {
-        console.error("No se pudo desasignar el usuario del regalo");
-      }
+      const success = await unassignUserFromGift(gift.id, authenticatedUser.uid, currentList.id);
+      console.log(success ? "User unassigned from gift successfully" : "Failed to unassign user from gift");
     },
     [unassignUserFromGift, authenticatedUser.uid, currentList.id]
   );
 
-  const handleDeleteList = () => {
-    if (window.confirm("¿Estás seguro de que quieres eliminar esta lista?")) {
+  const handleDeleteList = useCallback(() => {
+    if (window.confirm("Are you sure you want to delete this list?")) {
       deleteGiftList(currentList.id);
     }
-  };
+  }, [currentList.id, deleteGiftList]);
 
   const handleEditList = useCallback(() => {
     setIsEditModalOpen(true);
@@ -186,6 +156,7 @@ export function GiftTable({
         <AddGiftCard
           isAddingGift={isAddingGift}
           handleAddGift={handleAddGiftClick}
+          useExtendedForm={true}
         />
       )}
       <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
