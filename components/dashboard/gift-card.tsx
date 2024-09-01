@@ -6,13 +6,13 @@ import { Gift } from "@/types/gift";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { badgeVariant, currencySymbol } from "@/lib/gift-utils";
 import { EditGiftModal } from "../edit-gift-modal";
+import { ConfirmBoughtModal } from "../confirm-bought-modal";
 import {
   Trash2Icon,
   PencilIcon,
   UserPlusIcon,
   UserMinusIcon,
   ShoppingCartIcon,
-  InfoIcon,
   ExternalLinkIcon,
   UsersIcon,
 } from "lucide-react";
@@ -25,6 +25,8 @@ interface GiftCardProps {
   handleEditGift: (updatedGift: Gift) => void;
   handleAssignGift: () => void;
   handleUnassignGift: () => void;
+  handleMarkAsBought: (gift: Gift) => void;
+  isMarkingAsBought: boolean;
 }
 
 export function GiftCard({
@@ -35,8 +37,12 @@ export function GiftCard({
   handleEditGift,
   handleAssignGift,
   handleUnassignGift,
+  handleMarkAsBought,
+  isMarkingAsBought,
 }: GiftCardProps) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isConfirmBoughtModalOpen, setIsConfirmBoughtModalOpen] =
+    useState(false);
   const isAssigned = gift.assignedUsers?.some(
     (assignedUser) => assignedUser.userId === authenticatedUser.uid
   );
@@ -49,6 +55,15 @@ export function GiftCard({
   const handleViewProduct = useCallback(() => {
     window.open(gift.link || "", "_blank");
   }, [gift.link]);
+
+  const handleBuyClick = useCallback(() => {
+    setIsConfirmBoughtModalOpen(true);
+  }, []);
+
+  const handleConfirmBought = useCallback(() => {
+    handleMarkAsBought(gift);
+    setIsConfirmBoughtModalOpen(false);
+  }, [gift, handleMarkAsBought]);
 
   return (
     <>
@@ -138,15 +153,17 @@ export function GiftCard({
                 </Button>
                 <Button
                   variant="outline"
-                  onClick={handleViewProduct}
-                  disabled={!isAssigned}
+                  onClick={handleBuyClick}
+                  disabled={
+                    !isAssigned || isMarkingAsBought || gift.state === "bought"
+                  }
                   className="text-blue-600 hover:text-blue-700"
                 >
                   <ShoppingCartIcon
                     className="h-4 w-4 mr-1"
                     aria-hidden="true"
                   />
-                  Buy
+                  {isMarkingAsBought ? "Updating..." : "Buy"}
                 </Button>
               </>
             )}
@@ -158,6 +175,13 @@ export function GiftCard({
         onClose={() => setIsEditModalOpen(false)}
         gift={gift}
         onSubmit={handleEditGift}
+      />
+      <ConfirmBoughtModal
+        isOpen={isConfirmBoughtModalOpen}
+        onClose={() => setIsConfirmBoughtModalOpen(false)}
+        onConfirm={handleConfirmBought}
+        giftName={gift.name}
+        giftLink={gift.link}
       />
     </>
   );

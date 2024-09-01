@@ -21,6 +21,8 @@ import GiftFilter from "./gift-filter";
 import { SortGifts } from "./sort-gifts";
 import { useSearchGifts } from "@/hooks/use-search-gifts";
 import { SearchGifts } from "@/components/dashboard/search-gifts";
+import { useMarkGiftAsBought } from "@/hooks/use-mark-gift-as-bought";
+import { ConfirmBoughtModal } from "../confirm-bought-modal";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -46,6 +48,7 @@ export function GiftTable({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const giftListRef = useRef<HTMLDivElement>(null);
+  const { markGiftAsBought, isMarkingAsBought } = useMarkGiftAsBought();
 
   const filteredGifts = useFilteredGifts({ gifts, filter });
   const { sortedGifts, sortBy, setSortBy } = useSortGifts(filteredGifts);
@@ -80,10 +83,23 @@ export function GiftTable({
   }, [newGiftId, scrollToGift]);
 
   const handleAddGiftClick = useCallback(
-    async (url: string, details: string, name?: string, price?: number, currency?: string) => {
+    async (
+      url: string,
+      details: string,
+      name?: string,
+      price?: number,
+      currency?: string
+    ) => {
       if (url) {
-        const newGift = await handleAddGift(currentList.id, details, url, name, price, currency);
-        if (newGift?.id) {
+        const newGift = await handleAddGift(
+          currentList.id,
+          url,
+          details,
+          name,
+          price,
+          currency
+        );
+        if (newGift && newGift.id) {
           setNewGiftId(newGift.id);
         }
       }
@@ -94,9 +110,15 @@ export function GiftTable({
   const handleRemoveGift = useCallback(
     async (gift: Gift) => {
       if (!gift.id) return;
-      if (window.confirm("Are you sure you want to delete this gift?")) {
+      if (
+        window.confirm("¿Estás seguro de que quieres eliminar este regalo?")
+      ) {
         const success = await deleteGift(currentList.id, gift.id);
-        console.log(success ? "Gift deleted successfully" : "Failed to delete gift");
+        if (success) {
+          console.log("Regalo eliminado con éxito");
+        } else {
+          console.error("No se pudo eliminar el regalo");
+        }
       }
     },
     [currentList.id, deleteGift]
@@ -105,8 +127,16 @@ export function GiftTable({
   const handleEditGift = useCallback(
     async (updatedGift: Gift) => {
       if (!updatedGift.id) return;
-      const success = await updateGift(currentList.id, updatedGift.id, updatedGift);
-      console.log(success ? "Gift updated successfully" : "Failed to update gift");
+      const success = await updateGift(
+        currentList.id,
+        updatedGift.id,
+        updatedGift
+      );
+      if (success) {
+        console.log("Regalo actualizado con éxito");
+      } else {
+        console.error("No se pudo actualizar el regalo");
+      }
     },
     [currentList.id, updateGift]
   );
@@ -114,8 +144,16 @@ export function GiftTable({
   const handleAssignGift = useCallback(
     async (gift: Gift) => {
       if (!gift.id) return;
-      const success = await assignUserToGift(gift.id, authenticatedUser.uid, currentList.id);
-      console.log(success ? "User assigned to gift successfully" : "Failed to assign user to gift");
+      const success = await assignUserToGift(
+        gift.id,
+        authenticatedUser.uid,
+        currentList.id
+      );
+      if (success) {
+        console.log("Usuario asignado al regalo con éxito");
+      } else {
+        console.error("No se pudo asignar el usuario al regalo");
+      }
     },
     [assignUserToGift, authenticatedUser.uid, currentList.id]
   );
@@ -123,17 +161,25 @@ export function GiftTable({
   const handleUnassignGift = useCallback(
     async (gift: Gift) => {
       if (!gift.id) return;
-      const success = await unassignUserFromGift(gift.id, authenticatedUser.uid, currentList.id);
-      console.log(success ? "User unassigned from gift successfully" : "Failed to unassign user from gift");
+      const success = await unassignUserFromGift(
+        gift.id,
+        authenticatedUser.uid,
+        currentList.id
+      );
+      if (success) {
+        console.log("Usuario desasignado del regalo con éxito");
+      } else {
+        console.error("No se pudo desasignar el usuario del regalo");
+      }
     },
     [unassignUserFromGift, authenticatedUser.uid, currentList.id]
   );
 
-  const handleDeleteList = useCallback(() => {
-    if (window.confirm("Are you sure you want to delete this list?")) {
+  const handleDeleteList = () => {
+    if (window.confirm("¿Estás seguro de que quieres eliminar esta lista?")) {
       deleteGiftList(currentList.id);
     }
-  }, [currentList.id, deleteGiftList]);
+  };
 
   const handleEditList = useCallback(() => {
     setIsEditModalOpen(true);
@@ -142,6 +188,18 @@ export function GiftTable({
   const handleShareList = useCallback(() => {
     setIsShareModalOpen(true);
   }, []);
+
+  const handleMarkAsBought = useCallback(
+    async (gift: Gift) => {
+      const updatedGift = await markGiftAsBought(gift, currentList.id);
+      if (updatedGift) {
+        console.log(`Gift marked as bought successfully`);
+      } else {
+        console.error("Failed to mark gift as bought");
+      }
+    },
+    [currentList.id, markGiftAsBought]
+  );
 
   return (
     <div className="space-y-7 pb-10 lg:pb-0">
@@ -204,6 +262,8 @@ export function GiftTable({
                 handleEditGift={handleEditGift}
                 handleAssignGift={() => handleAssignGift(gift)}
                 handleUnassignGift={() => handleUnassignGift(gift)}
+                handleMarkAsBought={() => handleMarkAsBought(gift)}
+                isMarkingAsBought={isMarkingAsBought}
               />
             </motion.div>
           ))}
