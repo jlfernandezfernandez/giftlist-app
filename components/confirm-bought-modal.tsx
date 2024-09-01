@@ -19,11 +19,11 @@ export const ConfirmBoughtModal: React.FC<ConfirmBoughtModalProps> = ({
   giftName,
   giftLink,
 }) => {
-  const [step, setStep] = useState<'pre-buy' | 'post-buy'>('pre-buy');
+  const [step, setStep] = useState<"pre-buy" | "post-buy">("pre-buy");
 
   const handleBuy = () => {
     window.open(giftLink, "_blank");
-    setStep('post-buy');
+    setStep("post-buy");
   };
 
   const handleConfirm = () => {
@@ -34,10 +34,13 @@ export const ConfirmBoughtModal: React.FC<ConfirmBoughtModalProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} closeButtonActive>
       <div className="text-center">
-        {step === 'pre-buy' ? (
+        {step === "pre-buy" ? (
           <>
             <h3 className="text-lg font-medium mb-4">Buy Gift</h3>
-            <p className="mb-6">You're about to be redirected to buy "{giftName}". After your purchase, please come back to confirm.</p>
+            <p className="mb-6">
+              You&apos;re about to be redirected to buy &quot;{giftName}&quot;.
+              After your purchase, please come back to confirm.
+            </p>
             <div className="flex justify-center space-x-4">
               <Button onClick={onClose} variant="outline">
                 Cancel
@@ -50,13 +53,15 @@ export const ConfirmBoughtModal: React.FC<ConfirmBoughtModalProps> = ({
         ) : (
           <>
             <h3 className="text-lg font-medium mb-4">Confirm Purchase</h3>
-            <p className="mb-6">Have you already bought the gift "{giftName}"?</p>
+            <p className="mb-6">
+              Have you already bought the gift &quot;{giftName}&quot;?
+            </p>
             <div className="flex justify-center space-x-4">
               <Button onClick={onClose} variant="outline">
-                No, I haven't
+                No, I haven&apos;t
               </Button>
               <Button onClick={handleConfirm} variant="black">
-                Yes, I've bought it
+                Yes, I&apos;ve bought it
               </Button>
             </div>
           </>

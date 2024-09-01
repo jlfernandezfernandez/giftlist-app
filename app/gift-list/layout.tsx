@@ -28,7 +28,7 @@ export default function GiftListLayout({ children }: { children: ReactNode }) {
                 <MobileHeader />
                 <Sidebar />
                 <main className="flex-1 overflow-y-auto xl:h-screen">
-                  <div className="min-h-[calc(100vh-4rem)] lg:min-h-full p-4 md:p-6 lg:p-8 bg-gray-100">
+                  <div className="min-h-[calc(100vh-4rem)] lg:min-h-full p-4 md:p-6 lg:p-8">
                     {children}
                   </div>
                 </main>

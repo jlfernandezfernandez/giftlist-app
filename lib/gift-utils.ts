@@ -3,7 +3,7 @@
 export const badgeVariant = (status: string) => {
   switch (status) {
     case "pending":
-      return "secondary";
+      return "default";
     case "reserved":
       return "warning"; // Yellow
     case "bought":

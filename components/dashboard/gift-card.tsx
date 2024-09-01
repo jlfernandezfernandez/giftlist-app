@@ -1,3 +1,5 @@
+// components/dashboard/gift-card.tsx
+
 import React, { useCallback, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -67,59 +69,62 @@ export function GiftCard({
 
   return (
     <>
-      <Card className="overflow-hidden transition-shadow duration-300 hover:shadow-md">
-        <div>
+      <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg bg-gray-50 rounded-xl h-[290px] flex flex-col">
+        <div className="py-4 px-2 flex flex-col flex-grow">
           {/* Header */}
-          <div className="border-b px-6 pt-6 pb-4 flex justify-between items-center">
-            <div className="flex items-center space-x-2 text-sm text-gray-600">
-              <UsersIcon className="h-4 w-4" aria-hidden="true" />
-              <span>{gift.assignedUsers?.length || 0} assigned</span>
-            </div>
+          <div className="flex justify-between items-center mb-4 px-1">
             <Badge
               variant={badgeVariant(gift.state || "default")}
-              className="capitalize"
+              className="capitalize px-2 py-1 text-xs font-semibold rounded-full"
             >
               {gift.state}
             </Badge>
-          </div>
-          {/* Body */}
-          <div className="px-6 py-4 space-y-2">
-            <h3 className="font-medium text-lg line-clamp-1">{gift.name}</h3>
-            <div className="h-10 overflow-hidden">
-              <p className="text-sm text-gray-600 line-clamp-1">
-                {gift.description}
-              </p>
+            <div className="flex items-center space-x-2 text-sm">
+              <UsersIcon className="h-4 w-4" aria-hidden="true" />
+              <span>{gift.assignedUsers?.length || 0}</span>
             </div>
+          </div>
+
+          {/* Body */}
+          <div className="border border-gray-300 flex-grow bg-white rounded-xl p-4">
+            <h3 className="font-semibold text-xl text-gray-900 line-clamp-1 mb-2">
+              {gift.name}
+            </h3>
+            <p className="text-sm text-gray-600 line-clamp-2 mb-4 h-10">
+              {gift.description}
+            </p>
             <div className="flex justify-between items-center">
               <div
-                className="flex items-center truncate max-w-[50%] text-sm cursor-pointer"
+                className="flex items-center truncate max-w-[60%] text-sm cursor-pointer text-blue-600 hover:text-blue-800 transition-colors duration-200"
                 onClick={handleViewProduct}
               >
                 <ExternalLinkIcon
-                  className="h-4 w-4 mr-1 text-gray-400 flex-shrink-0"
+                  className="h-4 w-4 mr-1 flex-shrink-0"
                   aria-hidden="true"
                 />
-                <span className="text-gray-600 truncate">{gift.website}</span>
+                <span className="truncate">{gift.website}</span>
               </div>
-              <span className="font-semibold text-xl text-green-600">
+              <span className="font-bold text-2xl text-gray-900">
                 {priceDisplay}
               </span>
             </div>
           </div>
+
           {/* Footer */}
-          <div className="px-6 pb-6 pt-4 border-t bg-gray-50 flex justify-end space-x-2">
+          <div className="pt-4 px-1 flex justify-end space-x-2 mt-auto">
             {isOwner ? (
               <>
                 <Button
                   variant="outline"
                   onClick={() => setIsEditModalOpen(true)}
+                  className="text-gray-700 hover:bg-gray-100 transition-colors duration-200"
                 >
                   <PencilIcon className="h-4 w-4 mr-1" aria-hidden="true" />
                   Edit
                 </Button>
                 <Button
                   onClick={handleRemoveGift}
-                  className="text-red-600 hover:text-red-500"
+                  className="text-red-600 hover:bg-red-50 transition-colors duration-200"
                 >
                   <Trash2Icon className="h-4 w-4 mr-1" aria-hidden="true" />
                   Delete
@@ -128,9 +133,11 @@ export function GiftCard({
             ) : (
               <>
                 <Button
-                  className={
-                    isAssigned ? "text-red-600 hover:text-red-500" : ""
-                  }
+                  className={`transition-colors duration-200 ${
+                    isAssigned
+                      ? "text-red-600 hover:bg-red-50"
+                      : "text-green-600 hover:bg-green-50"
+                  }`}
                   onClick={isAssigned ? handleUnassignGift : handleAssignGift}
                 >
                   {isAssigned ? (
@@ -152,12 +159,11 @@ export function GiftCard({
                   )}
                 </Button>
                 <Button
-                  variant="outline"
                   onClick={handleBuyClick}
                   disabled={
                     !isAssigned || isMarkingAsBought || gift.state === "bought"
                   }
-                  className="text-blue-600 hover:text-blue-700"
+                  className="bg-blue-600 text-black hover:bg-blue-700 transition-colors duration-200 disabled:bg-gray-300 disabled:text-gray-500"
                 >
                   <ShoppingCartIcon
                     className="h-4 w-4 mr-1"
@@ -180,7 +186,7 @@ export function GiftCard({
         isOpen={isConfirmBoughtModalOpen}
         onClose={() => setIsConfirmBoughtModalOpen(false)}
         onConfirm={handleConfirmBought}
-        giftName={gift.name}
+        giftName={gift.name || ""}
         giftLink={gift.link}
       />
     </>
