@@ -25,16 +25,18 @@ export default function GiftListLayout({ children }: { children: ReactNode }) {
         <UserProvider>
           <GiftListProvider>
             <SidebarProvider>
-              <div className="flex flex-col xl:flex-row h-screen w-full">
+              <div className="flex flex-col lg:flex-row min-h-screen">
                 <MobileHeader />
-                <Suspense fallback={<Spinner />}>
-                  <Sidebar />
-                </Suspense>
-                <main className="flex-1 overflow-y-auto xl:h-screen">
-                  <div className="min-h-[calc(100vh-4rem)] lg:min-h-full p-4 md:p-6 lg:p-8 pb-16 md:pb-20">
-                    <Suspense fallback={<Spinner />}>{children}</Suspense>
-                  </div>
-                </main>
+                <div className="flex flex-col lg:flex-row flex-1">
+                  <Suspense fallback={<Spinner />}>
+                    <Sidebar />
+                  </Suspense>
+                  <main className="flex-1 overflow-y-auto">
+                    <div className="min-h-[calc(100vh-4rem)] lg:min-h-screen p-4 md:p-6 lg:p-8 pb-16 md:pb-20">
+                      <Suspense fallback={<Spinner />}>{children}</Suspense>
+                    </div>
+                  </main>
+                </div>
               </div>
               <Toaster />
             </SidebarProvider>

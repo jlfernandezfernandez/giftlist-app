@@ -18,12 +18,16 @@ export function AssignedGifts() {
   if (!user || isLoading) return null;
   if (isError)
     return (
-      <div className="text-sm text-red-500">Error loading assigned gifts</div>
+      <div className="text-sm lg:text-base text-red-500">
+        Error loading assigned gifts
+      </div>
     );
 
   if (assignedGifts.length === 0) {
     return (
-      <div className="text-sm text-muted-foreground">No assigned gifts</div>
+      <div className="text-sm lg:text-base text-muted-foreground">
+        No assigned gifts
+      </div>
     );
   }
 
@@ -36,20 +40,20 @@ export function AssignedGifts() {
       {assignedGifts.map((gift) => (
         <motion.div
           key={gift.id}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
           onClick={handleGiftClick}
           className="cursor-pointer"
         >
           <Link
             href={`/gift-list/${gift.giftListId}#${gift.id}`}
             className={cn(
-              "flex items-center gap-2 rounded-md px-2 py-1 text-sm sm:text-base transition-colors duration-200",
-              "hover:bg-muted hover:text-foreground",
-              "text-foreground/80"
+              "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm lg:text-base transition-colors duration-200",
+              "hover:bg-gray-100 dark:hover:bg-gray-800",
+              "text-gray-700 dark:text-gray-300"
             )}
           >
-            <GiftIcon className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <GiftIcon className="h-4 w-4 flex-shrink-0" />
             <span className="truncate" title={gift.name}>
               {gift.name}
             </span>

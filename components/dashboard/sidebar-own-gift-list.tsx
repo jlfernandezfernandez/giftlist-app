@@ -26,22 +26,22 @@ export function OwnGiftList({
       {lists.map((list) => (
         <motion.div
           key={list.id}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
           onClick={() => onListClick(`/gift-list/${list.id}`)}
           className="cursor-pointer"
         >
           <Link
             href={`/gift-list/${list.id}`}
             className={cn(
-              "flex items-center gap-2 rounded-md px-2 py-1 text-sm sm:text-base transition-colors duration-200",
-              "hover:bg-muted hover:text-foreground",
+              "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm lg:text-base transition-colors duration-200",
+              "hover:bg-gray-100 dark:hover:bg-gray-800",
               list.id === currentListId
-                ? "bg-primary/10 text-primary"
-                : "text-foreground/80"
+                ? "bg-gray-100 dark:bg-gray-800 font-medium"
+                : "text-gray-700 dark:text-gray-300"
             )}
           >
-            <ChevronRightIcon className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+            <ChevronRightIcon className="h-4 w-4 flex-shrink-0" />
             <span className="truncate" title={list.name}>
               {list.name}
             </span>
@@ -50,17 +50,17 @@ export function OwnGiftList({
       ))}
 
       <motion.div
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
         className="cursor-pointer mt-2"
       >
         <Button
           onClick={onCreateNewList}
           variant="black"
-          className="w-full justify-start text-sm sm:text-base mt-3"
+          className="w-full justify-start text-sm lg:text-base"
           aria-live="polite"
         >
-          <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5 mr-2" aria-hidden="true" />
+          <PlusIcon className="h-4 w-4 mr-2" aria-hidden="true" />
           Create New List
         </Button>
       </motion.div>

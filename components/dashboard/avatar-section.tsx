@@ -1,33 +1,32 @@
 // components/dashboard/avatar-section.tsx
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import Link from "next/link";
-import { SettingsIcon } from "lucide-react"; // Importa el ícono de configuraciones
+import { SettingsIcon, ChevronRightIcon } from "lucide-react";
 
 interface AvatarSectionProps {
   user: AuthenticatedUser | null;
 }
 
 export function AvatarSection({ user }: AvatarSectionProps) {
+  const displayName = user?.displayName || "Guest";
+
   return (
-    <div className="flex items-center justify-between mt-4">
-      <div className="flex items-center gap-2">
-        <Avatar className="w-8 h-8">
-          <AvatarImage src={"/placeholder-user.jpeg"} />
-        </Avatar>
-        <div>
-          <div className="text-sm font-semibold text-gray-800">
-            {user ? user.displayName : "Guest"}
+    <div className="flex flex-col space-y-2">
+      <Link
+        href="/user-settings"
+        className="flex items-center justify-between px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+      >
+        <div className="flex-1 min-w-0 space-y-1">
+          <div className="text-sm sm:text-base font-medium text-gray-900 line-clamp-2">
+            {displayName}
           </div>
-          <Link href="/user-settings">
-            <div className="flex items-center text-sm text-muted-foreground hover:underline cursor-pointer">
-              <SettingsIcon className="h-4 w-4 mr-1" />
-              User Settings
-            </div>
-          </Link>
+          <p className="text-xs sm:text-sm text-gray-500 truncate">
+            {user?.email}
+          </p>
         </div>
-      </div>
+        <ChevronRightIcon className="w-4 h-4 text-gray-400 flex-shrink-0 ml-2" />
+      </Link>
     </div>
   );
 }
