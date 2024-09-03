@@ -22,7 +22,7 @@ import { SortGifts } from "./sort-gifts";
 import { useSearchGifts } from "@/hooks/use-search-gifts";
 import { SearchGifts } from "@/components/dashboard/search-gifts";
 import { useMarkGiftAsBought } from "@/hooks/use-mark-gift-as-bought";
-import { ConfirmBoughtModal } from "../confirm-bought-modal";
+import { ScrollToTopButton } from "@/components/ui/scroll-to-top-button";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -73,10 +73,12 @@ export function GiftTable({
         }
       });
 
-      observer.observe(giftListRef.current!, {
-        childList: true,
-        subtree: true,
-      });
+      if (giftListRef.current) {
+        observer.observe(giftListRef.current, {
+          childList: true,
+          subtree: true,
+        });
+      }
 
       return () => observer.disconnect();
     }
@@ -175,11 +177,11 @@ export function GiftTable({
     [unassignUserFromGift, authenticatedUser.uid, currentList.id]
   );
 
-  const handleDeleteList = () => {
+  const handleDeleteList = useCallback(() => {
     if (window.confirm("¿Estás seguro de que quieres eliminar esta lista?")) {
       deleteGiftList(currentList.id);
     }
-  };
+  }, [deleteGiftList, currentList.id]);
 
   const handleEditList = useCallback(() => {
     setIsEditModalOpen(true);
@@ -202,7 +204,7 @@ export function GiftTable({
   );
 
   return (
-    <div className="space-y-7 pb-10 lg:pb-0">
+    <div className="space-y-7 pb-10 lg:pb-0 relative">
       <GiftListHeader
         currentList={currentList}
         isOwner={isOwner}
@@ -300,6 +302,7 @@ export function GiftTable({
         onClose={() => setIsShareModalOpen(false)}
         giftList={currentList}
       />
+      <ScrollToTopButton />
     </div>
   );
 }

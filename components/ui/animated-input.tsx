@@ -18,28 +18,25 @@ export function AnimatedInput({
 
   useEffect(() => {
     let index = 0;
-
     const interval = setInterval(() => {
       index = (index + 1) % placeholders.length;
       setPlaceholder(placeholders[index]);
     }, delayBetweenPlaceholders);
-
     return () => clearInterval(interval);
   }, [placeholders, delayBetweenPlaceholders]);
 
   return (
-    <div className="relative">
-      <Input
-        {...props}
-        placeholder={placeholder}
-        maxLength={maxLength}
-        className={`pr-16 ${props.className || ""}`}
-      />
-      {maxLength && (
-        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 bg-background px-1">
-          {(props.value as string)?.length || 0}/{maxLength}
-        </span>
-      )}
-    </div>
+    <Input
+      {...props}
+      placeholder={placeholder}
+      maxLength={maxLength}
+      labelRight={
+        maxLength && (
+          <span className="text-xs text-gray-400">
+            {(props.value as string)?.length || 0}/{maxLength}
+          </span>
+        )
+      }
+    />
   );
 }

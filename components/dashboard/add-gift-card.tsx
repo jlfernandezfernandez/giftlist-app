@@ -158,20 +158,22 @@ export function AddGiftCard({
               maxLength={MAX_DESCRIPTION_LENGTH}
             />
           </div>
-          <Button
-            type="submit"
-            disabled={isAddingGift}
-            variant="black"
-            className="w-full"
-            aria-live="polite"
-          >
-            {isAddingGift ? (
-              <SmallSpinner />
-            ) : (
-              <PlusIcon className="h-4 w-4 mr-2" aria-hidden="true" />
-            )}
-            {isAddingGift ? "Adding..." : "Add Gift"}
-          </Button>
+          <div className="pt-2">
+            <Button
+              type="submit"
+              disabled={isAddingGift}
+              variant="black"
+              className="w-full"
+              aria-live="polite"
+            >
+              {isAddingGift ? (
+                <SmallSpinner />
+              ) : (
+                <PlusIcon className="h-4 w-4 mr-2" aria-hidden="true" />
+              )}
+              {isAddingGift ? "Adding..." : "Add Gift"}
+            </Button>
+          </div>
         </form>
       </CardContent>
     </Card>

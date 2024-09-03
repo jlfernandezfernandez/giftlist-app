@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { format, parse, isValid, isBefore, startOfDay } from "date-fns";
 import { Input } from "./input";
-import { XCircleIcon } from "@heroicons/react/20/solid";
+import { XCircleIcon } from "lucide-react";
 
 interface DatePickerProps {
   value: string;
@@ -84,25 +84,27 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   };
 
   return (
-    <div className="relative">
+    <div className="space-y-1">
       <Input
         type="text"
         value={inputValue}
         onChange={handleInputChange}
         placeholder={placeholder}
-        className={`${className} pr-10`}
+        className={className}
         maxLength={10}
+        labelRight={
+          inputValue && (
+            <button
+              type="button"
+              onClick={handleClearDate}
+              className="text-gray-400 hover:text-gray-600"
+            >
+              <XCircleIcon className="h-5 w-5" />
+            </button>
+          )
+        }
       />
-      {inputValue && (
-        <button
-          type="button"
-          onClick={handleClearDate}
-          className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-        >
-          <XCircleIcon className="h-5 w-5" />
-        </button>
-      )}
-      {error && <p className="text-sm text-red-500 mt-2">{error}</p>}
+      {error && <p className="text-sm text-red-500">{error}</p>}
     </div>
   );
 };

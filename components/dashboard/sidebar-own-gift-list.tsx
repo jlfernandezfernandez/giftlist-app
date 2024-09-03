@@ -49,21 +49,23 @@ export function OwnGiftList({
         </motion.div>
       ))}
 
-      <motion.div
-        whileHover={{ scale: 1.01 }}
-        whileTap={{ scale: 0.99 }}
-        className="cursor-pointer mt-2"
-      >
-        <Button
-          onClick={onCreateNewList}
-          variant="black"
-          className="w-full justify-start text-sm lg:text-base"
-          aria-live="polite"
+      <div className="pt-3">
+        <motion.div
+          whileHover={{ scale: 1.01 }}
+          whileTap={{ scale: 0.99 }}
+          className="cursor-pointer"
         >
-          <PlusIcon className="h-4 w-4 mr-2" aria-hidden="true" />
-          Create New List
-        </Button>
-      </motion.div>
+          <Button
+            onClick={onCreateNewList}
+            variant="black"
+            className="w-full justify-start text-sm lg:text-base"
+            aria-live="polite"
+          >
+            <PlusIcon className="h-4 w-4 mr-2" aria-hidden="true" />
+            Create New List
+          </Button>
+        </motion.div>
+      </div>
     </div>
   );
 }
