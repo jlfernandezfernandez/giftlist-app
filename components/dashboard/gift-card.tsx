@@ -80,7 +80,7 @@ export function GiftCard({
               {gift.state}
             </Badge>
             <div className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-gray-500 bg-white rounded-full px-2 sm:px-3 py-1 shadow-sm">
-              <UsersIcon className="h-3 w-3 sm:h-4 sm:w-4" aria-hidden="true" />
+              <UsersIcon className="h-4 w-4" aria-hidden="true" />
               <span>{gift.assignedUsers?.length || 0}</span>
             </div>
           </div>
@@ -99,7 +99,7 @@ export function GiftCard({
                 onClick={handleViewProduct}
               >
                 <ExternalLinkIcon
-                  className="h-3 w-3 sm:h-4 sm:w-4 mr-1 flex-shrink-0"
+                  className="h-4 w-4 mr-1 flex-shrink-0"
                   aria-hidden="true"
                 />
                 <span className="truncate">{gift.website}</span>
@@ -119,20 +119,14 @@ export function GiftCard({
                   onClick={() => setIsEditModalOpen(true)}
                   className="text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-full text-xs sm:text-sm"
                 >
-                  <PencilIcon
-                    className="h-3 w-3 sm:h-4 sm:w-4 mr-1"
-                    aria-hidden="true"
-                  />
+                  <PencilIcon className="h-4 w-4 mr-1" aria-hidden="true" />
                   Edit
                 </Button>
                 <Button
                   onClick={handleRemoveGift}
                   className="text-red-600 hover:bg-red-50 transition-colors duration-200 rounded-full text-xs sm:text-sm"
                 >
-                  <Trash2Icon
-                    className="h-3 w-3 sm:h-4 sm:w-4 mr-1"
-                    aria-hidden="true"
-                  />
+                  <Trash2Icon className="h-4 w-4 mr-1" aria-hidden="true" />
                   Delete
                 </Button>
               </>
@@ -149,7 +143,7 @@ export function GiftCard({
                   {isAssigned ? (
                     <>
                       <UserMinusIcon
-                        className="h-3 w-3 sm:h-4 sm:w-4 mr-1"
+                        className="h-4 w-4 mr-1"
                         aria-hidden="true"
                       />
                       Leave
