@@ -1,10 +1,12 @@
 // components/dashboard/sidebar-own-gift-list.tsx
 
 import Link from "next/link";
-import { GiftIcon, PlusIcon } from "lucide-react";
+import { PlusIcon, ChevronRightIcon } from "lucide-react";
 import { GiftList } from "@/types/gift-list";
 import { motion } from "framer-motion";
 import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface OwnGiftListProps {
   lists: GiftList[];
@@ -20,7 +22,7 @@ export function OwnGiftList({
   const currentListId = useCurrentGiftListId();
 
   return (
-    <div>
+    <div className="space-y-1">
       {lists.map((list) => (
         <motion.div
           key={list.id}
@@ -31,11 +33,15 @@ export function OwnGiftList({
         >
           <Link
             href={`/gift-list/${list.id}`}
-            className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
-              list.id === currentListId ? "bg-muted text-foreground" : ""
-            }`}
+            className={cn(
+              "flex items-center gap-2 rounded-md px-2 py-1 text-sm sm:text-base transition-colors duration-200",
+              "hover:bg-muted hover:text-foreground",
+              list.id === currentListId
+                ? "bg-primary/10 text-primary"
+                : "text-foreground/80"
+            )}
           >
-            <GiftIcon className="h-4 w-4 flex-shrink-0" />
+            <ChevronRightIcon className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
             <span className="truncate" title={list.name}>
               {list.name}
             </span>
@@ -46,11 +52,17 @@ export function OwnGiftList({
       <motion.div
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        onClick={onCreateNewList}
-        className="cursor-pointer flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted text-foreground"
+        className="cursor-pointer mt-2"
       >
-        <PlusIcon className="h-4 w-4 flex-shrink-0" />
-        <span>Create New List</span>
+        <Button
+          onClick={onCreateNewList}
+          variant="black"
+          className="w-full justify-start text-sm sm:text-base mt-3"
+          aria-live="polite"
+        >
+          <PlusIcon className="h-4 w-4 sm:h-5 sm:w-5 mr-2" aria-hidden="true" />
+          Create New List
+        </Button>
       </motion.div>
     </div>
   );

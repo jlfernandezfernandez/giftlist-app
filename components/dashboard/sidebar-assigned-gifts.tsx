@@ -6,6 +6,7 @@ import { useUser } from "@/context/user-context";
 import { useAssignedGifts } from "@/hooks/use-assigned-gifts";
 import { motion } from "framer-motion";
 import { GiftIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function AssignedGifts() {
   const { closeSidebar } = useSidebar();
@@ -31,7 +32,7 @@ export function AssignedGifts() {
   };
 
   return (
-    <div className="space-y-1 mt-2">
+    <div className="space-y-1">
       {assignedGifts.map((gift) => (
         <motion.div
           key={gift.id}
@@ -42,9 +43,13 @@ export function AssignedGifts() {
         >
           <Link
             href={`/gift-list/${gift.giftListId}#${gift.id}`}
-            className={`flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground`}
+            className={cn(
+              "flex items-center gap-2 rounded-md px-2 py-1 text-sm sm:text-base transition-colors duration-200",
+              "hover:bg-muted hover:text-foreground",
+              "text-foreground/80"
+            )}
           >
-            <GiftIcon className="h-4 w-4 flex-shrink-0" />
+            <GiftIcon className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
             <span className="truncate" title={gift.name}>
               {gift.name}
             </span>

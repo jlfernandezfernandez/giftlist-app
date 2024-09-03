@@ -1,11 +1,12 @@
 // components/dashboard/sidebar-guest-gift-list.tsx
 import React, { useMemo } from "react";
 import Link from "next/link";
-import { GiftIcon, UserIcon } from "lucide-react";
+import { GiftIcon, UserIcon, ChevronRightIcon } from "lucide-react";
 import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
 import { GiftList } from "@/types/gift-list";
 import { useSidebar } from "@/context/sidebar-context";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface GuestGiftListProps {
   lists: GiftList[];
@@ -54,36 +55,42 @@ export function GuestGiftList({ lists, onListClick }: GuestGiftListProps) {
   };
 
   return (
-    <div className="space-y-4 mt-4 ml-1">
+    <div className="space-y-4">
       {Object.entries(groupedLists).map(([ownerNames, ownerLists]) => (
         <div key={ownerNames} className="space-y-1">
-          <div className="text-xs font-semibold text-muted-foreground flex items-center">
-            <UserIcon className="h-4 w-4 mr-2" />
+          <div className="flex items-center px-2 py-1 text-sm sm:text-base font-medium text-muted-foreground">
+            <UserIcon className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
             <span className="truncate" title={ownerNames}>
               {ownerNames}
             </span>
           </div>
-          {ownerLists.map((list) => (
-            <motion.div
-              key={list.id}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => handleListClick(list.id)}
-              className="cursor-pointer"
-            >
-              <Link
-                href={`/gift-list/${list.id}`}
-                className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-muted hover:text-foreground ${
-                  list.id === currentListId ? "bg-muted text-foreground" : ""
-                }`}
+          <div className="pl-2">
+            {ownerLists.map((list) => (
+              <motion.div
+                key={list.id}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleListClick(list.id)}
+                className="cursor-pointer"
               >
-                <GiftIcon className="h-4 w-4 flex-shrink-0" />
-                <span className="truncate" title={list.name}>
-                  {list.name}
-                </span>
-              </Link>
-            </motion.div>
-          ))}
+                <Link
+                  href={`/gift-list/${list.id}`}
+                  className={cn(
+                    "flex items-center gap-2 rounded-md px-2 py-1 text-sm sm:text-base transition-colors duration-200",
+                    "hover:bg-muted hover:text-foreground",
+                    list.id === currentListId
+                      ? "bg-primary/10 text-primary"
+                      : "text-foreground/80"
+                  )}
+                >
+                  <ChevronRightIcon className="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" />
+                  <span className="truncate flex-1" title={list.name}>
+                    {list.name}
+                  </span>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
         </div>
       ))}
     </div>

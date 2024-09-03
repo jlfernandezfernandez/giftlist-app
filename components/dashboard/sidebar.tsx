@@ -46,14 +46,14 @@ export function Sidebar() {
           isSidebarLoading ? "opacity-0" : "opacity-100"
         )}
       >
-        <div className="p-4">
+        <div className="p-6">
           <AvatarSection user={user} />
         </div>
 
-        <nav className="flex-1 overflow-y-auto p-4">
+        <nav className="flex-1 overflow-y-auto py-6 px-4">
           <div className="space-y-6">
             <section>
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase mb-2">
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase mb-3">
                 My Lists
               </h3>
               <OwnGiftList
@@ -70,14 +70,14 @@ export function Sidebar() {
             </section>
 
             <section>
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase mb-2">
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase mb-3">
                 Assigned Gifts
               </h3>
               <AssignedGifts />
             </section>
 
             <section>
-              <h3 className="text-xs font-semibold text-muted-foreground uppercase mb-2">
+              <h3 className="text-xs font-semibold text-muted-foreground uppercase mb-3">
                 Shared Lists
               </h3>
               <GuestGiftList
@@ -91,10 +91,10 @@ export function Sidebar() {
           </div>
         </nav>
 
-        <div className="border-t border-border p-4 mt-auto">
+        <div className="border-t border-border p-4">
           <Button
             variant="ghost"
-            className="w-full justify-start text-muted-foreground"
+            className="w-full justify-start text-muted-foreground hover:bg-muted hover:text-foreground transition-colors duration-200"
             onClick={handleLogout}
           >
             <LogOutIcon className="h-4 w-4 mr-2" />
