@@ -40,11 +40,11 @@ export function GiftTable({
   const [newGiftId, setNewGiftId] = useState<string | null>(null);
   const [filter, setFilter] = useState("All Gifts");
   const { isAddingGift, handleAddGift } = useAddGift(authenticatedUser);
-  const { deleteGift, isDeletingGift } = useDeleteGift();
-  const { updateGift, isUpdatingGift } = useUpdateGift();
-  const { assignUserToGift, isAssigningUser } = useAssignUserToGift();
-  const { unassignUserFromGift, isUnassigningUser } = useUnassignUserFromGift();
-  const { deleteGiftList, isDeletingGiftList } = useDeleteGiftList();
+  const { deleteGift } = useDeleteGift();
+  const { updateGift } = useUpdateGift();
+  const { assignUserToGift } = useAssignUserToGift();
+  const { unassignUserFromGift } = useUnassignUserFromGift();
+  const { deleteGiftList } = useDeleteGiftList();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const giftListRef = useRef<HTMLDivElement>(null);
@@ -224,70 +224,72 @@ export function GiftTable({
         </div>
         <SearchGifts searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       </div>
-      <motion.div
-        ref={giftListRef}
-        className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-5"
-        layout
-        transition={{
-          duration: 0.3,
-          type: "spring",
-          stiffness: 200,
-          damping: 25,
-        }}
-      >
-        <AnimatePresence mode="popLayout">
-          {searchedGifts.map((gift) => (
+      <div className="overflow-x-hidden">
+        <motion.div
+          ref={giftListRef}
+          className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-5"
+          layout
+          transition={{
+            duration: 0.3,
+            type: "spring",
+            stiffness: 200,
+            damping: 25,
+          }}
+        >
+          <AnimatePresence mode="popLayout">
+            {searchedGifts.map((gift) => (
+              <motion.div
+                key={`gift-${gift.id}`}
+                id={`gift-${gift.id}`}
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{
+                  opacity: { duration: 0.2 },
+                  scale: { duration: 0.2 },
+                  layout: {
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                  },
+                }}
+              >
+                <GiftCard
+                  authenticatedUser={authenticatedUser}
+                  gift={gift}
+                  isOwner={isOwner}
+                  handleRemoveGift={() => handleRemoveGift(gift)}
+                  handleEditGift={handleEditGift}
+                  handleAssignGift={() => handleAssignGift(gift)}
+                  handleUnassignGift={() => handleUnassignGift(gift)}
+                  handleMarkAsBought={() => handleMarkAsBought(gift)}
+                  isMarkingAsBought={isMarkingAsBought}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+          {searchedGifts.length === 0 && (
             <motion.div
-              key={`gift-${gift.id}`}
-              id={`gift-${gift.id}`}
-              layout
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{
-                opacity: { duration: 0.2 },
-                scale: { duration: 0.2 },
-                layout: {
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 30,
-                },
-              }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="col-span-full text-center py-8"
             >
-              <GiftCard
-                authenticatedUser={authenticatedUser}
-                gift={gift}
-                isOwner={isOwner}
-                handleRemoveGift={() => handleRemoveGift(gift)}
-                handleEditGift={handleEditGift}
-                handleAssignGift={() => handleAssignGift(gift)}
-                handleUnassignGift={() => handleUnassignGift(gift)}
-                handleMarkAsBought={() => handleMarkAsBought(gift)}
-                isMarkingAsBought={isMarkingAsBought}
-              />
-            </motion.div>
-          ))}
-        </AnimatePresence>
-        {searchedGifts.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-            className="col-span-full text-center py-8"
-          >
-            <p className="text-lg font-semibold text-gray-600">
-              {filter === "All Gifts" && searchTerm === ""
-                ? "There are no gifts in this list yet"
-                : "No gifts match the selected filter or search term"}
-            </p>
-            {!isOwner && filter === "All Gifts" && searchTerm === "" && (
-              <p className="mt-2 text-sm text-gray-500">
-                Check back later to see if any gifts have been added
+              <p className="text-lg font-semibold text-gray-600">
+                {filter === "All Gifts" && searchTerm === ""
+                  ? "There are no gifts in this list yet"
+                  : "No gifts match the selected filter or search term"}
               </p>
-            )}
-          </motion.div>
-        )}
-      </motion.div>
+              {!isOwner && filter === "All Gifts" && searchTerm === "" && (
+                <p className="mt-2 text-sm text-gray-500">
+                  Check back later to see if any gifts have been added
+                </p>
+              )}
+            </motion.div>
+          )}
+        </motion.div>
+      </div>
       <EditGiftListModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}

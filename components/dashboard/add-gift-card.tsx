@@ -78,11 +78,14 @@ export function AddGiftCard({
 
   return (
     <Card className="bg-white shadow-sm">
-      <CardContent className="p-6">
+      <CardContent className="p-4 sm:p-6">
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
           {useExtendedForm && (
             <div>
-              <label htmlFor="giftName" className="block mb-1">
+              <label
+                htmlFor="giftName"
+                className="block mb-1 text-sm font-medium text-gray-700"
+              >
                 Gift Name
               </label>
               <Input
@@ -97,7 +100,10 @@ export function AddGiftCard({
             </div>
           )}
           <div>
-            <label htmlFor="giftUrl" className="block mb-1">
+            <label
+              htmlFor="giftUrl"
+              className="block mb-1 text-sm font-medium text-gray-700"
+            >
               Gift URL
             </label>
             <Input
@@ -115,7 +121,10 @@ export function AddGiftCard({
           </div>
           {useExtendedForm && (
             <div>
-              <label htmlFor="giftPrice" className="block mb-1">
+              <label
+                htmlFor="giftPrice"
+                className="block mb-1 text-sm font-medium text-gray-700"
+              >
                 Price
               </label>
               <PriceInput
@@ -126,7 +135,10 @@ export function AddGiftCard({
             </div>
           )}
           <div>
-            <label htmlFor="giftDetails" className="mb-1 flex items-center">
+            <label
+              htmlFor="giftDetails"
+              className="mb-1 flex items-center text-sm font-medium text-gray-700"
+            >
               <span>Custom details</span>
               <span className="ml-2 text-xs font-normal text-gray-500 leading-none">
                 (optional)

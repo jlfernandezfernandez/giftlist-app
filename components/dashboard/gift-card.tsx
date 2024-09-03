@@ -69,17 +69,17 @@ export function GiftCard({
 
   return (
     <>
-      <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-white to-gray-50 rounded-2xl h-[240px] sm:h-[250px] md:h-[320px] flex flex-col border border-gray-200">
+      <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-white to-gray-50 rounded-xl h-full flex flex-col border border-gray-200">
         <div className="p-4 sm:p-6 flex flex-col flex-grow relative">
           {/* Header */}
           <div className="flex justify-between items-center mb-4">
             <Badge
               variant={badgeVariant(gift.state || "default")}
-              className="capitalize px-2 sm:px-3 py-1 text-xs font-semibold rounded-full shadow-sm"
+              className="capitalize px-2 py-1 text-xs font-semibold rounded-full shadow-sm"
             >
               {gift.state}
             </Badge>
-            <div className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm text-gray-500 bg-white rounded-full px-2 sm:px-3 py-1 shadow-sm">
+            <div className="flex items-center space-x-1 text-xs text-gray-500 bg-white rounded-full px-2 py-1 shadow-sm">
               <UsersIcon className="h-4 w-4" aria-hidden="true" />
               <span>{gift.assignedUsers?.length || 0}</span>
             </div>
@@ -87,15 +87,15 @@ export function GiftCard({
 
           {/* Body */}
           <div className="flex-grow">
-            <h3 className="font-semibold text-lg sm:text-xl md:text-2xl text-gray-900 line-clamp-1 mb-1 sm:mb-2">
+            <h3 className="font-semibold text-lg sm:text-xl text-gray-900 line-clamp-1 mb-2">
               {gift.name}
             </h3>
-            <p className="text-xs sm:text-sm text-gray-600 line-clamp-2 mb-2 sm:mb-4 h-8 sm:h-10">
+            <p className="text-sm text-gray-600 line-clamp-2 mb-4 h-10">
               {gift.description}
             </p>
-            <div className="flex justify-between items-center mt-2 sm:mt-4">
+            <div className="flex justify-between items-center mt-4">
               <div
-                className="flex items-center truncate max-w-[60%] text-xs sm:text-sm cursor-pointer text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                className="flex items-center truncate max-w-[60%] text-sm cursor-pointer text-blue-600 hover:text-blue-800 transition-colors duration-200"
                 onClick={handleViewProduct}
               >
                 <ExternalLinkIcon
@@ -104,27 +104,27 @@ export function GiftCard({
                 />
                 <span className="truncate">{gift.website}</span>
               </div>
-              <span className="font-bold text-xl sm:text-2xl md:text-3xl text-gray-900">
+              <span className="font-bold text-xl sm:text-2xl text-gray-900">
                 {priceDisplay}
               </span>
             </div>
           </div>
 
           {/* Footer */}
-          <div className="flex justify-end space-x-2">
+          <div className="flex justify-end space-x-2 mt-4">
             {isOwner ? (
               <>
                 <Button
                   variant="outline"
                   onClick={() => setIsEditModalOpen(true)}
-                  className="text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-full text-xs sm:text-sm"
+                  className="text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-full text-sm"
                 >
                   <PencilIcon className="h-4 w-4 mr-1" aria-hidden="true" />
                   Edit
                 </Button>
                 <Button
                   onClick={handleRemoveGift}
-                  className="text-red-600 hover:bg-red-50 transition-colors duration-200 rounded-full text-xs sm:text-sm"
+                  className="text-red-600 hover:bg-red-50 transition-colors duration-200 rounded-full text-sm"
                 >
                   <Trash2Icon className="h-4 w-4 mr-1" aria-hidden="true" />
                   Delete
@@ -133,7 +133,7 @@ export function GiftCard({
             ) : (
               <>
                 <Button
-                  className={`transition-colors duration-200 rounded-full text-xs sm:text-sm ${
+                  className={`transition-colors duration-200 rounded-full text-sm ${
                     isAssigned
                       ? "text-red-600 hover:bg-red-50"
                       : "text-green-600 hover:bg-green-50"

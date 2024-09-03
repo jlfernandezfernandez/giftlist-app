@@ -57,12 +57,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="h-full">
       <body
-        className={cn("antialiased", fontHeading.variable, fontBody.variable)}
+        className={cn(
+          "antialiased min-h-full flex flex-col",
+          fontHeading.variable,
+          fontBody.variable
+        )}
       >
         <SessionProvider>
-          {children}
+          <div className="flex-grow flex flex-col">{children}</div>
           <Analytics />
         </SessionProvider>
       </body>
