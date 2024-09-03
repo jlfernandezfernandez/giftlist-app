@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { AvatarSection } from "./avatar-section";
-import { XIcon, PlusIcon, LogOutIcon } from "lucide-react";
+import { LogOutIcon } from "lucide-react";
 import { useLogout } from "@/hooks/use-logout";
 import { useRouter } from "next/navigation";
 import Spinner from "@/components/ui/spinner";
@@ -13,9 +13,10 @@ import { useSidebar } from "@/context/sidebar-context";
 import { OwnGiftList } from "./sidebar-own-gift-list";
 import { GuestGiftList } from "./sidebar-guest-gift-list";
 import { AssignedGifts } from "./sidebar-assigned-gifts";
+import { cn } from "@/lib/utils";
 
 export function Sidebar() {
-  const { isSidebarOpen, closeSidebar } = useSidebar();
+  const { isSidebarOpen, isSidebarLoading, closeSidebar } = useSidebar();
   const { user, isLoadingUser } = useUser();
   const { giftLists, isLoadingGiftList } = useGiftList();
   const router = useRouter();
@@ -32,18 +33,23 @@ export function Sidebar() {
     <>
       {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-5 z-40 xl:hidden"
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 xl:hidden transition-opacity duration-300 ease-in-out"
           onClick={closeSidebar}
         />
       )}
       <aside
-        className={`bg-background border-r border-border fixed xl:relative z-50 h-full xl:h-screen transition-transform duration-300 ease-in-out ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } xl:translate-x-0 w-64 flex flex-col overflow-hidden`}
+        className={cn(
+          "fixed left-0 top-0 z-50 h-full flex flex-col transition-all duration-300 ease-in-out bg-background border-r border-border",
+          "w-3/4 sm:w-80 lg:w-72 xl:w-80",
+          "lg:relative lg:translate-x-0",
+          isSidebarOpen ? "translate-x-0 shadow-lg" : "-translate-x-full",
+          isSidebarLoading ? "opacity-0" : "opacity-100"
+        )}
       >
         <div className="p-4">
           <AvatarSection user={user} />
         </div>
+
         <nav className="flex-1 overflow-y-auto p-4">
           <div className="space-y-6">
             <section>
@@ -84,7 +90,8 @@ export function Sidebar() {
             </section>
           </div>
         </nav>
-        <div className="border-t border-border p-4">
+
+        <div className="border-t border-border p-4 mt-auto">
           <Button
             variant="ghost"
             className="w-full justify-start text-muted-foreground"
