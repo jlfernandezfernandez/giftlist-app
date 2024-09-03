@@ -35,10 +35,10 @@ export function OwnGiftList({
             href={`/gift-list/${list.id}`}
             className={cn(
               "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm lg:text-base transition-colors duration-200",
-              "hover:bg-gray-100 dark:hover:bg-gray-800",
+              "hover:bg-gray-100 ",
               list.id === currentListId
-                ? "bg-gray-100 dark:bg-gray-800 font-medium"
-                : "text-gray-700 dark:text-gray-300"
+                ? "bg-gray-100  font-medium"
+                : "text-gray-700 "
             )}
           >
             <ChevronRightIcon className="h-4 w-4 flex-shrink-0" />

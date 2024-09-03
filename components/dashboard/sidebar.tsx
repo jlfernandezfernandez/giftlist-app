@@ -53,7 +53,7 @@ export function Sidebar() {
             <AvatarSection user={user} />
           </div>
 
-          <nav className="flex-grow overflow-y-auto pt-2 pb-6 px-4">
+          <nav className="flex-grow overflow-y-auto pt-2 lg:pt-4 pb-6 px-4">
             <div className="space-y-6">
               <section>
                 <h3 className="flex items-center text-base font-semibold text-foreground mb-3">
@@ -97,7 +97,7 @@ export function Sidebar() {
             </div>
           </nav>
 
-          <div className="border-t border-border p-4 flex-shrink-0">
+          <div className="border-t border-border p-3 lg:p-4 flex-shrink-0">
             <Button
               variant="ghost"
               className="w-full justify-start text-muted-foreground hover:bg-muted hover:text-foreground transition-colors duration-200"
