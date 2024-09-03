@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { GiftList } from "@/types/gift-list";
+import { Gift } from "@/types/gift";
 import { Button } from "@/components/ui/button";
 import {
   CalendarIcon,
@@ -7,6 +8,7 @@ import {
   ShareIcon,
   Trash2Icon,
   UsersIcon,
+  GiftIcon,
 } from "lucide-react";
 
 interface GiftListHeaderProps {
@@ -15,6 +17,7 @@ interface GiftListHeaderProps {
   handleEditList: () => void;
   handleShareList: () => void;
   handleDeleteList: () => void;
+  gifts: Gift[];
 }
 
 export function GiftListHeader({
@@ -23,6 +26,7 @@ export function GiftListHeader({
   handleEditList,
   handleShareList,
   handleDeleteList,
+  gifts,
 }: GiftListHeaderProps) {
   const formattedDate = useMemo(() => {
     if (currentList.date) {
@@ -38,6 +42,8 @@ export function GiftListHeader({
   const members = useMemo(() => {
     return currentList.users.filter((user) => user.role !== "owner");
   }, [currentList.users]);
+
+  const totalGifts = gifts.length;
 
   return (
     <div className="overflow-hidden">
@@ -61,6 +67,12 @@ export function GiftListHeader({
                 <UsersIcon className="w-4 h-4 mr-1" />
                 <span>
                   {members.length} member{members.length !== 1 ? "s" : ""}
+                </span>
+              </div>
+              <div className="flex items-center mt-1 sm:mt-0">
+                <GiftIcon className="w-4 h-4 mr-1" />
+                <span>
+                  {totalGifts} gift{totalGifts !== 1 ? "s" : ""}
                 </span>
               </div>
             </div>

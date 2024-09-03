@@ -211,6 +211,7 @@ export function GiftTable({
         handleEditList={handleEditList}
         handleShareList={handleShareList}
         handleDeleteList={handleDeleteList}
+        gifts={gifts}
       />
       {isOwner && (
         <AddGiftCard
