@@ -4,6 +4,8 @@ import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
+import { Suspense } from "react";
+import Spinner from "@/components/ui/spinner";
 
 const fontHeading = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -66,7 +68,9 @@ export default function RootLayout({
         )}
       >
         <SessionProvider>
-          <div className="flex-grow flex flex-col">{children}</div>
+          <div className="flex-grow flex flex-col">
+            <Suspense fallback={<Spinner />}>{children}</Suspense>
+          </div>
           <Analytics />
         </SessionProvider>
       </body>

@@ -1,8 +1,6 @@
 // app/page.tsx
 import Link from "next/link";
-import { Suspense } from "react";
 import ClientHome from "@/components/client-home";
-import Spinner from "@/components/ui/spinner";
 import { GiftIcon, ShareIcon, UserGroupIcon } from "@/components/icons";
 
 export default function Home() {
@@ -34,9 +32,7 @@ export default function Home() {
           ))}
         </div>
 
-        <Suspense fallback={<Spinner />}>
-          <ClientHome />
-        </Suspense>
+        <ClientHome />
       </main>
       <footer className="relative bg-white shadow z-10">
         <div className="container mx-auto px-4 py-4 text-center">

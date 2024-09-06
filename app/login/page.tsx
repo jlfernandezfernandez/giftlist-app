@@ -1,7 +1,5 @@
 // app/login/page.tsx
-import { Suspense } from "react";
 import ClientLogin from "@/components/client-login";
-import Spinner from "@/components/ui/spinner";
 
 export default function LoginPage() {
   return (
@@ -11,9 +9,7 @@ export default function LoginPage() {
           <h1 className="text-xl font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl ">
             Sign in to your account
           </h1>
-          <Suspense fallback={<Spinner />}>
-            <ClientLogin />
-          </Suspense>
+          <ClientLogin />
         </div>
       </div>
     </main>

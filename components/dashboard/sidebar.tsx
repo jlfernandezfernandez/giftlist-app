@@ -6,7 +6,6 @@ import { AvatarSection } from "./avatar-section";
 import { LogOutIcon, GiftIcon, StarIcon } from "lucide-react";
 import { useLogout } from "@/hooks/use-logout";
 import { useRouter } from "next/navigation";
-import Spinner from "@/components/ui/spinner";
 import { useUser } from "@/context/user-context";
 import { useGiftList } from "@/context/gift-list-context";
 import { useSidebar } from "@/context/sidebar-context";
@@ -17,17 +16,13 @@ import { cn } from "@/lib/utils";
 
 export function Sidebar() {
   const { isSidebarOpen, isSidebarLoading, closeSidebar } = useSidebar();
-  const { user, isLoadingUser } = useUser();
-  const { giftLists, isLoadingGiftList } = useGiftList();
+  const { user } = useUser();
+  const { giftLists } = useGiftList();
   const router = useRouter();
   const handleLogout = useLogout();
 
-  if (isLoadingUser || isLoadingGiftList) {
-    return <Spinner />;
-  }
-
-  const ownGiftLists = giftLists.filter((list) => list.isOwner);
-  const guestGiftLists = giftLists.filter((list) => !list.isOwner);
+  const ownGiftLists = giftLists?.filter((list) => list.isOwner) ?? [];
+  const guestGiftLists = giftLists?.filter((list) => !list.isOwner) ?? [];
 
   return (
     <>
@@ -40,7 +35,7 @@ export function Sidebar() {
       <aside
         className={cn(
           "fixed left-0 top-0 z-50 h-full flex flex-col transition-all duration-300 ease-in-out bg-background border-r border-border",
-          "w-64 sm:w-72 lg:w-64 xl:w-72", // Ajustado para ser más consistente
+          "w-64 sm:w-72 lg:w-64 xl:w-72",
           "lg:sticky lg:top-0 lg:h-screen",
           isSidebarOpen
             ? "translate-x-0 shadow-lg"

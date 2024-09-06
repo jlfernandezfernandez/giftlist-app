@@ -10,14 +10,12 @@ interface LoginFormProps {
   onSubmit: (email: string, password: string) => Promise<void>;
   onGoogleSignIn: () => Promise<void>;
   error: string | null;
-  isPending: boolean;
 }
 
 export default function LoginForm({
   onSubmit,
   onGoogleSignIn,
   error,
-  isPending,
 }: LoginFormProps) {
   const [form, setForm] = useState({
     email: "",
@@ -44,7 +42,7 @@ export default function LoginForm({
       <div>
         <label
           htmlFor="email"
-          className="block mb-2 text-sm font-medium text-gray-900 "
+          className="block mb-2 text-sm font-medium text-gray-900"
         >
           Your email
         </label>
@@ -62,7 +60,7 @@ export default function LoginForm({
       <div>
         <label
           htmlFor="password"
-          className="block mb-2 text-sm font-medium text-gray-900 "
+          className="block mb-2 text-sm font-medium text-gray-900"
         >
           Password
         </label>
@@ -94,13 +92,7 @@ export default function LoginForm({
         </div>
       )}
       <div className="text-center mt-6">
-        <Button
-          type="submit"
-          variant="default"
-          size="lg"
-          className="w-full"
-          disabled={isPending}
-        >
+        <Button type="submit" variant="default" size="lg" className="w-full">
           Sign in
         </Button>
       </div>

@@ -3,7 +3,6 @@
 
 import { useAuthWithRedirect } from "@/hooks/use-auth-with-redirect";
 import RegisterForm from "@/components/register-form";
-import Spinner from "@/components/ui/spinner";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { ArrowRight } from "lucide-react";
@@ -11,7 +10,6 @@ import { ArrowRight } from "lucide-react";
 export default function ClientRegister() {
   const {
     error,
-    isPending,
     handleRegisterWithRedirect,
     handleGoogleSignInWithRedirect,
     getRedirectPath,
@@ -19,11 +17,9 @@ export default function ClientRegister() {
 
   return (
     <>
-      {isPending && <Spinner />}
       <RegisterForm
         onSubmit={handleRegisterWithRedirect}
         error={error}
-        isPending={isPending}
       />
       <div className="text-center mt-4">
         <p className="text-sm font-light text-gray-500">

@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState, FormEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { EyeIcon, EyeOffIcon } from "lucide-react"; // Asegúrate de importar estos iconos o usa los que prefieras
@@ -8,14 +8,9 @@ import { EyeIcon, EyeOffIcon } from "lucide-react"; // Asegúrate de importar es
 export interface RegisterFormProps {
   onSubmit: (name: string, email: string, password: string) => Promise<void>;
   error: string | null;
-  isPending: boolean;
 }
 
-export default function RegisterForm({
-  onSubmit,
-  error,
-  isPending,
-}: RegisterFormProps) {
+export default function RegisterForm({ onSubmit, error }: RegisterFormProps) {
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -52,7 +47,7 @@ export default function RegisterForm({
       <div>
         <label
           htmlFor="name"
-          className="block mb-2 text-sm font-medium text-gray-900 "
+          className="block mb-2 text-sm font-medium text-gray-900"
         >
           Your name
         </label>
@@ -69,7 +64,7 @@ export default function RegisterForm({
       <div>
         <label
           htmlFor="email"
-          className="block mb-2 text-sm font-medium text-gray-900 "
+          className="block mb-2 text-sm font-medium text-gray-900"
         >
           Your email
         </label>
@@ -86,7 +81,7 @@ export default function RegisterForm({
       <div>
         <label
           htmlFor="password"
-          className="block mb-2 text-sm font-medium text-gray-900 "
+          className="block mb-2 text-sm font-medium text-gray-900"
         >
           Password
         </label>
@@ -115,7 +110,7 @@ export default function RegisterForm({
       <div>
         <label
           htmlFor="confirmation"
-          className="block mb-2 text-sm font-medium text-gray-900 "
+          className="block mb-2 text-sm font-medium text-gray-900"
         >
           Confirm password
         </label>
@@ -127,6 +122,18 @@ export default function RegisterForm({
           onChange={handleChange}
           placeholder="••••••••"
           required
+          labelRight={
+            <button
+              type="button"
+              onClick={() => togglePasswordVisibility("confirmation")}
+            >
+              {showConfirmation ? (
+                <EyeOffIcon className="h-4 w-4" />
+              ) : (
+                <EyeIcon className="h-4 w-4" />
+              )}
+            </button>
+          }
         />
       </div>
       {error && (
@@ -137,13 +144,7 @@ export default function RegisterForm({
           <span className="block sm:inline">{error}</span>
         </div>
       )}
-      <Button
-        type="submit"
-        variant="default"
-        size="lg"
-        className="w-full"
-        disabled={isPending}
-      >
+      <Button type="submit" variant="default" size="lg" className="w-full">
         Create an account
       </Button>
     </form>

@@ -1,7 +1,5 @@
 // app/register/page.tsx
-import { Suspense } from "react";
 import ClientRegister from "@/components/client-register";
-import Spinner from "@/components/ui/spinner";
 
 export default function RegisterPage() {
   return (
@@ -11,9 +9,7 @@ export default function RegisterPage() {
           <h1 className="text-xl font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl ">
             Create your GiftList AI account
           </h1>
-          <Suspense fallback={<Spinner />}>
-            <ClientRegister />
-          </Suspense>
+          <ClientRegister />
         </div>
       </div>
     </main>

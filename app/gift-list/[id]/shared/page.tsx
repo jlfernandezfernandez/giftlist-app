@@ -3,26 +3,13 @@
 
 import { useParams } from "next/navigation";
 import { useAssociateUserToGiftList } from "@/hooks/use-associate-user-to-gift-list";
-import Spinner from "@/components/ui/spinner";
 import { Button } from "@/components/ui/button";
 
 export default function SharedGiftListPage() {
   const { id } = useParams();
-  const { status, error, retryAssociation, isLoadingUser } =
-    useAssociateUserToGiftList(id as string);
-
-  if (isLoadingUser || status === "loading") {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <Spinner />
-        <p className="mt-4 text-lg">
-          {isLoadingUser
-            ? "Loading user information..."
-            : "Associating you with the gift list..."}
-        </p>
-      </div>
-    );
-  }
+  const { status, error, retryAssociation } = useAssociateUserToGiftList(
+    id as string
+  );
 
   if (status === "error") {
     return (
