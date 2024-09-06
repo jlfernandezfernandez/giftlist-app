@@ -95,8 +95,8 @@ export function GiftTable({
       if (url) {
         const newGift = await handleAddGift(
           currentList.id,
-          url,
           details,
+          url,
           name,
           price,
           currency
