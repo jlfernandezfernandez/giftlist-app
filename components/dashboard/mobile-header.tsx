@@ -9,7 +9,7 @@ export function MobileHeader() {
   const { toggleSidebar } = useSidebar();
 
   return (
-    <header className="sticky top-0 z-10 xl:hidden flex items-center justify-between h-16 px-4 bg-background border-b border-border">
+    <header className="sticky top-0 z-10 lg:hidden flex items-center justify-between h-16 px-4 bg-background border-b border-border">
       <div className="flex items-center font-semibold space-x-2">
         <Gift className="w-5 h-5" aria-hidden="true" />
         <h1 className="text-lg">GiftList AI</h1>

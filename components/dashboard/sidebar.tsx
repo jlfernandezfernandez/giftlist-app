@@ -49,11 +49,11 @@ export function Sidebar() {
         )}
       >
         <div className="flex flex-col h-full">
-          <div className="p-4 flex-shrink-0">
+          <div className="flex-shrink-0">
             <AvatarSection user={user} />
           </div>
 
-          <nav className="flex-grow overflow-y-auto pt-2 lg:pt-4 pb-6 px-4">
+          <nav className="flex-grow overflow-y-auto pt-5 pb-6 px-4">
             <div className="space-y-6">
               <section>
                 <h3 className="flex items-center text-base font-semibold text-foreground mb-3">
