@@ -34,11 +34,6 @@ export default function Home() {
 
         <ClientHome />
       </main>
-      <footer className="relative bg-white shadow z-10">
-        <div className="container mx-auto px-4 py-4 text-center">
-          <p className="text-gray-700">© 2024 GiftList AI</p>
-        </div>
-      </footer>
     </div>
   );
 }
@@ -53,14 +48,13 @@ const features = [
   {
     icon: <ShareIcon className="h-12 w-12 text-white" />,
     title: "Share Easily",
-    description:
-      "Share your lists via a link and collaborate with others as an admin or guest.",
+    description: "Share your lists via a link and collaborate with others.",
   },
   {
     icon: <UserGroupIcon className="h-12 w-12 text-white" />,
     title: "Collaborative Management",
     description:
-      "Assign gifts, make group purchases, and keep everyone updated with notifications.",
+      "Assign gifts, make group purchases, and keep everyone updated.",
   },
 ];
 
