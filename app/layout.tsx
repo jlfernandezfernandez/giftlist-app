@@ -21,7 +21,7 @@ const fontBody = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: "GiftList AI",
-  description: "Organize and manage your gift lists with AI.",
+  description: "Organize and manage your gift lists.",
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",

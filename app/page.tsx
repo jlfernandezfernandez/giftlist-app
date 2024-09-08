@@ -1,38 +1,55 @@
 // app/page.tsx
+
 import Link from "next/link";
-import ClientHome from "@/components/client-home";
-import { GiftIcon, ShareIcon, UserGroupIcon } from "@/components/icons";
+import { GiftIcon, ShareIcon, UsersIcon } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="relative flex flex-col min-h-screen bg-animated-gradient">
-      <header className="relative bg-transparent p-6 z-10">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-white">GiftList AI</h1>
+    <div className="min-h-screen bg-gradient-to-br from-purple-700 via-indigo-800 to-blue-900">
+      <header className="p-6">
+        <nav className="container mx-auto flex justify-between items-center">
+          <h1 className="text-3xl font-extrabold text-white">GiftList AI</h1>
           <Link
             href="/login"
-            className="bg-white text-black px-4 py-2 rounded-full text-base hover:bg-gray-800 transition"
+            className="bg-white text-purple-800 px-6 py-2 rounded-full text-lg font-semibold hover:bg-opacity-90 transition-all"
           >
-            Sign In
+            Sign in
+          </Link>
+        </nav>
+      </header>
+
+      <main className="flex flex-col items-center justify-center min-h-[calc(100vh-80px)] px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16">
+        <div className="text-center">
+          <h2 className="text-5xl sm:text-6xl md:text-7xl font-extrabold text-white mb-6 leading-tight">
+            Organize and share your
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-yellow-400">
+              Gift Lists
+            </span>
+          </h2>
+          <p className="text-xl sm:text-2xl text-white mb-12 max-w-3xl mx-auto">
+            Create, manage, and share intelligent gift lists for any occasion.
+            Find the perfect presents for your loved ones with ease.
+          </p>
+        </div>
+
+        <div>
+          <Link
+            href="/signup"
+            className="bg-gradient-to-r from-pink-500 to-yellow-500 text-white px-8 py-4 rounded-full text-xl font-bold hover:from-pink-600 hover:to-yellow-600 transition-all"
+          >
+            Get Started for Free
           </Link>
         </div>
-      </header>
-      <main className="relative flex-grow flex flex-col items-center justify-center text-center p-8 z-10">
-        <h2 className="text-5xl font-extrabold text-white mb-6">
-          Organize and share your gift lists
-        </h2>
-        <p className="text-xl text-white mb-12 max-w-2xl">
-          Create, manage, and share gift lists for any occasion. Collaborate
-          with friends and family to make every event special.
-        </p>
 
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
+        <div className="mt-16 sm:mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {features.map((feature, index) => (
             <FeatureCard key={index} {...feature} />
           ))}
         </div>
 
-        <ClientHome />
+        <p className="mt-16 text-base text-yellow-300 text-center">
+          Coming soon: Advanced AI-powered integration!
+        </p>
       </main>
     </div>
   );
@@ -40,21 +57,20 @@ export default function Home() {
 
 const features = [
   {
-    icon: <GiftIcon className="h-12 w-12 text-white" />,
-    title: "Create Gift Lists",
+    icon: <GiftIcon className="h-16 w-16 text-pink-400" />,
+    title: "Smart Suggestions",
     description:
-      "Create and customize gift lists for any occasion with name, description, and event date.",
+      "Get personalized gift ideas based on interests and past preferences.",
   },
   {
-    icon: <ShareIcon className="h-12 w-12 text-white" />,
-    title: "Share Easily",
-    description: "Share your lists via a link and collaborate with others.",
+    icon: <ShareIcon className="h-16 w-16 text-yellow-400" />,
+    title: "Seamless Sharing",
+    description: "Collaborate with friends and family in real-time.",
   },
   {
-    icon: <UserGroupIcon className="h-12 w-12 text-white" />,
-    title: "Collaborative Management",
-    description:
-      "Assign gifts, make group purchases, and keep everyone updated.",
+    icon: <UsersIcon className="h-16 w-16 text-green-400" />,
+    title: "Group Gifting",
+    description: "Organize group purchases and split costs effortlessly.",
   },
 ];
 
@@ -68,10 +84,12 @@ function FeatureCard({
   description: string;
 }) {
   return (
-    <div className="bg-white bg-opacity-10 p-6 rounded-lg shadow-md backdrop-blur-sm">
-      <div className="flex justify-center mb-4">{icon}</div>
-      <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
-      <p className="text-white text-opacity-80">{description}</p>
+    <div className="bg-white bg-opacity-10 p-6 rounded-xl shadow-xl backdrop-blur-sm border border-white border-opacity-20 transition-transform duration-300 flex flex-col items-center text-center">
+      <div className="mb-4">{icon}</div>
+      <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">{title}</h3>
+      <p className="text-white text-opacity-80 text-sm sm:text-base">
+        {description}
+      </p>
     </div>
   );
 }
