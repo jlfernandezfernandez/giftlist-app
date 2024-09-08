@@ -58,9 +58,8 @@ export default function Home() {
 const features = [
   {
     icon: <GiftIcon className="h-16 w-16 text-pink-400" />,
-    title: "Smart Suggestions",
-    description:
-      "Get personalized gift ideas based on interests and past preferences.",
+    title: "Gift Management",
+    description: "Add gifts to your list and track their status.",
   },
   {
     icon: <ShareIcon className="h-16 w-16 text-yellow-400" />,
