@@ -35,7 +35,7 @@ export default function Home() {
 
           <div>
             <Link
-              href="/signup"
+              href="/register"
               className="bg-gradient-to-r from-pink-500 to-yellow-500 text-white px-8 py-4 rounded-full text-xl font-bold hover:from-pink-600 hover:to-yellow-600 transition-all"
             >
               Get Started for Free

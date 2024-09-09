@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { AvatarSection } from "./avatar-section";
-import { LogOutIcon, GiftIcon, Share2 } from "lucide-react";
+import { LogOutIcon, GiftIcon, Share2, LayoutDashboard } from "lucide-react";
 import { useLogout } from "@/hooks/use-logout";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/user-context";
@@ -13,6 +13,7 @@ import { OwnGiftList } from "./sidebar-own-gift-list";
 import { GuestGiftList } from "./sidebar-guest-gift-list";
 import { AssignedGifts } from "./sidebar-assigned-gifts";
 import { cn } from "@/lib/utils";
+import { DashboardButton } from "./sidebar-dashboard-button";
 
 export function Sidebar() {
   const { isSidebarOpen, isSidebarLoading, closeSidebar } = useSidebar();
@@ -23,6 +24,11 @@ export function Sidebar() {
 
   const ownGiftLists = giftLists?.filter((list) => list.isOwner) ?? [];
   const guestGiftLists = giftLists?.filter((list) => !list.isOwner) ?? [];
+
+  const handleListClick = (url: string) => {
+    router.push(url);
+    closeSidebar();
+  };
 
   return (
     <>
@@ -48,19 +54,14 @@ export function Sidebar() {
             <AvatarSection user={user} />
           </div>
 
-          <nav className="flex-grow overflow-y-auto pt-5 pb-6 px-4">
-            <div className="space-y-6">
+          <nav className="flex-grow overflow-y-auto pt-2 pb-6 px-4">
+            <div className="space-y-1">
+              <DashboardButton closeSidebar={closeSidebar} />
               <section>
                 <OwnGiftList
                   lists={ownGiftLists}
-                  onCreateNewList={() => {
-                    router.push("/gift-list/create");
-                    closeSidebar();
-                  }}
-                  onListClick={(url) => {
-                    router.push(url);
-                    closeSidebar();
-                  }}
+                  onCreateNewList={() => handleListClick("/gift-list/create")}
+                  onListClick={handleListClick}
                 />
               </section>
             </div>
@@ -75,10 +76,7 @@ export function Sidebar() {
                 </h3>
                 <GuestGiftList
                   lists={guestGiftLists}
-                  onListClick={(url) => {
-                    router.push(url);
-                    closeSidebar();
-                  }}
+                  onListClick={handleListClick}
                 />
               </section>
               <section>

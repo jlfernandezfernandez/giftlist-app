@@ -27,7 +27,7 @@ export function useDeleteGiftList() {
         title: "Success",
         description: "Gift list deleted successfully",
       });
-      router.push("/gift-list/create");
+      router.push("/gift-list/dashboard");
     } catch (error) {
       addToast({
         title: "Error",

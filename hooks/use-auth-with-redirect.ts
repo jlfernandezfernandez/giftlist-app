@@ -12,7 +12,7 @@ export function useAuthWithRedirect() {
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
   const getRedirectPath = useCallback(() => {
-    return searchParams?.get("redirect") || "/gift-list/create";
+    return searchParams?.get("redirect") || "/gift-list/dashboard";
   }, [searchParams]);
 
   useEffect(() => {
