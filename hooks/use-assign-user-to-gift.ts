@@ -23,22 +23,23 @@ export function useAssignUserToGift() {
         throw new Error("Failed to assign user to gift");
       }
 
-      // Actualizar el caché de SWR para la lista de regalos
+      // Actualizar el caché de SWR para la lista de regalos y los regalos asignados
       mutate(`/api/gift-lists/${giftListId}/gift`);
+      mutate(`/api/gifts/user/${userId}`);
 
       addToast({
         title: "Success",
         description: "You're now assigned to this gift",
       });
 
-      return true; // Indicar éxito
+      return true;
     } catch (error) {
       addToast({
         title: "Error",
         description: "Couldn't assign to gift",
       });
       console.error("Error assigning user to gift:", error);
-      return false; // Indicar fallo
+      return false;
     } finally {
       setIsAssigningUser(false);
     }

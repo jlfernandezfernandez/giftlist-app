@@ -23,22 +23,23 @@ export function useUnassignUserFromGift() {
         throw new Error("Failed to unassign user from gift");
       }
 
-      // Actualizar el caché de SWR para la lista de regalos
+      // Actualizar el caché de SWR para la lista de regalos y los regalos asignados
       mutate(`/api/gift-lists/${giftListId}/gift`);
+      mutate(`/api/gifts/user/${userId}`);
 
       addToast({
         title: "Success",
         description: "You're no longer assigned to this gift",
       });
 
-      return true; // Indicar éxito
+      return true;
     } catch (error) {
       addToast({
         title: "Error",
         description: "Couldn't unassign from gift",
       });
       console.error("Error unassigning user from gift:", error);
-      return false; // Indicar fallo
+      return false;
     } finally {
       setIsUnassigningUser(false);
     }

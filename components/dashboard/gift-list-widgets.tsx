@@ -3,10 +3,11 @@ import { Gift } from "@/types/gift";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   GiftIcon,
-  DollarSignIcon,
   UserCheckIcon,
   ShoppingCartIcon,
+  BanknoteIcon,
 } from "lucide-react";
+import { currencySymbol } from "@/lib/gift-utils";
 
 interface GiftListWidgetsProps {
   gifts: Gift[];
@@ -14,13 +15,27 @@ interface GiftListWidgetsProps {
 
 export function GiftListWidgets({ gifts }: GiftListWidgetsProps) {
   const totalGifts = gifts.length;
-  const totalValue = gifts.reduce((sum, gift) => sum + (gift.price || 0), 0);
   const reservedGifts = gifts.filter(
     (gift) => gift.assignedUsers && gift.assignedUsers.length > 0
   ).length;
   const totalAssigned = new Set(
     gifts.flatMap((gift) => gift.assignedUsers || []).map((user) => user.userId)
   ).size;
+
+  // Group gifts by currency and calculate total value for each currency
+  const totalValueByCurrency = gifts.reduce((acc, gift) => {
+    if (gift.price && gift.currency) {
+      acc[gift.currency] = (acc[gift.currency] || 0) + gift.price;
+    }
+    return acc;
+  }, {} as Record<string, number>);
+
+  // Format total value string
+  const totalValueString = Object.entries(totalValueByCurrency)
+    .map(
+      ([currency, value]) => `${currencySymbol(currency)}${value.toFixed(2)}`
+    )
+    .join(", ");
 
   const widgetData = [
     {
@@ -30,8 +45,8 @@ export function GiftListWidgets({ gifts }: GiftListWidgetsProps) {
     },
     {
       title: "Total Value",
-      value: `$${totalValue.toFixed(2)}`,
-      icon: <DollarSignIcon className="h-5 w-5 text-green-500" />,
+      value: totalValueString,
+      icon: <BanknoteIcon className="h-5 w-5 text-green-500" />,
     },
     {
       title: "Reserved",
