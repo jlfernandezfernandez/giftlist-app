@@ -23,6 +23,7 @@ import { useSearchGifts } from "@/hooks/use-search-gifts";
 import { SearchGifts } from "@/components/dashboard/search-gifts";
 import { useMarkGiftAsBought } from "@/hooks/use-mark-gift-as-bought";
 import { ScrollToTopButton } from "@/components/ui/scroll-to-top-button";
+import GiftListWidgets from "./gift-list-widgets";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
@@ -213,6 +214,7 @@ export function GiftTable({
         handleDeleteList={handleDeleteList}
         gifts={gifts}
       />
+      <GiftListWidgets gifts={gifts} />
       {isOwner && (
         <AddGiftCard
           isAddingGift={isAddingGift}
