@@ -22,8 +22,10 @@ export default function CreateGiftListPage() {
   return (
     <div className="flex min-h-screen w-full justify-center">
       <main className="w-full max-w-6xl py-6 px-6 md:px-2">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold mb-2">Create a New Gift List</h1>
+        <div className="mb-6 space-y-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+            Create a New Gift List
+          </h1>
           <p className="text-gray-600">
             Fill in the details below to create a new gift list.
           </p>

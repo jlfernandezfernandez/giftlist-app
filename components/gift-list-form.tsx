@@ -25,17 +25,17 @@ interface GiftListFormProps {
 const MAX_DESCRIPTION_LENGTH = 50;
 
 const NAME_PLACEHOLDERS = [
-  "Birthday Wishlist",
-  "Wedding Registry",
-  "Christmas Gift Ideas",
-  "Housewarming Gifts",
+  "e.g. Birthday Wishlist",
+  "e.g. Wedding Registry",
+  "e.g. Christmas Gift Ideas",
+  "e.g. Housewarming Gifts",
 ];
 
 const DESCRIPTION_PLACEHOLDERS = [
-  "My 30th birthday celebration",
-  "Our dream wedding items",
-  "Family Christmas exchange",
-  "New apartment essentials",
+  "e.g. My 30th birthday celebration",
+  "e.g. Our dream wedding items",
+  "e.g. Family Christmas exchange",
+  "e.g. New apartment essentials",
 ];
 
 export function GiftListForm({
