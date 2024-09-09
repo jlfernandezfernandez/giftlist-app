@@ -51,9 +51,6 @@ export function Sidebar() {
           <nav className="flex-grow overflow-y-auto pt-5 pb-6 px-4">
             <div className="space-y-6">
               <section>
-                <h3 className="flex items-center text-lg font-bold text-foreground mb-3">
-                  My Lists
-                </h3>
                 <OwnGiftList
                   lists={ownGiftLists}
                   onCreateNewList={() => {

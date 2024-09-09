@@ -11,16 +11,16 @@ export function AvatarSection({ user }: AvatarSectionProps) {
   const truncatedName = displayName.split(" ").slice(0, 3).join(" ");
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between">
-        <div className="flex-1 min-w-0 space-y-1">
-          <div className="text-lg sm:text-xl font-bold text-gray-900">
-            {truncatedName}
-          </div>
+    <div className="p-4 sm:p-6">
+      <div className="space-y-1">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
+          {truncatedName}
+        </h2>
+        {user?.email && (
           <p className="text-xs sm:text-sm text-gray-500 truncate">
-            {user?.email}
+            {user.email}
           </p>
-        </div>
+        )}
       </div>
     </div>
   );
