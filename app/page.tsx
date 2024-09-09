@@ -5,7 +5,7 @@ import { GiftIcon, ShareIcon, UsersIcon } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-700 via-indigo-800 to-blue-900">
+    <div className="min-h-screen">
       <div className="min-h-screen flex flex-col">
         <header className="p-6">
           <nav className="container mx-auto flex justify-between items-center">
