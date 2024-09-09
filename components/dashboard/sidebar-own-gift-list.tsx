@@ -1,7 +1,7 @@
 // components/dashboard/sidebar-own-gift-list.tsx
 
 import Link from "next/link";
-import { PlusIcon, ChevronRightIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { GiftList } from "@/types/gift-list";
 import { motion } from "framer-motion";
 import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
@@ -41,7 +41,6 @@ export function OwnGiftList({
                 : "text-gray-700 "
             )}
           >
-            <ChevronRightIcon className="h-4 w-4 flex-shrink-0" />
             <span className="truncate" title={list.name}>
               {list.name}
             </span>
@@ -57,9 +56,10 @@ export function OwnGiftList({
         >
           <Button
             onClick={onCreateNewList}
-            variant="black"
-            className="w-full justify-start text-sm lg:text-base"
+            variant="ghost"
+            className="w-full text-sm lg:text-base"
             aria-live="polite"
+            alignment="left"
           >
             <PlusIcon className="h-4 w-4 mr-2" aria-hidden="true" />
             Create New List

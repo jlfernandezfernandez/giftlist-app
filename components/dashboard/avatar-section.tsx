@@ -8,13 +8,14 @@ interface AvatarSectionProps {
 
 export function AvatarSection({ user }: AvatarSectionProps) {
   const displayName = user?.displayName || "Guest";
+  const truncatedName = displayName.split(" ").slice(0, 3).join(" ");
 
   return (
     <div className="p-6">
       <div className="flex items-center justify-between">
         <div className="flex-1 min-w-0 space-y-1">
-          <div className="text-sm sm:text-base font-medium text-gray-900 line-clamp-2">
-            {displayName}
+          <div className="text-lg sm:text-xl font-bold text-gray-900">
+            {truncatedName}
           </div>
           <p className="text-xs sm:text-sm text-gray-500 truncate">
             {user?.email}

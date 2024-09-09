@@ -1,7 +1,7 @@
 // components/dashboard/sidebar-guest-gift-list.tsx
 import React, { useMemo } from "react";
 import Link from "next/link";
-import { GiftIcon, UserIcon, ChevronRightIcon } from "lucide-react";
+import { UserIcon } from "lucide-react";
 import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
 import { GiftList } from "@/types/gift-list";
 import { useSidebar } from "@/context/sidebar-context";
@@ -83,7 +83,6 @@ export function GuestGiftList({ lists, onListClick }: GuestGiftListProps) {
                       : "text-gray-700 "
                   )}
                 >
-                  <ChevronRightIcon className="h-4 w-4 flex-shrink-0" />
                   <span className="truncate flex-1" title={list.name}>
                     {list.name}
                   </span>

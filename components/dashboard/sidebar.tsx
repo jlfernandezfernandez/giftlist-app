@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { AvatarSection } from "./avatar-section";
-import { LogOutIcon, GiftIcon, StarIcon } from "lucide-react";
+import { LogOutIcon, GiftIcon, Share2 } from "lucide-react";
 import { useLogout } from "@/hooks/use-logout";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/user-context";
@@ -44,15 +44,14 @@ export function Sidebar() {
         )}
       >
         <div className="flex flex-col h-full">
-          <div className="flex-shrink-0">
+          <div className="flex-shrink-0 mt-2 lg:mt-4">
             <AvatarSection user={user} />
           </div>
 
           <nav className="flex-grow overflow-y-auto pt-5 pb-6 px-4">
             <div className="space-y-6">
               <section>
-                <h3 className="flex items-center text-base font-semibold text-foreground mb-3">
-                  <GiftIcon className="w-5 h-5 mr-2" />
+                <h3 className="flex items-center text-lg font-bold text-foreground mb-3">
                   My Lists
                 </h3>
                 <OwnGiftList
@@ -67,10 +66,14 @@ export function Sidebar() {
                   }}
                 />
               </section>
+            </div>
 
+            <div className="mt-10 space-y-6">
+              {" "}
+              {/* Nuevo div con mt-10 y space-y-6 */}
               <section>
                 <h3 className="flex items-center text-base font-semibold text-foreground mb-3">
-                  <GiftIcon className="w-5 h-5 mr-2" />
+                  <Share2 className="w-5 h-5 mr-2" />
                   Shared With Me
                 </h3>
                 <GuestGiftList
@@ -81,10 +84,9 @@ export function Sidebar() {
                   }}
                 />
               </section>
-
               <section>
                 <h3 className="flex items-center text-base font-semibold text-foreground mb-3">
-                  <StarIcon className="w-5 h-5 mr-2" />
+                  <GiftIcon className="w-5 h-5 mr-2" />
                   Assigned Gifts
                 </h3>
                 <AssignedGifts />
@@ -92,11 +94,12 @@ export function Sidebar() {
             </div>
           </nav>
 
-          <div className="border-t border-border p-3 lg:p-4 flex-shrink-0">
+          <div className="border-t border-border flex-shrink-0">
             <Button
               variant="ghost"
-              className="w-full justify-start text-muted-foreground hover:bg-muted hover:text-foreground transition-colors duration-200"
+              className="w-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors duration-200 h-12"
               onClick={handleLogout}
+              alignment="left"
             >
               <LogOutIcon className="h-4 w-4 mr-2" />
               Logout

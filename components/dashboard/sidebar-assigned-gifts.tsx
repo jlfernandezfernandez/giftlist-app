@@ -5,7 +5,6 @@ import { useSidebar } from "@/context/sidebar-context";
 import { useUser } from "@/context/user-context";
 import { useAssignedGifts } from "@/hooks/use-assigned-gifts";
 import { motion } from "framer-motion";
-import { GiftIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function AssignedGifts() {
@@ -53,7 +52,6 @@ export function AssignedGifts() {
               "text-gray-700 "
             )}
           >
-            <GiftIcon className="h-4 w-4 flex-shrink-0" />
             <span className="truncate" title={gift.name}>
               {gift.name}
             </span>
