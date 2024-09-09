@@ -1,7 +1,7 @@
 // components/dashboard/sidebar-guest-gift-list.tsx
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
-import { UserIcon } from "lucide-react";
+import { UserIcon, ChevronDown, ChevronRight } from "lucide-react";
 import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
 import { GiftList } from "@/types/gift-list";
 import { useSidebar } from "@/context/sidebar-context";
@@ -16,6 +16,9 @@ interface GuestGiftListProps {
 export function GuestGiftList({ lists, onListClick }: GuestGiftListProps) {
   const currentListId = useCurrentGiftListId();
   const { closeSidebar } = useSidebar();
+  const [expandedOwners, setExpandedOwners] = useState<Record<string, boolean>>(
+    {}
+  );
 
   const formatOwnerNames = (owners: { name: string }[]) => {
     if (owners.length === 0) return "";
@@ -54,42 +57,64 @@ export function GuestGiftList({ lists, onListClick }: GuestGiftListProps) {
     closeSidebar();
   };
 
+  const toggleOwnerExpansion = (ownerName: string) => {
+    setExpandedOwners((prev) => ({ ...prev, [ownerName]: !prev[ownerName] }));
+  };
+
   return (
     <div className="space-y-3">
       {Object.entries(groupedLists).map(([ownerNames, ownerLists]) => (
         <div key={ownerNames} className="space-y-1">
-          <div className="flex items-center px-2 py-1 text-sm lg:text-base font-medium text-gray-700 ">
+          <motion.div
+            className="flex items-center px-2 py-1 text-sm lg:text-base font-medium text-gray-700 cursor-pointer"
+            onClick={() => toggleOwnerExpansion(ownerNames)}
+            whileHover={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
+            whileTap={{ scale: 0.98 }}
+          >
             <UserIcon className="h-4 w-4 mr-2" />
-            <span className="truncate" title={ownerNames}>
+            <span className="truncate flex-1" title={ownerNames}>
               {ownerNames}
             </span>
-          </div>
-          <div className="pl-2">
-            {ownerLists.map((list) => (
-              <motion.div
-                key={list.id}
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.99 }}
-                onClick={() => handleListClick(list.id)}
-                className="cursor-pointer"
-              >
-                <Link
-                  href={`/gift-list/${list.id}`}
-                  className={cn(
-                    "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm lg:text-base transition-colors duration-200",
-                    "hover:bg-gray-100 ",
-                    list.id === currentListId
-                      ? "bg-gray-100  font-medium"
-                      : "text-gray-700 "
-                  )}
+            {expandedOwners[ownerNames] ? (
+              <ChevronDown className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </motion.div>
+          {expandedOwners[ownerNames] && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="pl-2"
+            >
+              {ownerLists.map((list) => (
+                <motion.div
+                  key={list.id}
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  onClick={() => handleListClick(list.id)}
+                  className="cursor-pointer"
                 >
-                  <span className="truncate flex-1" title={list.name}>
-                    {list.name}
-                  </span>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
+                  <Link
+                    href={`/gift-list/${list.id}`}
+                    className={cn(
+                      "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm lg:text-base transition-colors duration-200",
+                      "hover:bg-gray-100",
+                      list.id === currentListId
+                        ? "bg-gray-100 font-medium"
+                        : "text-gray-700"
+                    )}
+                  >
+                    <span className="truncate flex-1" title={list.name}>
+                      {list.name}
+                    </span>
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
         </div>
       ))}
     </div>

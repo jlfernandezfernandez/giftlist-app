@@ -1,5 +1,5 @@
 import { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -7,16 +7,10 @@ import { Analytics } from "@vercel/analytics/react";
 import { Suspense } from "react";
 import Spinner from "@/components/ui/spinner";
 
-const fontHeading = Plus_Jakarta_Sans({
+const inter = Inter({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-heading",
-});
-
-const fontBody = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-body",
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -59,14 +53,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="h-full">
-      <body
-        className={cn(
-          "antialiased min-h-full flex flex-col",
-          fontHeading.variable,
-          fontBody.variable
-        )}
-      >
+    <html lang="en" className={cn("h-full", inter.variable)}>
+      <body className="antialiased min-h-full flex flex-col">
         <SessionProvider>
           <div className="flex-grow flex flex-col">
             <Suspense fallback={<Spinner />}>{children}</Suspense>
