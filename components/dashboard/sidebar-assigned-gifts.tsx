@@ -10,17 +10,9 @@ import { cn } from "@/lib/utils";
 export function AssignedGifts() {
   const { closeSidebar } = useSidebar();
   const { user } = useUser();
-  const { assignedGifts, isLoading, isError } = useAssignedGifts(
-    user?.uid || ""
-  );
+  const { assignedGifts, isLoading } = useAssignedGifts(user?.uid || "");
 
   if (!user || isLoading) return null;
-  if (isError)
-    return (
-      <div className="text-sm lg:text-base text-red-500">
-        Error loading assigned gifts
-      </div>
-    );
 
   if (assignedGifts.length === 0) {
     return (
