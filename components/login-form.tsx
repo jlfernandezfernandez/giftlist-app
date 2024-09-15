@@ -128,7 +128,6 @@ export default function LoginForm({
               id="password"
               value={form.password}
               onChange={handleChange}
-              placeholder="••••••••"
               required
             />
             <button
