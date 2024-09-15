@@ -85,27 +85,31 @@ export default function RegisterForm({ onSubmit, error }: RegisterFormProps) {
         >
           Password
         </label>
-        <Input
-          type={showPassword ? "text" : "password"}
-          name="password"
-          id="password"
-          value={form.password}
-          onChange={handleChange}
-          placeholder="••••••••"
-          required
-          labelRight={
-            <button
-              type="button"
-              onClick={() => togglePasswordVisibility("password")}
-            >
-              {showPassword ? (
-                <EyeOffIcon className="h-4 w-4" />
-              ) : (
-                <EyeIcon className="h-4 w-4" />
-              )}
-            </button>
-          }
-        />
+        <div className="relative">
+          <Input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            id="password"
+            value={form.password}
+            onChange={handleChange}
+            placeholder="••••••••"
+            required
+            className="pr-10"
+          />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+            onClick={() => togglePasswordVisibility("password")}
+          >
+            {showPassword ? (
+              <EyeOffIcon className="h-4 w-4" />
+            ) : (
+              <EyeIcon className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
       </div>
       <div>
         <label
@@ -114,27 +118,31 @@ export default function RegisterForm({ onSubmit, error }: RegisterFormProps) {
         >
           Confirm password
         </label>
-        <Input
-          type={showConfirmation ? "text" : "password"}
-          name="confirmation"
-          id="confirmation"
-          value={form.confirmation}
-          onChange={handleChange}
-          placeholder="••••••••"
-          required
-          labelRight={
-            <button
-              type="button"
-              onClick={() => togglePasswordVisibility("confirmation")}
-            >
-              {showConfirmation ? (
-                <EyeOffIcon className="h-4 w-4" />
-              ) : (
-                <EyeIcon className="h-4 w-4" />
-              )}
-            </button>
-          }
-        />
+        <div className="relative">
+          <Input
+            type={showConfirmation ? "text" : "password"}
+            name="confirmation"
+            id="confirmation"
+            value={form.confirmation}
+            onChange={handleChange}
+            placeholder="••••••••"
+            required
+            className="pr-10"
+          />
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+            onClick={() => togglePasswordVisibility("confirmation")}
+          >
+            {showConfirmation ? (
+              <EyeOffIcon className="h-4 w-4" />
+            ) : (
+              <EyeIcon className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
       </div>
       {error && (
         <div
