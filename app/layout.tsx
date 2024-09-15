@@ -1,5 +1,6 @@
 import { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { Inter } from "next/font/google";
 import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -72,6 +73,12 @@ const satoshi = localFont({
   display: "swap",
 });
 
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
 export const metadata: Metadata = {
   title: "GiftList AI",
   description: "Organize and manage your gift lists.",
@@ -112,7 +119,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={cn("h-full", satoshi.variable)}>
+    <html lang="en" className={cn("h-full", satoshi.variable, inter.variable)}>
       <body className="antialiased min-h-full flex flex-col bg-gradient-to-br from-purple-700 via-indigo-800 to-blue-900 font-sans">
         <SessionProvider>
           <div className="flex-grow flex flex-col">
