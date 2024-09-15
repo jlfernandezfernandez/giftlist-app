@@ -31,11 +31,11 @@ export function GiftListWidgets({ gifts }: GiftListWidgetsProps) {
   }, {} as Record<string, number>);
 
   // Format total value string
-  const totalValueString = Object.entries(totalValueByCurrency)
-    .map(
-      ([currency, value]) => `${currencySymbol(currency)}${value.toFixed(2)}`
-    )
-    .join(", ");
+  const totalValueString = Object.entries(totalValueByCurrency).length > 0
+    ? Object.entries(totalValueByCurrency)
+        .map(([currency, value]) => `${currencySymbol(currency)}${value.toFixed(2)}`)
+        .join(", ")
+    : "0";
 
   const widgetData = [
     {
