@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { AvatarSection } from "./avatar-section";
-import { LogOutIcon, GiftIcon, Share2, LayoutDashboard } from "lucide-react";
+import { LogOutIcon, GiftIcon, Share2 } from "lucide-react";
 import { useLogout } from "@/hooks/use-logout";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/user-context";
