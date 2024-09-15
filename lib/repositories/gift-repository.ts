@@ -3,7 +3,10 @@
 import { supabase } from "@/lib/supabase.client";
 import { Gift } from "@/types/gift";
 
-export async function createGiftRepo(gift: Gift): Promise<Gift> {
+export async function createGiftRepo(
+  gift: Gift,
+  userId: string
+): Promise<Gift> {
   console.log(gift);
   const { data, error } = await supabase.rpc("create_gift", {
     p_giftlist_id: gift.giftListId,
@@ -13,6 +16,7 @@ export async function createGiftRepo(gift: Gift): Promise<Gift> {
     p_website: gift.website,
     p_price: gift.price,
     p_currency: gift.currency,
+    p_user_id: userId,
   });
 
   if (error) {
@@ -36,7 +40,8 @@ export async function createGiftRepo(gift: Gift): Promise<Gift> {
 
 export async function updateGiftRepo(
   giftId: string,
-  updatedGift: Partial<Gift>
+  updatedGift: Partial<Gift>,
+  userId: string
 ): Promise<Gift> {
   const { data, error } = await supabase.rpc("update_gift", {
     p_gift_id: giftId,
@@ -47,6 +52,7 @@ export async function updateGiftRepo(
     p_price: updatedGift.price,
     p_currency: updatedGift.currency,
     p_state: updatedGift.state,
+    p_user_id: userId,
   });
 
   if (error) {
@@ -95,8 +101,14 @@ export async function getGiftsByListIdRepo(listId: string): Promise<Gift[]> {
   }));
 }
 
-export async function deleteGiftRepo(giftId: string): Promise<void> {
-  const { error } = await supabase.from("gifts").delete().eq("id", giftId);
+export async function deleteGiftRepo(
+  giftId: string,
+  userId: string
+): Promise<void> {
+  const { error } = await supabase.rpc("delete_gift", {
+    p_gift_id: giftId,
+    p_user_id: userId,
+  });
 
   if (error) {
     throw new Error(`Error deleting gift: ${error.message}`);

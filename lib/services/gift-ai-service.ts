@@ -29,5 +29,5 @@ export async function processGift(
     currency: currency || productData.currency,
   };
 
-  return await createGift(newGift);
+  return await createGift(newGift, userId);
 }

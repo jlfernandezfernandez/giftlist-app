@@ -41,14 +41,16 @@ export async function updateGiftList(
   giftListId: string,
   name: string,
   description: string | null,
-  date: string | null
+  date: string | null,
+  userId: string
 ): Promise<GiftList> {
   try {
     const updatedGiftList = await updateGiftListRepo(
       giftListId,
       name,
       description,
-      date
+      date,
+      userId
     );
     return updatedGiftList;
   } catch (error) {

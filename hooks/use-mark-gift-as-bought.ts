@@ -3,9 +3,13 @@
 import { useCallback } from "react";
 import { useUpdateGift } from "./use-update-gift";
 import { Gift } from "@/types/gift";
+import { AuthenticatedUser } from "@/types/authenticated-user";
 
-export function useMarkGiftAsBought() {
-  const { updateGift, isUpdatingGift: isMarkingAsBought } = useUpdateGift();
+export function useMarkGiftAsBought(
+  authenticatedUser: AuthenticatedUser | null
+) {
+  const { updateGift, isUpdatingGift: isMarkingAsBought } =
+    useUpdateGift(authenticatedUser);
 
   const markGiftAsBought = useCallback(
     async (gift: Gift, giftListId: string) => {
@@ -13,7 +17,7 @@ export function useMarkGiftAsBought() {
 
       const updatedGift: Partial<Gift> = {
         ...gift,
-        state: "bought"
+        state: "bought",
       };
 
       return await updateGift(giftListId, gift.id, updatedGift);

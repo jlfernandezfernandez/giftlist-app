@@ -10,16 +10,17 @@ import {
 } from "@/lib/repositories/gift-repository";
 import { Gift } from "@/types/gift";
 
-export async function createGift(gift: Gift): Promise<Gift> {
-  return await createGiftRepo(gift);
+export async function createGift(gift: Gift, userId: string): Promise<Gift> {
+  return await createGiftRepo(gift, userId);
 }
 
 export async function updateGift(
   giftId: string,
-  updatedGift: Partial<Gift>
+  updatedGift: Partial<Gift>,
+  userId: string
 ): Promise<Gift> {
   try {
-    return await updateGiftRepo(giftId, updatedGift);
+    return await updateGiftRepo(giftId, updatedGift, userId);
   } catch (error) {
     console.error("Error updating gift:", error);
     throw new Error("Failed to update gift");
@@ -30,9 +31,12 @@ export async function getGiftsByListId(listId: string): Promise<Gift[]> {
   return await getGiftsByListIdRepo(listId);
 }
 
-export async function deleteGift(giftId: string): Promise<void> {
+export async function deleteGift(
+  giftId: string,
+  userId: string
+): Promise<void> {
   try {
-    await deleteGiftRepo(giftId);
+    await deleteGiftRepo(giftId, userId);
   } catch (error) {
     console.error("Error deleting gift:", error);
     throw new Error("Failed to delete gift");

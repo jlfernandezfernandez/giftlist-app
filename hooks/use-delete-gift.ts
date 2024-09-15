@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { mutate } from "swr";
 import { useToast } from "@/context/toast-context";
+import { AuthenticatedUser } from "@/types/authenticated-user";
 
-export function useDeleteGift() {
+export function useDeleteGift(authenticatedUser: AuthenticatedUser | null) {
   const [isDeletingGift, setIsDeleting] = useState(false);
   const { addToast } = useToast();
 
@@ -13,13 +14,17 @@ export function useDeleteGift() {
     try {
       const response = await fetch(`/api/gifts/${giftId}`, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: authenticatedUser?.uid }),
       });
 
       if (!response.ok) {
         throw new Error("Failed to delete gift");
       }
 
-      // Actualizar el caché de SWR para la lista de regalos
+      // Update SWR cache for the gift list
       mutate(`/api/gift-lists/${giftListId}/gift`);
 
       addToast({
@@ -27,14 +32,14 @@ export function useDeleteGift() {
         description: "Gift deleted successfully",
       });
 
-      return true; // Indicar éxito
+      return true; // Indicate success
     } catch (error) {
       addToast({
         title: "Error",
         description: "Failed to delete gift",
       });
       console.error("Error deleting gift:", error);
-      return false; // Indicar fallo
+      return false; // Indicate failure
     } finally {
       setIsDeleting(false);
     }

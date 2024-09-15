@@ -41,15 +41,16 @@ export function GiftTable({
   const [newGiftId, setNewGiftId] = useState<string | null>(null);
   const [filter, setFilter] = useState("All Gifts");
   const { isAddingGift, handleAddGift } = useAddGift(authenticatedUser);
-  const { deleteGift } = useDeleteGift();
-  const { updateGift } = useUpdateGift();
+  const { deleteGift } = useDeleteGift(authenticatedUser);
+  const { updateGift } = useUpdateGift(authenticatedUser);
   const { assignUserToGift } = useAssignUserToGift();
   const { unassignUserFromGift } = useUnassignUserFromGift();
   const { deleteGiftList } = useDeleteGiftList();
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const giftListRef = useRef<HTMLDivElement>(null);
-  const { markGiftAsBought, isMarkingAsBought } = useMarkGiftAsBought();
+  const { markGiftAsBought, isMarkingAsBought } =
+    useMarkGiftAsBought(authenticatedUser);
 
   const filteredGifts = useFilteredGifts({ gifts, filter });
   const { sortedGifts, sortBy, setSortBy } = useSortGifts(filteredGifts);

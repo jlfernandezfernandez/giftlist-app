@@ -38,7 +38,8 @@ export async function PUT(
       giftListId,
       name,
       description,
-      date
+      date,
+      userId
     );
     return NextResponse.json(updatedGiftList, { status: 200 });
   } catch (error) {

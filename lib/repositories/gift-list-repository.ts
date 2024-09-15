@@ -42,13 +42,15 @@ export async function updateGiftListRepo(
   giftListId: string,
   name: string,
   description: string | null,
-  date: string | null
+  date: string | null,
+  userId: string
 ): Promise<GiftList> {
   const { data, error } = await supabase.rpc("update_gift_list", {
     p_gift_list_id: giftListId,
     p_name: name,
     p_description: description,
     p_date: date,
+    p_user_id: userId,
   });
 
   if (error) {
