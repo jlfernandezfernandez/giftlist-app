@@ -12,21 +12,11 @@ import { cn } from "@/lib/utils";
 interface OwnGiftListProps {
   lists: GiftList[];
   onCreateNewList: () => void;
-  onListClick: (url: string) => void;
 }
 
-export function OwnGiftList({
-  lists,
-  onCreateNewList,
-  onListClick,
-}: OwnGiftListProps) {
+export function OwnGiftList({ lists, onCreateNewList }: OwnGiftListProps) {
   const currentListId = useCurrentGiftListId();
   const { closeSidebar } = useSidebar();
-
-  const handleListClick = (listId: string) => {
-    onListClick(`/gift-list/${listId}`);
-    closeSidebar();
-  };
 
   return (
     <div className="space-y-3">
@@ -58,11 +48,11 @@ export function OwnGiftList({
               key={list.id}
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
-              onClick={() => handleListClick(list.id)}
               className="cursor-pointer"
             >
               <Link
                 href={`/gift-list/${list.id}`}
+                onClick={() => closeSidebar()}
                 className={cn(
                   "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm lg:text-base transition-colors duration-200",
                   "hover:bg-gray-100",

@@ -8,9 +8,8 @@ import {
   ShareIcon,
   Trash2Icon,
   UsersIcon,
-  HeartIcon,
 } from "lucide-react";
-import { formatDate, formatOwnerNames } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 import Link from "next/link";
 
 interface GiftListHeaderProps {
@@ -39,10 +38,6 @@ export function GiftListHeader({
     [currentList.users]
   );
 
-  const formattedOwnerNames = useMemo(() => formatOwnerNames(owners), [owners]);
-
-  // Remove the handleEditList function
-
   return (
     <div className="space-y-6 border-gray-200 pb-4 lg:pb-6">
       <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between">
@@ -54,10 +49,19 @@ export function GiftListHeader({
             {currentList.description}
           </p>
           <div className="flex flex-wrap gap-2 sm:gap-3">
+            {owners.map((owner) => (
+              <Badge
+                key={owner.userId}
+                variant="outline"
+                className="flex items-center px-3 py-1 text-xs sm:text-sm"
+              >
+                {owner.name}
+              </Badge>
+            ))}
             {formattedDate && (
               <Badge
                 variant="outline"
-                className="flex items-center px-2 sm:px-3 py-1 text-xs sm:text-sm"
+                className="flex items-center px-3 py-1 text-xs sm:text-sm"
               >
                 <CalendarIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                 {formattedDate}
@@ -65,14 +69,7 @@ export function GiftListHeader({
             )}
             <Badge
               variant="outline"
-              className="flex items-center px-2 sm:px-3 py-1 text-xs sm:text-sm"
-            >
-              <HeartIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-              {formattedOwnerNames}
-            </Badge>
-            <Badge
-              variant="outline"
-              className="flex items-center px-2 sm:px-3 py-1 text-xs sm:text-sm"
+              className="flex items-center px-3 py-1 text-xs sm:text-sm"
             >
               <UsersIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
               {members.length} member{members.length !== 1 ? "s" : ""}

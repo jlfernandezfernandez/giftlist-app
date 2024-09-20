@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { AvatarSection } from "./avatar-section";
 import { LogOutIcon, GiftIcon, Share2 } from "lucide-react";
 import { useLogout } from "@/hooks/use-logout";
-import { useRouter } from "next/navigation";
 import { useUser } from "@/context/user-context";
 import { useGiftList } from "@/context/gift-list-context";
 import { useSidebar } from "@/context/sidebar-context";
@@ -19,16 +18,10 @@ export function Sidebar() {
   const { isSidebarOpen, isSidebarLoading, closeSidebar } = useSidebar();
   const { user } = useUser();
   const { giftLists } = useGiftList();
-  const router = useRouter();
   const handleLogout = useLogout();
 
   const ownGiftLists = giftLists?.filter((list) => list.isOwner) ?? [];
   const guestGiftLists = giftLists?.filter((list) => !list.isOwner) ?? [];
-
-  const handleListClick = (url: string) => {
-    router.push(url);
-    closeSidebar();
-  };
 
   return (
     <>
@@ -58,26 +51,17 @@ export function Sidebar() {
             <div className="space-y-1">
               <DashboardButton closeSidebar={closeSidebar} />
               <section>
-                <OwnGiftList
-                  lists={ownGiftLists}
-                  onCreateNewList={() => handleListClick("/gift-list/create")}
-                  onListClick={handleListClick}
-                />
+                <OwnGiftList lists={ownGiftLists} onCreateNewList={() => {}} />
               </section>
             </div>
 
             <div className="mt-10 space-y-6">
-              {" "}
-              {/* Nuevo div con mt-10 y space-y-6 */}
               <section>
                 <h3 className="flex items-center text-base font-semibold text-foreground mb-3">
                   <Share2 className="w-5 h-5 mr-2" />
                   Shared With Me
                 </h3>
-                <GuestGiftList
-                  lists={guestGiftLists}
-                  onListClick={handleListClick}
-                />
+                <GuestGiftList lists={guestGiftLists} />
               </section>
               <section>
                 <h3 className="flex items-center text-base font-semibold text-foreground mb-3">

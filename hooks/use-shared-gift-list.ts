@@ -6,7 +6,7 @@ import { useGiftList } from "@/context/gift-list-context";
 
 export const useSharedGiftList = (giftListId: string) => {
   const router = useRouter();
-  const { user, isLoadingUser } = useUser();
+  const { user } = useUser();
   const { mutate } = useGiftList();
   const [error, setError] = useState<string | null>(null);
 

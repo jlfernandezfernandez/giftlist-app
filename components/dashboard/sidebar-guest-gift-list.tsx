@@ -10,10 +10,9 @@ import { cn } from "@/lib/utils";
 
 interface GuestGiftListProps {
   lists: GiftList[];
-  onListClick: (url: string) => void;
 }
 
-export function GuestGiftList({ lists, onListClick }: GuestGiftListProps) {
+export function GuestGiftList({ lists }: GuestGiftListProps) {
   const currentListId = useCurrentGiftListId();
   const { closeSidebar } = useSidebar();
   const [expandedOwners, setExpandedOwners] = useState<Record<string, boolean>>(
@@ -52,11 +51,6 @@ export function GuestGiftList({ lists, onListClick }: GuestGiftListProps) {
     }, {} as Record<string, GiftList[]>);
   }, [lists]);
 
-  const handleListClick = (listId: string) => {
-    onListClick(`/gift-list/${listId}`);
-    closeSidebar();
-  };
-
   const toggleOwnerExpansion = (ownerName: string) => {
     setExpandedOwners((prev) => ({ ...prev, [ownerName]: !prev[ownerName] }));
   };
@@ -94,7 +88,7 @@ export function GuestGiftList({ lists, onListClick }: GuestGiftListProps) {
                   key={list.id}
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
-                  onClick={() => handleListClick(list.id)}
+                  onClick={() => closeSidebar()}
                   className="cursor-pointer"
                 >
                   <Link
