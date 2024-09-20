@@ -4,8 +4,15 @@
 import { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useGiftList } from "@/context/gift-list-context";
-import { GiftListCard } from "@/components/dashboard/gift-list-card";
 import { Share2Icon } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { GiftListRow } from "./gift-list-row";
 
 export function SharedGiftListSummary() {
   const { giftLists } = useGiftList();
@@ -16,19 +23,28 @@ export function SharedGiftListSummary() {
 
   return (
     <Card className="flex flex-col">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <CardTitle className="text-sm font-medium flex items-center">
           <Share2Icon className="h-4 w-4 text-primary mr-2" />
           Shared With You
         </CardTitle>
       </CardHeader>
-      <CardContent className="overflow-y-auto pt-0">
+      <CardContent className="overflow-x-auto pt-0">
         {sharedGiftLists.length > 0 ? (
-          <div className="space-y-2">
-            {sharedGiftLists.map((list) => (
-              <GiftListCard key={list.id} giftList={list} />
-            ))}
-          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Name</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead className="text-right">Gifts</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {sharedGiftLists.map((list) => (
+                <GiftListRow key={list.id} giftList={list} />
+              ))}
+            </TableBody>
+          </Table>
         ) : (
           <div className="flex items-center justify-center h-full">
             <p className="text-muted-foreground text-center text-sm">

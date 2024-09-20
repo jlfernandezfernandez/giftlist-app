@@ -5,9 +5,16 @@ import { useMemo } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { GiftListCard } from "@/components/dashboard/gift-list-card";
 import { useGiftList } from "@/context/gift-list-context";
 import { ListIcon, PlusIcon } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { GiftListRow } from "./gift-list-row";
 
 export function OwnGiftListSummary() {
   const { giftLists } = useGiftList();
@@ -18,7 +25,7 @@ export function OwnGiftListSummary() {
 
   return (
     <Card className="flex flex-col">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <CardTitle className="text-sm font-medium flex items-center">
           <ListIcon className="h-4 w-4 text-primary mr-2" />
           Your Gift Lists
@@ -30,15 +37,26 @@ export function OwnGiftListSummary() {
           </Button>
         </Link>
       </CardHeader>
-      <CardContent className="overflow-y-auto pt-0">
+      <CardContent>
         {ownGiftLists.length > 0 ? (
-          <div className="space-y-2">
-            {ownGiftLists.map((list) => (
-              <GiftListCard key={list.id} giftList={list} />
-            ))}
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead className="text-right">Gifts</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {ownGiftLists.map((list) => (
+                  <GiftListRow key={list.id} giftList={list} />
+                ))}
+              </TableBody>
+            </Table>
           </div>
         ) : (
-          <div className="flex items-center justify-center h-full">
+          <div className="flex items-center justify-center h-24">
             <p className="text-muted-foreground text-center text-sm">
               You haven&apos;t created any gift lists yet.
             </p>
