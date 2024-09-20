@@ -5,10 +5,12 @@ import { mutate } from "swr";
 import { Gift } from "@/types/gift";
 import { useToast } from "@/context/toast-context";
 import { AuthenticatedUser } from "@/types/authenticated-user";
+import { useGifts } from "@/context/gifts-context";
 
 export function useUpdateGift(authenticatedUser: AuthenticatedUser | null) {
   const [isUpdatingGift, setIsUpdatingGift] = useState(false);
   const { addToast } = useToast();
+  const { updateGift: updateGiftInContext } = useGifts();
 
   const updateGift = useCallback(
     async (giftListId: string, giftId: string, updatedGift: Partial<Gift>) => {
@@ -31,6 +33,9 @@ export function useUpdateGift(authenticatedUser: AuthenticatedUser | null) {
 
         const updatedGiftData: Gift = await response.json();
 
+        // Update the context
+        updateGiftInContext(giftListId, updatedGiftData);
+
         // Update the SWR cache for the gift list
         mutate(`/api/gift-lists/${giftListId}/gift`);
 
@@ -51,7 +56,7 @@ export function useUpdateGift(authenticatedUser: AuthenticatedUser | null) {
         setIsUpdatingGift(false);
       }
     },
-    [authenticatedUser, addToast]
+    [authenticatedUser, addToast, updateGiftInContext]
   );
 
   return { updateGift, isUpdatingGift };

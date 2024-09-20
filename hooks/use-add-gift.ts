@@ -3,12 +3,14 @@
 import { useState, useCallback } from "react";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { Gift } from "@/types/gift";
-import { mutate } from "swr";
 import { useToast } from "@/context/toast-context";
+import { useGifts as useGiftsContext } from "@/context/gifts-context";
+import { mutate } from "swr";
 
 export const useAddGift = (authenticatedUser: AuthenticatedUser | null) => {
   const [isAddingGift, setIsAddingGift] = useState(false);
   const { addToast } = useToast();
+  const { addGift: addGiftToContext } = useGiftsContext();
 
   const handleAddGift = useCallback(
     async (
@@ -44,6 +46,7 @@ export const useAddGift = (authenticatedUser: AuthenticatedUser | null) => {
 
         const newGift: Gift = await response.json();
 
+        addGiftToContext(listId, newGift);
         mutate(`/api/gift-lists/${listId}/gift`);
         addToast({
           title: "Success",
@@ -62,7 +65,7 @@ export const useAddGift = (authenticatedUser: AuthenticatedUser | null) => {
         setIsAddingGift(false);
       }
     },
-    [authenticatedUser, addToast]
+    [authenticatedUser, addToast, addGiftToContext]
   );
 
   return {

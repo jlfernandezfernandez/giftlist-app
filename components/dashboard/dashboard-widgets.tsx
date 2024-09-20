@@ -4,6 +4,7 @@ import { useAssignedGifts } from "@/hooks/use-assigned-gifts";
 import { Card, CardContent } from "@/components/ui/card";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { GiftIcon, Share2Icon, PackageIcon, UserCheckIcon } from "lucide-react";
+import { useGifts } from "@/context/gifts-context";
 
 type WidgetProps = {
   title: string;
@@ -33,21 +34,19 @@ type DashboardWidgetsProps = {
 
 export function DashboardWidgets({ user }: DashboardWidgetsProps) {
   const { giftLists } = useGiftList();
+  const { gifts } = useGifts();
   const { assignedGifts } = useAssignedGifts(user.uid);
 
-  const { ownGiftLists, sharedGiftLists, totalGifts } = useMemo(() => {
+  const { ownGiftLists, sharedGiftLists, ownGifts } = useMemo(() => {
     const ownLists = giftLists?.filter((list) => list.isOwner) ?? [];
     const sharedLists = giftLists?.filter((list) => !list.isOwner) ?? [];
-    const total = ownLists.reduce(
-      (sum, list) => sum + (list.gifts?.length ?? 0),
-      0
-    );
+    const ownGifts = ownLists.flatMap((list) => gifts[list.id] || []);
     return {
       ownGiftLists: ownLists,
       sharedGiftLists: sharedLists,
-      totalGifts: total,
+      ownGifts,
     };
-  }, [giftLists]);
+  }, [giftLists, gifts]);
 
   const widgetData: WidgetProps[] = [
     {
@@ -61,8 +60,8 @@ export function DashboardWidgets({ user }: DashboardWidgetsProps) {
       icon: <Share2Icon className="h-5 w-5 text-green-500" />,
     },
     {
-      title: "Total Gifts",
-      value: totalGifts,
+      title: "My Gifts",
+      value: ownGifts.length,
       icon: <PackageIcon className="h-5 w-5 text-purple-500" />,
     },
     {

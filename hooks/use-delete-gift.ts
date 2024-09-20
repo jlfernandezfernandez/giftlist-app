@@ -4,10 +4,12 @@ import { useState } from "react";
 import { mutate } from "swr";
 import { useToast } from "@/context/toast-context";
 import { AuthenticatedUser } from "@/types/authenticated-user";
+import { useGifts as useGiftsContext } from "@/context/gifts-context";
 
 export function useDeleteGift(authenticatedUser: AuthenticatedUser | null) {
   const [isDeletingGift, setIsDeleting] = useState(false);
   const { addToast } = useToast();
+  const { removeGift: removeGiftFromContext } = useGiftsContext();
 
   const deleteGift = async (giftListId: string, giftId: string) => {
     setIsDeleting(true);
@@ -24,7 +26,7 @@ export function useDeleteGift(authenticatedUser: AuthenticatedUser | null) {
         throw new Error("Failed to delete gift");
       }
 
-      // Update SWR cache for the gift list
+      removeGiftFromContext(giftListId, giftId);
       mutate(`/api/gift-lists/${giftListId}/gift`);
 
       addToast({
