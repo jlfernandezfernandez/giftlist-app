@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { GiftList } from "@/types/gift-list";
-import { Gift } from "@/types/gift";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,11 +11,11 @@ import {
   HeartIcon,
 } from "lucide-react";
 import { formatDate, formatOwnerNames } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface GiftListHeaderProps {
   currentList: GiftList;
   isOwner: boolean;
-  handleEditList: () => void;
   handleShareList: () => void;
   handleDeleteList: () => void;
 }
@@ -24,10 +23,11 @@ interface GiftListHeaderProps {
 export function GiftListHeader({
   currentList,
   isOwner,
-  handleEditList,
   handleShareList,
   handleDeleteList,
 }: GiftListHeaderProps) {
+  const router = useRouter();
+
   const formattedDate = useMemo(
     () => formatDate(currentList.date),
     [currentList.date]
@@ -42,6 +42,10 @@ export function GiftListHeader({
   );
 
   const formattedOwnerNames = useMemo(() => formatOwnerNames(owners), [owners]);
+
+  const handleEditList = () => {
+    router.push(`/gift-list/${currentList.id}/edit`);
+  };
 
   return (
     <div className="space-y-6 border-gray-200 pb-4 lg:pb-6">

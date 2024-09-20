@@ -210,7 +210,6 @@ export function GiftTable({
       <GiftListHeader
         currentList={currentList}
         isOwner={isOwner}
-        handleEditList={handleEditList}
         handleShareList={handleShareList}
         handleDeleteList={handleDeleteList}
       />
