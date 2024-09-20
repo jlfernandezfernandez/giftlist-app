@@ -44,57 +44,66 @@ export function GiftListHeader({
   const formattedOwnerNames = useMemo(() => formatOwnerNames(owners), [owners]);
 
   return (
-    <div className="overflow-hidden space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
-        <div className="space-y-3">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+    <div className="space-y-6 border-gray-200 pb-4 lg:pb-6">
+      <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between">
+        <div className="space-y-4 max-w-3xl">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight break-words">
             {currentList.name}
           </h1>
-          <p className="text-sm sm:text-base text-gray-600">
+          <p className="text-base sm:text-lg text-gray-600">
             {currentList.description}
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 sm:gap-3">
             {formattedDate && (
-              <Badge variant="secondary" className="flex items-center">
-                <CalendarIcon className="w-3 h-3 mr-1" />
+              <Badge
+                variant="outline"
+                className="flex items-center px-2 sm:px-3 py-1 text-xs sm:text-sm"
+              >
+                <CalendarIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
                 {formattedDate}
               </Badge>
             )}
-            <Badge variant="secondary" className="flex items-center">
-              <HeartIcon className="w-3 h-3 mr-1" />
+            <Badge
+              variant="outline"
+              className="flex items-center px-2 sm:px-3 py-1 text-xs sm:text-sm"
+            >
+              <HeartIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
               {formattedOwnerNames}
             </Badge>
-            <Badge variant="secondary" className="flex items-center">
-              <UsersIcon className="w-3 h-3 mr-1" />
+            <Badge
+              variant="outline"
+              className="flex items-center px-2 sm:px-3 py-1 text-xs sm:text-sm"
+            >
+              <UsersIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
               {members.length} member{members.length !== 1 ? "s" : ""}
             </Badge>
           </div>
         </div>
         {isOwner && (
-          <div className="flex flex-wrap items-center gap-3 mt-4 sm:mt-0">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 mt-6 lg:mt-0">
             <Button
               onClick={handleEditList}
               variant="outline"
-              className="w-full sm:w-auto"
+              className="text-sm font-medium"
             >
               <PencilIcon className="h-4 w-4 mr-2" />
               Edit
             </Button>
             <Button
-              onClick={handleDeleteList}
-              variant="destructive"
-              className="w-full sm:w-auto"
-            >
-              <Trash2Icon className="h-4 w-4 mr-2" />
-              Delete
-            </Button>
-            <Button
               onClick={handleShareList}
               variant="default"
-              className="w-full sm:w-auto"
+              className="text-sm font-medium"
             >
               <ShareIcon className="h-4 w-4 mr-2" />
               Share
+            </Button>
+            <Button
+              onClick={handleDeleteList}
+              variant="outline"
+              className="text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50"
+            >
+              <Trash2Icon className="h-4 w-4 mr-2" />
+              Delete
             </Button>
           </div>
         )}
