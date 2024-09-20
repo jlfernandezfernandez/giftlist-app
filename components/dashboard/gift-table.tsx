@@ -45,7 +45,7 @@ export function GiftTable({
   const { updateGift } = useUpdateGift(authenticatedUser);
   const { assignUserToGift } = useAssignUserToGift();
   const { unassignUserFromGift } = useUnassignUserFromGift();
-  const { deleteGiftList } = useDeleteGiftList();
+  const { deleteGiftList } = useDeleteGiftList(authenticatedUser);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const giftListRef = useRef<HTMLDivElement>(null);

@@ -82,9 +82,12 @@ export async function associateUserToGiftList(
   }
 }
 
-export async function deleteGiftList(giftListId: string): Promise<void> {
+export async function deleteGiftList(
+  giftListId: string,
+  userId: string
+): Promise<void> {
   try {
-    await deleteGiftListRepo(giftListId);
+    await deleteGiftListRepo(giftListId, userId);
   } catch (error) {
     console.error("Error deleting gift list:", error);
     throw new Error("Failed to delete gift list");

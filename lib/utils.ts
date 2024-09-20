@@ -10,13 +10,19 @@ export function getFirstName(name: string): string {
   return name.split(" ")[0];
 }
 
-export function formatDate(date: string | Date): string {
-  const dateObj = typeof date === "string" ? new Date(date) : date;
-  return dateObj.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+export function formatDate(
+  date: string | Date | undefined | null
+): string | null {
+  let formattedDate = null;
+  if (date !== undefined && date !== null) {
+    const dateObj = typeof date === "string" ? new Date(date) : date;
+    formattedDate = dateObj.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  }
+  return formattedDate;
 }
 
 export function formatOwnerNames(owners: User[]): string {

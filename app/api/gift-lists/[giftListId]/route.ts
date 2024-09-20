@@ -11,9 +11,10 @@ export async function DELETE(
   { params }: { params: { giftListId: string } }
 ) {
   const giftListId = params.giftListId;
+  const { userId } = await request.json();
 
   try {
-    await deleteGiftList(giftListId);
+    await deleteGiftList(giftListId, userId);
     return NextResponse.json(
       { message: "Gift list deleted successfully" },
       { status: 200 }

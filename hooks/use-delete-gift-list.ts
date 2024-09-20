@@ -4,8 +4,9 @@ import { useState } from "react";
 import { useGiftList } from "@/context/gift-list-context";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/context/toast-context";
+import { AuthenticatedUser } from "@/types/authenticated-user";
 
-export function useDeleteGiftList() {
+export function useDeleteGiftList(authenticatedUser: AuthenticatedUser | null) {
   const [isDeletingGiftList, setIsDeleting] = useState(false);
   const { mutate } = useGiftList();
   const router = useRouter();
@@ -16,6 +17,10 @@ export function useDeleteGiftList() {
     try {
       const response = await fetch(`/api/gift-lists/${listId}`, {
         method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: authenticatedUser?.uid }),
       });
 
       if (!response.ok) {

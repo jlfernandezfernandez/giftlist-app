@@ -117,11 +117,14 @@ export async function getGiftListsByUserIdRepo(
   }));
 }
 
-export async function deleteGiftListRepo(giftListId: string): Promise<void> {
-  const { error } = await supabase
-    .from("giftlists")
-    .delete()
-    .eq("id", giftListId);
+export async function deleteGiftListRepo(
+  giftListId: string,
+  userId: string
+): Promise<void> {
+  const { error } = await supabase.rpc("delete_gift_list", {
+    p_gift_list_id: giftListId,
+    p_user_id: userId,
+  });
 
   if (error) {
     throw new Error(`Error deleting gift list: ${error.message}`);
