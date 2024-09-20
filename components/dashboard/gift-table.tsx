@@ -9,7 +9,6 @@ import { AuthenticatedUser } from "@/types/authenticated-user";
 import { useAddGift } from "@/hooks/use-add-gift";
 import { useDeleteGift } from "@/hooks/use-delete-gift";
 import { useDeleteGiftList } from "@/hooks/use-delete-gift-list";
-import { EditGiftListModal } from "../edit-gift-list-modal";
 import { useUpdateGift } from "@/hooks/use-update-gift";
 import { ShareGiftListModal } from "../share-gift-list-modal";
 import { motion, AnimatePresence } from "framer-motion";
@@ -185,10 +184,6 @@ export function GiftTable({
     }
   }, [deleteGiftList, currentList.id]);
 
-  const handleEditList = useCallback(() => {
-    setIsEditModalOpen(true);
-  }, []);
-
   const handleShareList = useCallback(() => {
     setIsShareModalOpen(true);
   }, []);
@@ -294,11 +289,6 @@ export function GiftTable({
           )}
         </motion.div>
       </div>
-      <EditGiftListModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        giftList={currentList}
-      />
       <ShareGiftListModal
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
