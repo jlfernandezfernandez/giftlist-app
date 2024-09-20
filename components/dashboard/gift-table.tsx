@@ -213,7 +213,6 @@ export function GiftTable({
         handleEditList={handleEditList}
         handleShareList={handleShareList}
         handleDeleteList={handleDeleteList}
-        gifts={gifts}
       />
       <GiftListWidgets gifts={gifts} />
       {isOwner && (

@@ -2,13 +2,13 @@ import { useMemo } from "react";
 import { GiftList } from "@/types/gift-list";
 import { Gift } from "@/types/gift";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   CalendarIcon,
   PencilIcon,
   ShareIcon,
   Trash2Icon,
   UsersIcon,
-  GiftIcon,
   HeartIcon,
 } from "lucide-react";
 import { formatDate, formatOwnerNames } from "@/lib/utils";
@@ -19,7 +19,6 @@ interface GiftListHeaderProps {
   handleEditList: () => void;
   handleShareList: () => void;
   handleDeleteList: () => void;
-  gifts: Gift[];
 }
 
 export function GiftListHeader({
@@ -28,7 +27,6 @@ export function GiftListHeader({
   handleEditList,
   handleShareList,
   handleDeleteList,
-  gifts,
 }: GiftListHeaderProps) {
   const formattedDate = useMemo(
     () => formatDate(currentList.date),
@@ -48,30 +46,28 @@ export function GiftListHeader({
   return (
     <div className="overflow-hidden space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between">
-        <div className="space-y-2">
+        <div className="space-y-3">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
             {currentList.name}
           </h1>
           <p className="text-sm sm:text-base text-gray-600">
             {currentList.description}
           </p>
-          <div className="flex flex-col sm:flex-row sm:flex-wrap sm:gap-3 text-sm text-gray-500">
+          <div className="flex flex-wrap gap-2">
             {formattedDate && (
-              <div className="flex items-center mb-2 sm:mb-0">
-                <CalendarIcon className="w-4 h-4 mr-1" />
-                <span>{formattedDate}</span>
-              </div>
+              <Badge variant="secondary" className="flex items-center">
+                <CalendarIcon className="w-3 h-3 mr-1" />
+                {formattedDate}
+              </Badge>
             )}
-            <div className="flex items-center mb-2 sm:mb-0">
-              <HeartIcon className="w-4 h-4 mr-1" />
-              <span>By {formattedOwnerNames}</span>
-            </div>
-            <div className="flex items-center">
-              <UsersIcon className="w-4 h-4 mr-1" />
-              <span>
-                {members.length} member{members.length !== 1 ? "s" : ""}
-              </span>
-            </div>
+            <Badge variant="secondary" className="flex items-center">
+              <HeartIcon className="w-3 h-3 mr-1" />
+              {formattedOwnerNames}
+            </Badge>
+            <Badge variant="secondary" className="flex items-center">
+              <UsersIcon className="w-3 h-3 mr-1" />
+              {members.length} member{members.length !== 1 ? "s" : ""}
+            </Badge>
           </div>
         </div>
         {isOwner && (
