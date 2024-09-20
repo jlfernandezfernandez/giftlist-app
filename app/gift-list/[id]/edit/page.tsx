@@ -73,7 +73,7 @@ export default function EditGiftListPage() {
   const handleDeleteList = async () => {
     if (window.confirm("Are you sure you want to delete this gift list?")) {
       await deleteGiftList(currentList.id);
-      router.push("/dashboard");
+      router.push("/gift-list/dashboard");
     }
   };
 
