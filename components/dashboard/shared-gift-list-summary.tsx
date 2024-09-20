@@ -2,12 +2,10 @@
 // This component displays a summary of gift lists shared with the user
 
 import { useMemo } from "react";
-import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { useGiftList } from "@/context/gift-list-context";
-import { GiftList } from "./gift-list";
-import { Share2Icon, PlusIcon } from "lucide-react";
+import { GiftListCard } from "@/components/dashboard/gift-list-card";
+import { Share2Icon } from "lucide-react";
 
 export function SharedGiftListSummary() {
   const { giftLists } = useGiftList();
@@ -17,18 +15,18 @@ export function SharedGiftListSummary() {
   }, [giftLists]);
 
   return (
-    <Card className="h-[400px] max-h-[600px] flex flex-col">
+    <Card className="flex flex-col">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-sm font-medium flex items-center">
           <Share2Icon className="h-4 w-4 text-primary mr-2" />
           Shared With You
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex-grow overflow-y-auto pt-0">
+      <CardContent className="overflow-y-auto pt-0">
         {sharedGiftLists.length > 0 ? (
           <div className="space-y-2">
             {sharedGiftLists.map((list) => (
-              <GiftList key={list.id} giftList={list} />
+              <GiftListCard key={list.id} giftList={list} />
             ))}
           </div>
         ) : (

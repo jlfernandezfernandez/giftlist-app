@@ -12,14 +12,14 @@ export function AssignedGiftsSummary({ user }: AssignedGiftsSummaryProps) {
   const { assignedGifts } = useAssignedGifts(user.uid);
 
   return (
-    <Card className="h-[400px] max-h-[600px] flex flex-col">
+    <Card className="flex flex-col">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
         <CardTitle className="text-sm font-medium flex items-center">
           <GiftIcon className="h-4 w-4 text-primary mr-2" />
           Your Assigned Gifts
         </CardTitle>
       </CardHeader>
-      <CardContent className="flex-grow overflow-y-auto pt-0">
+      <CardContent className="overflow-y-auto pt-0">
         {assignedGifts.length > 0 ? (
           <div className="space-y-2">
             {assignedGifts.map((gift) => (

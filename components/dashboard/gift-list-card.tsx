@@ -3,13 +3,16 @@
 
 import Link from "next/link";
 import { ListIcon, ChevronRightIcon } from "lucide-react";
-import { GiftList as GiftListType } from "@/types/gift-list"; // Asegúrate de tener este tipo definido
+import { GiftList as GiftListType } from "@/types/gift-list";
+import { useGifts } from "@/hooks/use-gifts";
 
-interface GiftListProps {
+interface GiftListCardProps {
   giftList: GiftListType;
 }
 
-export function GiftList({ giftList }: GiftListProps) {
+export function GiftListCard({ giftList }: GiftListCardProps) {
+  const { gifts, isLoading } = useGifts(giftList.id);
+
   return (
     <Link
       href={`/gift-list/${giftList.id}`}
@@ -21,8 +24,9 @@ export function GiftList({ giftList }: GiftListProps) {
           <div className="min-w-0 flex-grow">
             <h3 className="font-medium text-sm truncate">{giftList.name}</h3>
             <p className="text-xs text-muted-foreground mt-0.5">
-              {giftList.gifts?.length || 0} gift
-              {giftList.gifts?.length !== 1 ? "s" : ""}
+              {isLoading
+                ? "Loading..."
+                : `${gifts.length} gift${gifts.length !== 1 ? "s" : ""}`}
             </p>
           </div>
         </div>
