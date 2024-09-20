@@ -1,5 +1,4 @@
 // context/gift-list-context.tsx
-
 "use client";
 
 import React, {
@@ -15,9 +14,9 @@ import { useUser } from "./user-context";
 
 interface GiftListContextProps {
   giftLists: GiftList[];
+  isLoading: boolean;
   currentList: GiftList | null;
-  isLoadingGiftList: boolean;
-  setCurrentList: (list: GiftList) => void;
+  setCurrentListId: (listId: string | null) => void;
   mutate: () => void;
 }
 
@@ -26,19 +25,24 @@ const GiftListContext = createContext<GiftListContextProps | undefined>(
 );
 
 export const GiftListProvider = ({ children }: { children: ReactNode }) => {
-  const [currentList, setCurrentList] = useState<GiftList | null>(null);
   const { user } = useUser();
   const { giftLists, isLoading, mutate } = useGiftLists(user?.uid);
+  const [currentListId, setCurrentListId] = useState<string | null>(null);
+
+  const currentList = useMemo(
+    () => giftLists.find((list) => list.id === currentListId) || null,
+    [giftLists, currentListId]
+  );
 
   const value = useMemo(
     () => ({
       giftLists,
+      isLoading,
       currentList,
-      isLoadingGiftList: isLoading,
-      setCurrentList,
+      setCurrentListId,
       mutate,
     }),
-    [giftLists, currentList, isLoading, mutate]
+    [giftLists, isLoading, currentList, mutate]
   );
 
   return (
