@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/user-context";
 import { useGiftList } from "@/context/gift-list-context";
@@ -17,10 +17,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useGifts } from "@/hooks/use-gifts";
+import { useGifts } from "@/context/gifts-context";
 import { useDeleteGiftList } from "@/hooks/use-delete-gift-list";
 import { ShareGiftListModal } from "@/components/share-gift-list-modal";
 import Spinner from "@/components/ui/spinner";
+import { User } from "@/types/user";
+import Link from "next/link";
 
 export default function EditGiftListPage() {
   const router = useRouter();
@@ -28,7 +30,7 @@ export default function EditGiftListPage() {
   const currentListId = useCurrentGiftListId();
   const { currentList, setCurrentListId } = useGiftList();
   const { updateGiftList, isLoading: isUpdating } = useUpdateGiftList();
-  const { gifts } = useGifts(currentListId);
+  const { gifts, getGiftsForList } = useGifts();
   const { deleteGiftList } = useDeleteGiftList(user);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
@@ -41,29 +43,53 @@ export default function EditGiftListPage() {
       setName(currentList.name);
       setDescription(currentList.description);
       setDate(currentList.date);
+      getGiftsForList(currentList.id);
     }
-  }, [currentList]);
+  }, [currentList, getGiftsForList]);
 
   useEffect(() => {
     setCurrentListId(currentListId);
   }, [currentListId, setCurrentListId]);
 
+  const [owners, members] = useMemo<[Array<User>, Array<User>]>(() => {
+    if (!currentList?.users) return [[], []];
+    return currentList.users.reduce<[Array<User>, Array<User>]>(
+      (acc, user) => {
+        if (user.role === "owner") {
+          acc[0].push(user);
+        } else {
+          acc[1].push(user);
+        }
+        return acc;
+      },
+      [[], []]
+    );
+  }, [currentList]);
+
+  const currentGifts = useMemo(
+    () => gifts[currentList?.id || ""] || [],
+    [gifts, currentList]
+  );
+
   if (!user || !currentList) {
     return <Spinner />;
   }
 
-  // Comprobar si el usuario actual es propietario de la lista
-  const isOwner = currentList.users.some(
-    (u) => u.userId === user.uid && u.role === "owner"
-  );
-
-  if (!isOwner) {
-    router.push(`/gift-list/${currentListId}`);
-    return null;
+  if (!currentList.isOwner) {
+    return <Link href={`/gift-list/${currentListId}`} />;
   }
 
-  const handleSubmit = async () => {
-    await updateGiftList(currentList.id, name, description, date);
+  const handleSubmit = async (data: {
+    name: string;
+    description: string | null;
+    date: string | null;
+  }) => {
+    await updateGiftList(
+      currentList.id,
+      data.name,
+      data.description,
+      data.date
+    );
   };
 
   const handleShareList = () => {
@@ -73,7 +99,7 @@ export default function EditGiftListPage() {
   const handleDeleteList = async () => {
     if (window.confirm("Are you sure you want to delete this gift list?")) {
       await deleteGiftList(currentList.id);
-      router.push("/gift-list/dashboard");
+      return <Link href="/gift-list/dashboard" />;
     }
   };
 
@@ -117,14 +143,12 @@ export default function EditGiftListPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentList.users
-                .filter((user) => user.role === "owner")
-                .map((owner) => (
-                  <TableRow key={owner.userId}>
-                    <TableCell>{owner.name}</TableCell>
-                    <TableCell>{owner.email}</TableCell>
-                  </TableRow>
-                ))}
+              {owners.map((owner) => (
+                <TableRow key={owner.userId}>
+                  <TableCell>{owner.name}</TableCell>
+                  <TableCell>{owner.email}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </CardContent>
@@ -143,14 +167,12 @@ export default function EditGiftListPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {currentList.users
-                .filter((user) => user.role !== "owner")
-                .map((member) => (
-                  <TableRow key={member.userId}>
-                    <TableCell>{member.name}</TableCell>
-                    <TableCell>{member.email}</TableCell>
-                  </TableRow>
-                ))}
+              {members.map((member) => (
+                <TableRow key={member.userId}>
+                  <TableCell>{member.name}</TableCell>
+                  <TableCell>{member.email}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </CardContent>
@@ -171,7 +193,7 @@ export default function EditGiftListPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {gifts.map((gift) => (
+              {currentGifts.map((gift) => (
                 <TableRow key={gift.id}>
                   <TableCell>{gift.name}</TableCell>
                   <TableCell>{gift.description}</TableCell>

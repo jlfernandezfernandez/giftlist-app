@@ -11,7 +11,7 @@ import {
   HeartIcon,
 } from "lucide-react";
 import { formatDate, formatOwnerNames } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface GiftListHeaderProps {
   currentList: GiftList;
@@ -26,8 +26,6 @@ export function GiftListHeader({
   handleShareList,
   handleDeleteList,
 }: GiftListHeaderProps) {
-  const router = useRouter();
-
   const formattedDate = useMemo(
     () => formatDate(currentList.date),
     [currentList.date]
@@ -43,9 +41,7 @@ export function GiftListHeader({
 
   const formattedOwnerNames = useMemo(() => formatOwnerNames(owners), [owners]);
 
-  const handleEditList = () => {
-    router.push(`/gift-list/${currentList.id}/edit`);
-  };
+  // Remove the handleEditList function
 
   return (
     <div className="space-y-6 border-gray-200 pb-4 lg:pb-6">
@@ -85,14 +81,12 @@ export function GiftListHeader({
         </div>
         {isOwner && (
           <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 mt-6 lg:mt-0">
-            <Button
-              onClick={handleEditList}
-              variant="outline"
-              className="text-sm font-medium"
-            >
-              <PencilIcon className="h-4 w-4 mr-2" />
-              Edit
-            </Button>
+            <Link href={`/gift-list/${currentList.id}/edit`} passHref>
+              <Button variant="outline" className="text-sm font-medium">
+                <PencilIcon className="h-4 w-4 mr-2" />
+                Edit
+              </Button>
+            </Link>
             <Button
               onClick={handleShareList}
               variant="default"

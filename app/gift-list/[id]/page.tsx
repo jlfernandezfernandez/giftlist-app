@@ -6,13 +6,13 @@ import { GiftTable } from "@/components/dashboard/gift-table";
 import { useUser } from "@/context/user-context";
 import { useGiftList } from "@/context/gift-list-context";
 import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
-import { useGifts } from "@/hooks/use-gifts";
+import { useGifts } from "@/context/gifts-context";
 
 export default function GiftListPage() {
   const { user } = useUser();
   const currentListId = useCurrentGiftListId();
   const { currentList, setCurrentListId } = useGiftList();
-  const { gifts, isLoading: isLoadingGifts } = useGifts(currentListId);
+  const { getGiftsForList } = useGifts();
 
   useEffect(() => {
     setCurrentListId(currentListId);
@@ -22,19 +22,17 @@ export default function GiftListPage() {
     return null;
   }
 
+  const gifts = getGiftsForList(currentList.id);
+
   return (
     <div>
-      {isLoadingGifts ? (
-        <div>Loading gifts...</div>
-      ) : (
-        <GiftTable
-          key={currentList.id}
-          authenticatedUser={user}
-          currentList={currentList}
-          gifts={gifts}
-          isOwner={currentList.isOwner}
-        />
-      )}
+      <GiftTable
+        key={currentList.id}
+        authenticatedUser={user}
+        currentList={currentList}
+        gifts={gifts}
+        isOwner={currentList.isOwner}
+      />
     </div>
   );
 }

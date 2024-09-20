@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ShareIcon, Trash2Icon, ArrowLeftIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface GiftListEditHeaderProps {
   onShareList: () => void;
@@ -16,22 +16,17 @@ export function GiftListEditHeader({
   onDeleteList,
   listId,
 }: GiftListEditHeaderProps) {
-  const router = useRouter();
-
-  const handleGoBack = () => {
-    router.push(`/gift-list/${listId}`);
-  };
-
   return (
     <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-      <Button
-        onClick={handleGoBack}
-        variant="ghost"
-        className="text-sm font-medium w-full sm:w-auto"
-      >
-        <ArrowLeftIcon className="h-4 w-4 mr-2" />
-        Back
-      </Button>
+      <Link href={`/gift-list/${listId}`}>
+        <Button
+          variant="ghost"
+          className="text-sm font-medium w-full sm:w-auto"
+        >
+          <ArrowLeftIcon className="h-4 w-4 mr-2" />
+          Back
+        </Button>
+      </Link>
       <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
         <Button
           onClick={onShareList}
