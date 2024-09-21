@@ -61,9 +61,9 @@ export function InstallPrompt() {
         animate={{ y: 0 }}
         className="w-full max-w-md bg-white/90 dark:bg-gray-800/90 rounded-2xl overflow-hidden shadow-lg backdrop-blur-md"
       >
-        <div className="px-4 py-4">
+        <div className="px-4 py-5">
           <div className="flex justify-between items-center mb-2">
-            <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
               Add to Home Screen
             </h2>
             <Button
