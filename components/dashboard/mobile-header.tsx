@@ -9,7 +9,7 @@ export function MobileHeader() {
   const { toggleSidebar } = useSidebar();
 
   return (
-    <header className="sticky top-0 z-10 lg:hidden flex items-center h-14 px-4 bg-background border-b border-border">
+    <header className="sticky top-0 z-10 lg:hidden flex items-center h-15 px-4 bg-background border-b border-border">
       <Button
         variant="ghost"
         size="icon"
