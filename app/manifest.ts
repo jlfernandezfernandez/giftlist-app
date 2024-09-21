@@ -5,10 +5,11 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "GiftList AI",
     short_name: "GiftList AI",
     description: "Organize and manage your gift lists.",
-    start_url: "/",
+    start_url: "/gift-list/dashboard",
     display: "standalone",
     background_color: "#ffffff",
     theme_color: "#000000",
+    orientation: "portrait",
     icons: [
       {
         src: "/icon-192x192.png",
