@@ -73,7 +73,7 @@ export function Sidebar() {
             </div>
           </nav>
 
-          <div className="border-t border-border flex-shrink-0">
+          <div className="border-t border-border flex-shrink-0 mb-4">
             <Button
               variant="ghost"
               className="w-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors duration-200 h-14"
