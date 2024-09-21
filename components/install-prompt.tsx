@@ -80,7 +80,7 @@ export function InstallPrompt() {
           <div className="h-px bg-gray-200 dark:bg-gray-700 mb-4"></div>
           <p className="text-sm text-gray-600 dark:text-gray-300 mb-6">
             Install this application on your home screen for quick and easy
-            access when you're on the go.
+            access when you&apos;re on the go.
           </p>
           <div className="space-y-4 mb-6">
             <InstallStep
