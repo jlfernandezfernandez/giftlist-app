@@ -3,10 +3,10 @@ import ClientLogin from "@/components/client-login";
 
 export default function LoginPage() {
   return (
-    <main className="bg-gray-50 flex min-h-screen flex-col items-center justify-center p-6">
-      <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
-        <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <h1 className="text-xl font-semibold leading-tight tracking-tight text-gray-900 md:text-2xl ">
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-6">
+      <div className="w-full sm:border sm:rounded-lg sm:max-w-md">
+        <div className="p-4 space-y-4 sm:p-6 md:space-y-6">
+          <h1 className="text-lg font-semibold leading-tight tracking-tight text-gray-900 sm:text-xl md:text-2xl">
             Sign in to your account
           </h1>
           <ClientLogin />
