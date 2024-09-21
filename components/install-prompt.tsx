@@ -1,10 +1,9 @@
 // components/install-prompt.tsx
-// A component that prompts users to install the app on their device
-
 "use client";
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 export function InstallPrompt() {
   const [isVisible, setIsVisible] = useState(false);
@@ -34,6 +33,20 @@ export function InstallPrompt() {
     setIsVisible(false);
   };
 
+  const handleShare = () => {
+    if (navigator.share) {
+      navigator
+        .share({
+          title: "Install our app",
+          text: "Check out this awesome app!",
+          url: window.location.href,
+        })
+        .catch(console.error);
+    } else {
+      console.log("Web Share API not supported");
+    }
+  };
+
   if (!isVisible || !isIOS) {
     return null;
   }
@@ -43,37 +56,41 @@ export function InstallPrompt() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black bg-opacity-40 flex items-end justify-center p-4 z-[100]"
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end justify-center p-4 z-[100]"
     >
       <motion.div
         initial={{ y: 50 }}
         animate={{ y: 0 }}
-        className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg"
+        className="w-full max-w-md bg-white/90 dark:bg-gray-800/90 rounded-2xl overflow-hidden shadow-lg backdrop-blur-md"
       >
         <div className="px-6 py-6">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+            <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
               Add to Home Screen
             </h2>
-            <button
-              className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
               onClick={handleCancel}
             >
-              Cancel
-            </button>
+              Not Now
+            </Button>
           </div>
-          <div className="h-px bg-gray-200 dark:bg-gray-700 mb-6"></div>
           <p className="text-sm text-gray-600 dark:text-gray-300 mb-6">
-            This website has app functionality. Add it to your home screen to
-            use it in fullscreen and while offline.
+            Install this application on your home screen for quick and easy
+            access when you're on the go.
           </p>
-          <div className="space-y-4">
+          <div className="space-y-4 mb-6">
             <InstallStep
               icon={<UploadIcon />}
               text="Tap the Share button in your browser's toolbar."
             />
             <InstallStep icon={<PlusIcon />} text="Tap 'Add to Home Screen'." />
           </div>
+          <Button className="w-full" variant="ios" onClick={handleShare}>
+            Open Share Menu
+          </Button>
         </div>
       </motion.div>
     </motion.div>
