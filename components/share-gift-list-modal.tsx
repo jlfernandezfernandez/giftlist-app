@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import Modal from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { GiftList } from "@/types/gift-list";
-import { Send, Share2 } from "lucide-react";
+import { Share2 } from "lucide-react";
 
 interface ShareGiftListModalProps {
   isOpen: boolean;
@@ -37,17 +37,24 @@ export const ShareGiftListModal: React.FC<ShareGiftListModalProps> = ({
   }, [isOpen, giftList.id]);
 
   const getShareMessagePreview = () => {
-    return `🎁 You're invited to join a gift list!
+    return `🎁 You're invited to a gift list!
 
-"${giftList.name}" by ${ownerNames}
+📜 "${giftList.name}"
+👤 Created by: ${ownerNames}
 
-Click here to join: ${shareUrl}`;
+🔗 Join here:
+${shareUrl}
+
+Let's make gifting special! 🎉`;
   };
 
   const getShareMessageForSharing = () => {
     return `🎁 You're invited to join a gift list!
 
-"${giftList.name}" by ${ownerNames}`;
+📜 "${giftList.name}"
+👤 Created by: ${ownerNames}
+
+Join now and start gifting! 🎉`;
   };
 
   const handleShare = async () => {
