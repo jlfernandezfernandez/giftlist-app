@@ -40,15 +40,15 @@ export function useUpdateGift(authenticatedUser: AuthenticatedUser | null) {
         mutate(`/api/gift-lists/${giftListId}/gift`);
 
         addToast({
-          title: "Success",
           description: "Gift updated successfully",
+          type: "success",
         });
 
         return updatedGiftData;
       } catch (error) {
         addToast({
-          title: "Error",
           description: "Failed to update gift",
+          type: "error",
         });
         console.error("Error updating gift:", error);
         throw error;

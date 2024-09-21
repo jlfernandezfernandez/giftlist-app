@@ -93,7 +93,7 @@ export function GiftListForm({
       </div>
       <Button
         type="submit"
-        variant="black"
+        variant="secondary"
         disabled={isLoading || !name}
         className="w-full mt-6"
       >

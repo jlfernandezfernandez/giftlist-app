@@ -45,11 +45,9 @@ export function GiftTable({
   const { assignUserToGift } = useAssignUserToGift();
   const { unassignUserFromGift } = useUnassignUserFromGift();
   const { deleteGiftList } = useDeleteGiftList(authenticatedUser);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const giftListRef = useRef<HTMLDivElement>(null);
-  const { markGiftAsBought, isMarkingAsBought } =
-    useMarkGiftAsBought(authenticatedUser);
+  const { markGiftAsBought } = useMarkGiftAsBought(authenticatedUser);
 
   const filteredGifts = useFilteredGifts({ gifts, filter });
   const { sortedGifts, sortBy, setSortBy } = useSortGifts(filteredGifts);
@@ -263,7 +261,6 @@ export function GiftTable({
                   handleAssignGift={() => handleAssignGift(gift)}
                   handleUnassignGift={() => handleUnassignGift(gift)}
                   handleMarkAsBought={() => handleMarkAsBought(gift)}
-                  isMarkingAsBought={isMarkingAsBought}
                 />
               </motion.div>
             ))}

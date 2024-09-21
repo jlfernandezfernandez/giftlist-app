@@ -29,14 +29,14 @@ export function useDeleteGiftList(authenticatedUser: AuthenticatedUser | null) {
 
       mutate();
       addToast({
-        title: "Success",
         description: "Gift list deleted successfully",
+        type: "success",
       });
       router.push("/gift-list/dashboard");
     } catch (error) {
       addToast({
-        title: "Error",
         description: "Failed to delete gift list",
+        type: "error",
       });
       console.error("Error deleting gift list:", error);
     } finally {

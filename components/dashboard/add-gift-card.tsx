@@ -96,6 +96,7 @@ export function AddGiftCard({
                 placeholder="Enter gift name"
                 className="w-full"
                 disabled={isAddingGift}
+                required
               />
             </div>
           )}
@@ -162,7 +163,7 @@ export function AddGiftCard({
             <Button
               type="submit"
               disabled={isAddingGift}
-              variant="black"
+              variant="secondary"
               className="w-full"
               aria-live="polite"
             >

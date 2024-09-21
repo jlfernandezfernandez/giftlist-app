@@ -3,6 +3,13 @@
 
 import { useToast } from "@/context/toast-context";
 
+const toastTypeStyles = {
+  success: "border-l-4 border-green-300",
+  error: "border-l-4 border-red-300",
+  warning: "border-l-4 border-yellow-300",
+  info: "border-l-4 border-blue-300",
+};
+
 export function Toaster() {
   const { toasts } = useToast();
 
@@ -11,10 +18,13 @@ export function Toaster() {
       {toasts.map((toast) => (
         <div
           key={toast.id}
-          className="bg-white border border-gray-200 rounded-lg shadow-lg p-4"
+          className={`bg-white border border-gray-200 rounded-lg shadow-lg p-4 flex ${
+            toastTypeStyles[toast.type]
+          }`}
         >
-          {toast.title && <h4 className="font-semibold">{toast.title}</h4>}
-          <p>{toast.description}</p>
+          <div className="flex-grow">
+            <p>{toast.description}</p>
+          </div>
         </div>
       ))}
     </div>

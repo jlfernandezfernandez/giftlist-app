@@ -1,6 +1,5 @@
 // hooks/use-update-gift-list.ts
 import { useState } from "react";
-import { GiftList } from "@/types/gift-list";
 import { useGiftList } from "@/context/gift-list-context";
 import { useUser } from "@/context/user-context";
 import { useToast } from "@/context/toast-context";
@@ -36,16 +35,16 @@ export const useUpdateGiftList = () => {
       if (response.ok) {
         mutate();
         addToast({
-          title: "Success",
           description: "Gift list updated successfully",
+          type: "success",
         });
       } else {
         throw new Error("Failed to update gift list");
       }
     } catch (error) {
       addToast({
-        title: "Error",
         description: "Failed to update gift list",
+        type: "error",
       });
     } finally {
       setIsLoading(false);

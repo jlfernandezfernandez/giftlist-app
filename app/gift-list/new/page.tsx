@@ -1,4 +1,4 @@
-// app/gift-list/create/page.tsx
+// app/gift-list/new/page.tsx
 "use client";
 
 import { useState } from "react";

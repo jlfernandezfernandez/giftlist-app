@@ -46,9 +46,9 @@ export async function deleteGift(
 export async function assignUserToGift(
   giftId: string,
   userId: string
-): Promise<void> {
+): Promise<Gift> {
   try {
-    await assignUserToGiftRepo(giftId, userId);
+    return await assignUserToGiftRepo(giftId, userId);
   } catch (error) {
     console.error("Error assigning user to gift:", error);
     throw new Error("Failed to assign user to gift");
@@ -58,9 +58,9 @@ export async function assignUserToGift(
 export async function unassignUserFromGift(
   giftId: string,
   userId: string
-): Promise<void> {
+): Promise<Gift> {
   try {
-    await unassignUserFromGiftRepo(giftId, userId);
+    return await unassignUserFromGiftRepo(giftId, userId);
   } catch (error) {
     console.error("Error unassigning user from gift:", error);
     throw new Error("Failed to unassign user from gift");

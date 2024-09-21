@@ -52,7 +52,7 @@ export function GiftListHeader({
             {owners.map((owner) => (
               <Badge
                 key={owner.userId}
-                variant="outline"
+                variant="pastelPink"
                 className="flex items-center px-3 py-1 text-xs sm:text-sm"
               >
                 {owner.name}
@@ -60,7 +60,7 @@ export function GiftListHeader({
             ))}
             {formattedDate && (
               <Badge
-                variant="outline"
+                variant="pastelBlue"
                 className="flex items-center px-3 py-1 text-xs sm:text-sm"
               >
                 <CalendarIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
@@ -68,7 +68,7 @@ export function GiftListHeader({
               </Badge>
             )}
             <Badge
-              variant="outline"
+              variant="pastelGreen"
               className="flex items-center px-3 py-1 text-xs sm:text-sm"
             >
               <UsersIcon className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
@@ -78,8 +78,11 @@ export function GiftListHeader({
         </div>
         {isOwner && (
           <div className="flex flex-col sm:flex-row items-stretch sm:items-start gap-3 mt-6 lg:mt-0">
-            <Link href={`/gift-list/${currentList.id}/edit`} passHref>
-              <Button variant="outline" className="text-sm font-medium">
+            <Link
+              href={`/gift-list/${currentList.id}/edit`}
+              className="w-full sm:w-auto"
+            >
+              <Button variant="outline" className="w-full text-sm font-medium">
                 <PencilIcon className="h-4 w-4 mr-2" />
                 Edit
               </Button>

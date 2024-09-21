@@ -20,11 +20,8 @@ export async function PUT(
   }
 
   try {
-    await assignUserToGift(giftId, userId);
-    return NextResponse.json(
-      { message: "User assigned to gift successfully" },
-      { status: 200 }
-    );
+    const updatedGift = await assignUserToGift(giftId, userId);
+    return NextResponse.json(updatedGift, { status: 200 });
   } catch (error: any) {
     return NextResponse.json(
       { message: "Failed to assign user to gift", error: error.message },
@@ -47,11 +44,8 @@ export async function DELETE(
   }
 
   try {
-    await unassignUserFromGift(giftId, userId);
-    return NextResponse.json(
-      { message: "User unassigned from gift successfully" },
-      { status: 200 }
-    );
+    const updatedGift = await unassignUserFromGift(giftId, userId);
+    return NextResponse.json(updatedGift, { status: 200 });
   } catch (error: any) {
     return NextResponse.json(
       { message: "Failed to unassign user from gift", error: error.message },

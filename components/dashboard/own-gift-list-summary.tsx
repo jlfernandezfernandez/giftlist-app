@@ -30,7 +30,7 @@ export function OwnGiftListSummary() {
           <ListIcon className="h-4 w-4 text-primary mr-2" />
           Your Gift Lists
         </CardTitle>
-        <Link href="/gift-list/create" passHref>
+        <Link href="/gift-list/new" passHref>
           <Button variant="outline" size="sm" className="h-8 px-2 text-xs">
             <PlusIcon className="h-3 w-3 mr-1" />
             New List

@@ -25,8 +25,8 @@ export const useGifts = (giftListId: string | null) => {
       onError: (err) => {
         console.error("Error fetching gifts:", err);
         addToast({
-          title: "Error",
           description: "Failed to fetch gifts. Please try again later.",
+          type: "error",
         });
       },
     }

@@ -54,8 +54,8 @@ export function GiftsProvider({ children }: { children: React.ReactNode }) {
         );
       } catch (error) {
         addToast({
-          title: "Error",
           description: "Failed to fetch gifts. Please try again later.",
+          type: "error",
         });
       } finally {
         setIsLoading(false);
@@ -73,13 +73,17 @@ export function GiftsProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const updateGift = useCallback((giftListId: string, updatedGift: Gift) => {
-    setGifts((prev) => ({
-      ...prev,
-      [giftListId]:
+    setGifts((prev) => {
+      const updatedGifts =
         prev[giftListId]?.map((gift) =>
-          gift.id === updatedGift.id ? updatedGift : gift
-        ) || [],
-    }));
+          gift.id === updatedGift.id ? { ...gift, ...updatedGift } : gift
+        ) || [];
+
+      return {
+        ...prev,
+        [giftListId]: updatedGifts,
+      };
+    });
   }, []);
 
   const removeGift = useCallback((giftListId: string, giftId: string) => {

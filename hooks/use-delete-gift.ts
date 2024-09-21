@@ -30,15 +30,15 @@ export function useDeleteGift(authenticatedUser: AuthenticatedUser | null) {
       mutate(`/api/gift-lists/${giftListId}/gift`);
 
       addToast({
-        title: "Success",
         description: "Gift deleted successfully",
+        type: "success",
       });
 
       return true; // Indicate success
     } catch (error) {
       addToast({
-        title: "Error",
         description: "Failed to delete gift",
+        type: "error",
       });
       console.error("Error deleting gift:", error);
       return false; // Indicate failure

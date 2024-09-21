@@ -10,17 +10,27 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "border border-gray-200 bg-white hover:bg-gray-100 hover:text-gray-900",
-        destructive: "bg-red-500 text-gray-50 hover:bg-red-500/90",
+          "border border-gray-200 bg-gray-50 text-gray-800 hover:bg-gray-100 hover:text-gray-900",
+        destructive: "bg-red-200 text-red-800 hover:bg-red-300",
         outline:
-          "border border-gray-200 bg-white hover:bg-gray-100 hover:text-gray-900",
-        secondary: "bg-gray-100 text-gray-900 hover:bg-gray-100/80",
-        ghost: "hover:bg-gray-100 hover:text-gray-900",
-        link: "text-gray-900 underline-offset-4 hover:underline",
-        blue: "bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500",
+          "border border-gray-300 bg-transparent text-gray-800 hover:bg-gray-100",
+        secondary: "bg-blue-100 text-blue-800 hover:bg-blue-200",
+        ghost: "text-gray-800 hover:bg-gray-100 hover:text-gray-900",
+        link: "text-blue-600 underline-offset-4 hover:underline",
+        blue: "bg-blue-200 text-blue-800 hover:bg-blue-300 focus:ring-blue-400",
         green:
-          "bg-green-600 text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500",
-        black: "border border-black bg-black hover:bg-gray-800 text-white",
+          "bg-green-200 text-green-800 hover:bg-green-300 focus:ring-green-400",
+        black: "bg-gray-900 text-white hover:bg-black focus:ring-gray-800",
+        pastelBlue:
+          "bg-blue-200 text-blue-800 hover:bg-blue-300 focus:ring-blue-400",
+        pastelGreen:
+          "bg-green-200 text-green-800 hover:bg-green-300 focus:ring-green-400",
+        pastelPink:
+          "bg-pink-200 text-pink-800 hover:bg-pink-300 focus:ring-pink-400",
+        pastelYellow:
+          "bg-yellow-200 text-yellow-800 hover:bg-yellow-300 focus:ring-yellow-400",
+        pastelPurple:
+          "bg-purple-200 text-purple-800 hover:bg-purple-300 focus:ring-purple-400",
       },
       size: {
         default: "h-10 px-4 py-2",

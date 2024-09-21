@@ -28,7 +28,6 @@ interface GiftCardProps {
   handleAssignGift: () => void;
   handleUnassignGift: () => void;
   handleMarkAsBought: (gift: Gift) => void;
-  isMarkingAsBought: boolean;
 }
 
 export function GiftCard({
@@ -40,7 +39,6 @@ export function GiftCard({
   handleAssignGift,
   handleUnassignGift,
   handleMarkAsBought,
-  isMarkingAsBought,
 }: GiftCardProps) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isConfirmBoughtModalOpen, setIsConfirmBoughtModalOpen] =
@@ -48,6 +46,8 @@ export function GiftCard({
   const isAssigned = gift.assignedUsers?.some(
     (assignedUser) => assignedUser.userId === authenticatedUser.uid
   );
+
+  console.log("gift", gift);
 
   const priceDisplay =
     gift.price !== undefined && gift.currency
@@ -160,16 +160,14 @@ export function GiftCard({
                 </Button>
                 <Button
                   onClick={handleBuyClick}
-                  disabled={
-                    !isAssigned || isMarkingAsBought || gift.state === "bought"
-                  }
+                  disabled={!isAssigned || gift.state === "bought"}
                   className="bg-blue-600 hover:bg-blue-700 transition-colors duration-200 disabled:bg-gray-300 disabled:text-gray-500 rounded-full"
                 >
                   <ShoppingCartIcon
                     className="h-4 w-4 mr-1"
                     aria-hidden="true"
                   />
-                  {isMarkingAsBought ? "Updating..." : "Buy"}
+                  Buy
                 </Button>
               </>
             )}

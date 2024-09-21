@@ -3,11 +3,36 @@
 import { supabase } from "@/lib/supabase.client";
 import { Gift } from "@/types/gift";
 
+function mapGiftData(giftData: any): Gift {
+  if (!giftData || typeof giftData !== "object") {
+    console.error("Invalid gift data:", giftData);
+    throw new Error("Invalid gift data");
+  }
+
+  return {
+    id: giftData.id,
+    giftListId: giftData.giftlist_id,
+    name: giftData.name,
+    description: giftData.description,
+    link: giftData.link,
+    website: giftData.website,
+    price: giftData.price,
+    currency: giftData.currency,
+    state: giftData.state,
+    assignedUsers: Array.isArray(giftData.assigned_users)
+      ? giftData.assigned_users.map((user: any) => ({
+          userId: user.user_id,
+          name: user.name,
+          email: user.email,
+        }))
+      : [],
+  };
+}
+
 export async function createGiftRepo(
   gift: Gift,
   userId: string
 ): Promise<Gift> {
-  console.log(gift);
   const { data, error } = await supabase.rpc("create_gift", {
     p_giftlist_id: gift.giftListId,
     p_name: gift.name,
@@ -20,22 +45,19 @@ export async function createGiftRepo(
   });
 
   if (error) {
+    console.error("Supabase error:", error);
     throw new Error(`Error creating gift: ${error.message}`);
   }
 
+  if (!data || !Array.isArray(data) || data.length === 0) {
+    console.error("Unexpected data structure:", data);
+    throw new Error("Failed to create gift: No data returned");
+  }
+
   const createdGift = data[0];
-  return {
-    id: createdGift.id,
-    giftListId: createdGift.gift_list_id,
-    name: createdGift.name,
-    description: createdGift.description,
-    link: createdGift.link,
-    website: createdGift.website,
-    price: createdGift.price,
-    currency: createdGift.currency,
-    state: createdGift.state,
-    assignedUsers: [], // Lista de usuarios asignados vacía por defecto
-  };
+  console.log("Created gift data:", createdGift);
+
+  return mapGiftData(createdGift);
 }
 
 export async function updateGiftRepo(
@@ -59,19 +81,7 @@ export async function updateGiftRepo(
     throw new Error(`Error updating gift: ${error.message}`);
   }
 
-  const updatedGiftData = data[0];
-
-  return {
-    id: updatedGiftData.id,
-    giftListId: updatedGiftData.giftlist_id,
-    name: updatedGiftData.name,
-    description: updatedGiftData.description,
-    link: updatedGiftData.link,
-    website: updatedGiftData.website,
-    price: updatedGiftData.price,
-    currency: updatedGiftData.currency,
-    state: updatedGiftData.state,
-  };
+  return mapGiftData(data[0]);
 }
 
 export async function getGiftsByListIdRepo(listId: string): Promise<Gift[]> {
@@ -83,22 +93,7 @@ export async function getGiftsByListIdRepo(listId: string): Promise<Gift[]> {
     throw new Error(`Error fetching gifts for list: ${error.message}`);
   }
 
-  return data.map((gift: any) => ({
-    id: gift.id,
-    giftListId: gift.gift_list_id,
-    name: gift.name,
-    description: gift.description,
-    link: gift.link,
-    website: gift.website,
-    price: gift.price,
-    currency: gift.currency,
-    state: gift.state,
-    assignedUsers: gift.assigned_users.map((user: any) => ({
-      userId: user.user_id,
-      name: user.name,
-      email: user.email,
-    })),
-  }));
+  return data.map(mapGiftData);
 }
 
 export async function deleteGiftRepo(
@@ -118,8 +113,8 @@ export async function deleteGiftRepo(
 export async function assignUserToGiftRepo(
   giftId: string,
   userId: string
-): Promise<void> {
-  const { error } = await supabase.rpc("assign_user_to_gift", {
+): Promise<Gift> {
+  const { data, error } = await supabase.rpc("assign_user_to_gift", {
     p_gift_id: giftId,
     p_user_id: userId,
   });
@@ -127,13 +122,15 @@ export async function assignUserToGiftRepo(
   if (error) {
     throw new Error(`Error assigning user to gift: ${error.message}`);
   }
+
+  return mapGiftData(data[0]);
 }
 
 export async function unassignUserFromGiftRepo(
   giftId: string,
   userId: string
-): Promise<void> {
-  const { error } = await supabase.rpc("unassign_user_from_gift", {
+): Promise<Gift> {
+  const { data, error } = await supabase.rpc("unassign_user_from_gift", {
     p_gift_id: giftId,
     p_user_id: userId,
   });
@@ -141,6 +138,8 @@ export async function unassignUserFromGiftRepo(
   if (error) {
     throw new Error(`Error unassigning user from gift: ${error.message}`);
   }
+
+  return mapGiftData(data[0]);
 }
 
 export async function getAssignedGiftsByUserIdRepo(
@@ -154,20 +153,5 @@ export async function getAssignedGiftsByUserIdRepo(
     throw new Error(`Error fetching assigned gifts for user: ${error.message}`);
   }
 
-  return data.map((gift: any) => ({
-    id: gift.id,
-    giftListId: gift.gift_list_id,
-    name: gift.name,
-    description: gift.description,
-    link: gift.link,
-    website: gift.website,
-    price: gift.price,
-    currency: gift.currency,
-    state: gift.state,
-    assignedUsers: gift.assigned_users.map((user: any) => ({
-      userId: user.user_id,
-      name: user.name,
-      email: user.email,
-    })),
-  }));
+  return data.map(mapGiftData);
 }

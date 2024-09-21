@@ -49,15 +49,15 @@ export const useAddGift = (authenticatedUser: AuthenticatedUser | null) => {
         addGiftToContext(listId, newGift);
         mutate(`/api/gift-lists/${listId}/gift`);
         addToast({
-          title: "Success",
           description: "Gift added successfully",
+          type: "success",
         });
 
         return newGift;
       } catch (error) {
         addToast({
-          title: "Error",
           description: "Failed to add gift",
+          type: "error",
         });
         console.error("Error adding gift:", error);
         return null;

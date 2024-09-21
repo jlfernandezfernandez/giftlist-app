@@ -45,7 +45,7 @@ export const ConfirmBoughtModal: React.FC<ConfirmBoughtModalProps> = ({
               <Button onClick={onClose} variant="outline">
                 Cancel
               </Button>
-              <Button onClick={handleBuy} variant="black">
+              <Button onClick={handleBuy} variant="secondary">
                 Proceed to Buy
               </Button>
             </div>
@@ -60,7 +60,7 @@ export const ConfirmBoughtModal: React.FC<ConfirmBoughtModalProps> = ({
               <Button onClick={onClose} variant="outline">
                 No, I haven&apos;t
               </Button>
-              <Button onClick={handleConfirm} variant="black">
+              <Button onClick={handleConfirm} variant="secondary">
                 Yes, I&apos;ve bought it
               </Button>
             </div>

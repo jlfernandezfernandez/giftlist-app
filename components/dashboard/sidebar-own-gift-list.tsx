@@ -5,43 +5,39 @@ import { ListPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
 import { GiftList } from "@/types/gift-list";
-import { useSidebar } from "@/context/sidebar-context";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface OwnGiftListProps {
   lists: GiftList[];
-  onCreateNewList: () => void;
 }
 
-export function OwnGiftList({ lists, onCreateNewList }: OwnGiftListProps) {
+export function OwnGiftList({ lists }: OwnGiftListProps) {
   const currentListId = useCurrentGiftListId();
-  const { closeSidebar } = useSidebar();
 
   return (
     <div className="space-y-3">
       {lists.length === 0 ? (
-        <Button
-          onClick={onCreateNewList}
-          className="w-full justify-start"
-          variant="outline"
-        >
-          <ListPlus className="mr-2 h-4 w-4" />
-          Create your first list
-        </Button>
+        <Link href="/gift-list/new">
+          <Button className="w-full justify-start" variant="outline">
+            <ListPlus className="mr-2 h-4 w-4" />
+            Create your first list
+          </Button>
+        </Link>
       ) : (
         <>
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-lg font-bold text-foreground">My Lists</h3>
-            <Button
-              onClick={onCreateNewList}
-              size="icon"
-              variant="ghost"
-              className="h-8 w-8"
-              title="Create new list"
-            >
-              <ListPlus className="h-5 w-5" />
-            </Button>
+            <Link href="/gift-list/new">
+              <Button
+                size="icon"
+                variant="ghost"
+                className="h-8 w-8"
+                title="Create new list"
+              >
+                <ListPlus className="h-5 w-5" />
+              </Button>
+            </Link>
           </div>
           {lists.map((list) => (
             <motion.div
@@ -52,7 +48,6 @@ export function OwnGiftList({ lists, onCreateNewList }: OwnGiftListProps) {
             >
               <Link
                 href={`/gift-list/${list.id}`}
-                onClick={() => closeSidebar()}
                 className={cn(
                   "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm lg:text-base transition-colors duration-200",
                   "hover:bg-gray-100",

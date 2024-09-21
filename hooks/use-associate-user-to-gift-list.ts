@@ -23,8 +23,8 @@ export const useAssociateUserToGiftList = (
       setError("User not authenticated");
       setStatus("error");
       addToast({
-        title: "Error",
         description: "User not authenticated. Please log in and try again.",
+        type: "error",
       });
       return;
     }
@@ -47,8 +47,8 @@ export const useAssociateUserToGiftList = (
 
       setStatus("success");
       addToast({
-        title: "Success",
         description: "You've been successfully associated with the gift list.",
+        type: "success",
       });
       mutate(); // Reload the gift list context
       router.push(`/gift-list/${giftListId}`);
@@ -58,10 +58,10 @@ export const useAssociateUserToGiftList = (
       );
       setStatus("error");
       addToast({
-        title: "Error",
         description: `Failed to associate with gift list: ${
           err instanceof Error ? err.message : "Unknown error"
         }`,
+        type: "error",
       });
     }
   }, [giftListId, user, addToast, router, role, mutate]);

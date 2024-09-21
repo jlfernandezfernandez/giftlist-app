@@ -51,7 +51,7 @@ export function Sidebar() {
             <div className="space-y-1">
               <DashboardButton closeSidebar={closeSidebar} />
               <section>
-                <OwnGiftList lists={ownGiftLists} onCreateNewList={() => {}} />
+                <OwnGiftList lists={ownGiftLists} />
               </section>
             </div>
 

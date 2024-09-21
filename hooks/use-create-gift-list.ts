@@ -38,8 +38,8 @@ export const useCreateGiftList = () => {
         const giftList: GiftList = await response.json();
         mutate();
         addToast({
-          title: "Success",
           description: "Gift list created successfully",
+          type: "success",
         });
         router.push(`/gift-list/${giftList.id}`);
       } else {
@@ -47,8 +47,8 @@ export const useCreateGiftList = () => {
       }
     } catch (error) {
       addToast({
-        title: "Error",
         description: "Failed to create gift list",
+        type: "error",
       });
     } finally {
       setIsLoading(false);
