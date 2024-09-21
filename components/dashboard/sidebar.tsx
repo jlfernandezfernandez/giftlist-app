@@ -76,7 +76,7 @@ export function Sidebar() {
           <div className="border-t border-border flex-shrink-0">
             <Button
               variant="ghost"
-              className="w-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors duration-200 h-12"
+              className="w-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors duration-200 h-14"
               onClick={handleLogout}
               alignment="left"
             >
