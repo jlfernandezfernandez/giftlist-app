@@ -21,7 +21,7 @@ export function MobileHeader() {
       <div className="flex-1 flex justify-center">
         <h1 className="text-lg font-semibold">GiftList AI</h1>
       </div>
-      <div className="w-10" /> {/* Spacer para equilibrar el diseño */}
+      <div className="w-10" />
     </header>
   );
 }

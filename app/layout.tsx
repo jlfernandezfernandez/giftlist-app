@@ -123,7 +123,7 @@ export default function RootLayout({
     <html lang="en" className={cn("h-full", satoshi.variable, inter.variable)}>
       <body className="antialiased min-h-full flex flex-col bg-gradient-to-br from-purple-700 via-indigo-800 to-blue-900 font-sans">
         <SessionProvider>
-          <div className="flex-grow flex flex-col">
+          <div className="flex-grow flex flex-col pt-safe-area-inset-top">
             <Suspense fallback={<Spinner />}>
               {children}
               <InstallPrompt />
