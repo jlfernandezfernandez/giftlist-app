@@ -77,6 +77,7 @@ export function InstallPrompt() {
               Not Now
             </Button>
           </div>
+          <div className="h-px bg-gray-200 dark:bg-gray-700 mb-4"></div>
           <p className="text-sm text-gray-600 dark:text-gray-300 mb-6">
             Install this application on your home screen for quick and easy
             access when you're on the go.
