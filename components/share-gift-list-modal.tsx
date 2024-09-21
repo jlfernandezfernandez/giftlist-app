@@ -36,7 +36,7 @@ export const ShareGiftListModal: React.FC<ShareGiftListModalProps> = ({
     }
   }, [isOpen, giftList.id]);
 
-  const getShareMessage = () => {
+  const getShareMessagePreview = () => {
     return `🎁 You're invited to join a gift list!
 
 "${giftList.name}" by ${ownerNames}
@@ -44,11 +44,10 @@ export const ShareGiftListModal: React.FC<ShareGiftListModalProps> = ({
 Click here to join: ${shareUrl}`;
   };
 
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(getShareMessage()).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+  const getShareMessageForSharing = () => {
+    return `🎁 You're invited to join a gift list!
+
+"${giftList.name}" by ${ownerNames}`;
   };
 
   const handleShare = async () => {
@@ -56,7 +55,7 @@ Click here to join: ${shareUrl}`;
       try {
         await navigator.share({
           title: `Join ${ownerNames}'s Gift List`,
-          text: getShareMessage(),
+          text: getShareMessageForSharing(),
           url: shareUrl,
         });
       } catch (error) {
@@ -68,6 +67,13 @@ Click here to join: ${shareUrl}`;
     }
   };
 
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(getShareMessagePreview()).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} closeButtonActive>
       <div className="text-left">
@@ -76,7 +82,9 @@ Click here to join: ${shareUrl}`;
           Share this message with others to invite them to your gift list:
         </p>
         <div className="bg-gray-100 p-3 rounded-md mb-4">
-          <p className="text-sm whitespace-pre-line">{getShareMessage()}</p>
+          <p className="text-sm whitespace-pre-line">
+            {getShareMessagePreview()}
+          </p>
         </div>
         <div className="flex space-x-2 mt-4">
           <Button
