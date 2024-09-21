@@ -30,7 +30,7 @@ const buttonVariants = cva(
           "bg-yellow-200 text-yellow-800 hover:bg-yellow-300 focus:ring-yellow-400",
         pastelPurple:
           "bg-purple-200 text-purple-800 hover:bg-purple-300 focus:ring-purple-400",
-        ios: "text-blue-700 hover:text-blue-800",
+        ios: "text-blue-700 dark:text-white hover:text-blue-800",
       },
       size: {
         default: "h-10 px-4 py-2",
