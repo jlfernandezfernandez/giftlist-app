@@ -1,6 +1,6 @@
 // components/dashboard/gift-card.tsx
 
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,9 @@ import {
   ExternalLinkIcon,
   UsersIcon,
 } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import SmallSpinner from "../ui/small-spinner";
 
 interface GiftCardProps {
   authenticatedUser: AuthenticatedUser;
@@ -43,11 +46,13 @@ export function GiftCard({
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isConfirmBoughtModalOpen, setIsConfirmBoughtModalOpen] =
     useState(false);
+  const [isAssigning, setIsAssigning] = useState(false);
+
+  const router = useRouter();
+
   const isAssigned = gift.assignedUsers?.some(
     (assignedUser) => assignedUser.userId === authenticatedUser.uid
   );
-
-  console.log("gift", gift);
 
   const priceDisplay =
     gift.price !== undefined && gift.currency
@@ -55,7 +60,9 @@ export function GiftCard({
       : "N/A";
 
   const handleViewProduct = useCallback(() => {
-    window.open(gift.link || "", "_blank");
+    if (gift.link) {
+      window.open(gift.link, "_blank", "noopener,noreferrer");
+    }
   }, [gift.link]);
 
   const handleBuyClick = useCallback(() => {
@@ -67,9 +74,27 @@ export function GiftCard({
     setIsConfirmBoughtModalOpen(false);
   }, [gift, handleMarkAsBought]);
 
+  const handleAssignUnassign = useCallback(async () => {
+    setIsAssigning(true);
+    try {
+      await (isAssigned ? handleUnassignGift() : handleAssignGift());
+      router.refresh();
+    } catch (error) {
+      console.error("Error assigning/unassigning user:", error);
+    } finally {
+      setIsAssigning(false);
+    }
+  }, [isAssigned, handleAssignGift, handleUnassignGift, router]);
+
   return (
     <>
-      <Card className="overflow-hidden transition-all duration-300 hover:shadow-lg bg-gradient-to-br from-white to-gray-50 rounded-xl h-full flex flex-col border border-gray-200">
+      <Card
+        className={cn(
+          "overflow-hidden transition-all duration-300 hover:shadow-lg",
+          "bg-gradient-to-br from-white to-gray-50 rounded-xl h-full flex flex-col",
+          "border border-gray-200"
+        )}
+      >
         <div className="p-4 sm:p-6 flex flex-col flex-grow relative">
           {/* Header */}
           <div className="flex justify-between items-center mb-4">
@@ -94,16 +119,19 @@ export function GiftCard({
               {gift.description}
             </p>
             <div className="flex justify-between items-center mt-4">
-              <div
-                className="flex items-center truncate max-w-[60%] text-sm cursor-pointer text-blue-600 hover:text-blue-800 transition-colors duration-200"
+              <button
                 onClick={handleViewProduct}
+                className={cn(
+                  "flex items-center truncate max-w-[60%] text-sm",
+                  "text-blue-600 hover:text-blue-900 transition-colors duration-200"
+                )}
               >
                 <ExternalLinkIcon
                   className="h-4 w-4 mr-1 flex-shrink-0"
                   aria-hidden="true"
                 />
                 <span className="truncate">{gift.website}</span>
-              </div>
+              </button>
               <span className="font-bold text-xl sm:text-2xl text-gray-900">
                 {priceDisplay}
               </span>
@@ -111,20 +139,20 @@ export function GiftCard({
           </div>
 
           {/* Footer */}
-          <div className="flex justify-end space-x-2 mt-4">
+          <div className="flex justify-end space-x-2 mt-5">
             {isOwner ? (
               <>
                 <Button
                   variant="outline"
                   onClick={() => setIsEditModalOpen(true)}
-                  className="text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-full text-sm"
+                  className="w-24 justify-center text-gray-700 hover:bg-gray-100 transition-colors duration-200 rounded-full text-sm"
                 >
                   <PencilIcon className="h-4 w-4 mr-1" aria-hidden="true" />
                   Edit
                 </Button>
                 <Button
                   onClick={handleRemoveGift}
-                  className="text-red-600 hover:bg-red-50 transition-colors duration-200 rounded-full text-sm"
+                  className="w-24 justify-center text-red-600 hover:bg-red-50 transition-colors duration-200 rounded-full text-sm"
                 >
                   <Trash2Icon className="h-4 w-4 mr-1" aria-hidden="true" />
                   Delete
@@ -133,14 +161,20 @@ export function GiftCard({
             ) : (
               <>
                 <Button
-                  className={`transition-colors duration-200 rounded-full text-sm ${
+                  className={cn(
+                    "w-24 justify-center transition-colors duration-200 rounded-full text-sm",
                     isAssigned
                       ? "text-red-600 hover:bg-red-50"
                       : "text-green-600 hover:bg-green-50"
-                  }`}
-                  onClick={isAssigned ? handleUnassignGift : handleAssignGift}
+                  )}
+                  onClick={handleAssignUnassign}
+                  disabled={isAssigning}
                 >
-                  {isAssigned ? (
+                  {isAssigning ? (
+                    <>
+                      <SmallSpinner />
+                    </>
+                  ) : isAssigned ? (
                     <>
                       <UserMinusIcon
                         className="h-4 w-4 mr-1"
@@ -161,7 +195,10 @@ export function GiftCard({
                 <Button
                   onClick={handleBuyClick}
                   disabled={!isAssigned || gift.state === "bought"}
-                  className="bg-blue-600 hover:bg-blue-700 transition-colors duration-200 disabled:bg-gray-300 disabled:text-gray-500 rounded-full"
+                  className={cn(
+                    "w-24 justify-center bg-blue-600 hover:bg-blue-700 transition-colors duration-200",
+                    "disabled:bg-gray-300 disabled:text-gray-500 rounded-full"
+                  )}
                 >
                   <ShoppingCartIcon
                     className="h-4 w-4 mr-1"

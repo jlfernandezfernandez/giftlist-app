@@ -145,16 +145,7 @@ export function GiftTable({
   const handleAssignGift = useCallback(
     async (gift: Gift) => {
       if (!gift.id) return;
-      const success = await assignUserToGift(
-        gift.id,
-        authenticatedUser.uid,
-        currentList.id
-      );
-      if (success) {
-        console.log("Usuario asignado al regalo con éxito");
-      } else {
-        console.error("No se pudo asignar el usuario al regalo");
-      }
+      return assignUserToGift(gift.id, authenticatedUser.uid, currentList.id);
     },
     [assignUserToGift, authenticatedUser.uid, currentList.id]
   );
@@ -162,16 +153,7 @@ export function GiftTable({
   const handleUnassignGift = useCallback(
     async (gift: Gift) => {
       if (!gift.id) return;
-      const success = await unassignUserFromGift(
-        gift.id,
-        authenticatedUser.uid,
-        currentList.id
-      );
-      if (success) {
-        console.log("Usuario desasignado del regalo con éxito");
-      } else {
-        console.error("No se pudo desasignar el usuario del regalo");
-      }
+      return unassignUserFromGift(gift.id, authenticatedUser.uid, currentList.id);
     },
     [unassignUserFromGift, authenticatedUser.uid, currentList.id]
   );
