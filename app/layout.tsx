@@ -112,9 +112,8 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
+  themeColor: "white",
 };
-
-// ... existing imports ...
 
 export default function RootLayout({
   children,
@@ -123,7 +122,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={cn(satoshi.variable, inter.variable)}>
-      <body className="antialiased flex flex-col font-sans bg-gradient-to-br from-purple-700 via-indigo-800 to-blue-900 safe-top">
+      <body className="antialiased flex flex-col font-sans bg-white">
         <SessionProvider>
           <div className="flex-grow flex flex-col">
             <Suspense fallback={<Spinner />}>
