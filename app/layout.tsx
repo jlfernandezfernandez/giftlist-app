@@ -120,10 +120,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={cn("h-full", satoshi.variable, inter.variable)}>
-      <body className="antialiased min-h-full flex flex-col bg-gradient-to-br from-purple-700 via-indigo-800 to-blue-900 font-sans">
+    <html
+      lang="en"
+      className={cn(
+        "h-full bg-gradient-to-br from-purple-700 via-indigo-800 to-blue-900",
+        satoshi.variable,
+        inter.variable
+      )}
+    >
+      <body className="antialiased min-h-full flex flex-col font-sans">
         <SessionProvider>
-          <div className="flex-grow flex flex-col pt-safe-area-inset-top">
+          <div className="flex-grow flex flex-col">
             <Suspense fallback={<Spinner />}>
               {children}
               <InstallPrompt />
