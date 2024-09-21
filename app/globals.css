@@ -41,6 +41,12 @@
 
   body {
     @apply bg-background text-foreground font-body;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+
+  html {
+    height: -webkit-fill-available;
   }
 
   h1,
@@ -50,6 +56,12 @@
   h5,
   h6 {
     @apply font-heading;
+  }
+}
+
+@layer utilities {
+  .safe-top {
+    padding-top: env(safe-area-inset-top);
   }
 }
 
