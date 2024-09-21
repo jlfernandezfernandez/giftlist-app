@@ -2,27 +2,63 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 
 export function InstallPrompt() {
+  const [showPrompt, setShowPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
-  const [isStandalone, setIsStandalone] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
   useEffect(() => {
-    setIsIOS(
-      /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream
-    );
-    setIsStandalone(window.matchMedia("(display-mode: standalone)").matches);
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+    setIsIOS(isIOS);
+
+    const isStandalone = window.matchMedia(
+      "(display-mode: standalone)"
+    ).matches;
+
+    if (!isStandalone) {
+      setShowPrompt(true);
+
+      if (!isIOS) {
+        const handleBeforeInstallPrompt = (e: Event) => {
+          e.preventDefault();
+          setDeferredPrompt(e);
+        };
+
+        window.addEventListener(
+          "beforeinstallprompt",
+          handleBeforeInstallPrompt
+        );
+
+        return () => {
+          window.removeEventListener(
+            "beforeinstallprompt",
+            handleBeforeInstallPrompt
+          );
+        };
+      }
+    }
   }, []);
 
-  if (isStandalone) return null;
+  const handleInstall = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") {
+        setShowPrompt(false);
+      }
+      setDeferredPrompt(null);
+    }
+  };
+
+  if (!showPrompt) return null;
 
   return (
-    <div className="p-4 bg-gray-100 rounded-lg">
-      <h3 className="text-lg font-semibold mb-2">Install App</h3>
-      <Button variant="outline">Add to Home Screen</Button>
-      {isIOS && (
-        <p className="mt-2 text-sm">
+    <div className="fixed bottom-4 left-4 right-4 bg-white p-4 rounded-lg shadow-lg">
+      <h3 className="text-lg font-semibold mb-2">Install GiftList AI</h3>
+      {isIOS ? (
+        <p>
           To install this app on your iOS device, tap the share button
           <span role="img" aria-label="share icon">
             {" "}
@@ -35,6 +71,15 @@ export function InstallPrompt() {
           </span>
           .
         </p>
+      ) : deferredPrompt ? (
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={handleInstall}
+        >
+          Install App
+        </button>
+      ) : (
+        <p>You can install this app from your browser&apos;s menu.</p>
       )}
     </div>
   );
