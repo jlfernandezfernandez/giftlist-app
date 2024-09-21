@@ -11,11 +11,20 @@ export function InstallPrompt() {
   const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
-    const isIOSDevice =
-      /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-    setIsIOS(isIOSDevice);
+    function isIOSDevice() {
+      const ua = window.navigator.userAgent.toLowerCase();
+      const isIOS = /iphone|ipad|ipod/.test(ua);
+      const isWebkit = "WebkitAppearance" in document.documentElement.style;
+      const isStandalone =
+        "standalone" in window.navigator && window.navigator.standalone;
 
-    if (isIOSDevice) {
+      return isIOS || (isWebkit && !isStandalone);
+    }
+
+    const iosDetected = isIOSDevice();
+    setIsIOS(iosDetected);
+
+    if (iosDetected) {
       const timer = setTimeout(() => setIsVisible(true), 3000);
       return () => clearTimeout(timer);
     }
@@ -34,7 +43,7 @@ export function InstallPrompt() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black bg-opacity-40 flex items-end justify-center p-4 sm:items-center z-[100]"
+      className="fixed inset-0 bg-black bg-opacity-40 flex items-end justify-center p-4 z-[100]"
     >
       <motion.div
         initial={{ y: 50 }}
