@@ -4,47 +4,45 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import {
+  setInstallPromptDismissed,
+  getInstallPromptDismissed,
+} from "@/actions/cookies";
 
 export function InstallPrompt() {
   const [isVisible, setIsVisible] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
-    function isIOSDevice() {
-      const ua = window.navigator.userAgent.toLowerCase();
-      const isIOS = /iphone|ipad|ipod/.test(ua);
-      const isWebkit = "WebkitAppearance" in document.documentElement.style;
-      const isStandalone =
-        "standalone" in window.navigator && window.navigator.standalone;
+    async function checkPromptVisibility() {
+      function isIOSDevice() {
+        const ua = window.navigator.userAgent.toLowerCase();
+        const isIOS = /iphone|ipad|ipod/.test(ua);
+        const isWebkit = "WebkitAppearance" in document.documentElement.style;
+        const isStandalone =
+          "standalone" in window.navigator && window.navigator.standalone;
 
-      return isIOS || (isWebkit && !isStandalone);
+        return isIOS || (isWebkit && !isStandalone);
+      }
+
+      const iosDetected = isIOSDevice();
+      setIsIOS(iosDetected);
+
+      if (iosDetected) {
+        const isDismissed = await getInstallPromptDismissed();
+        if (!isDismissed) {
+          const timer = setTimeout(() => setIsVisible(true), 3000);
+          return () => clearTimeout(timer);
+        }
+      }
     }
 
-    const iosDetected = isIOSDevice();
-    setIsIOS(iosDetected);
-
-    if (iosDetected) {
-      const timer = setTimeout(() => setIsVisible(true), 3000);
-      return () => clearTimeout(timer);
-    }
+    checkPromptVisibility();
   }, []);
 
-  const handleCancel = () => {
+  const handleCancel = async () => {
     setIsVisible(false);
-  };
-
-  const handleShare = () => {
-    if (navigator.share) {
-      navigator
-        .share({
-          title: "Install our app",
-          text: "Check out this awesome app!",
-          url: window.location.href,
-        })
-        .catch(console.error);
-    } else {
-      console.log("Web Share API not supported");
-    }
+    await setInstallPromptDismissed();
   };
 
   if (!isVisible || !isIOS) {
@@ -63,18 +61,18 @@ export function InstallPrompt() {
         animate={{ y: 0 }}
         className="w-full max-w-md bg-white/90 dark:bg-gray-800/90 rounded-2xl overflow-hidden shadow-lg backdrop-blur-md"
       >
-        <div className="px-6 py-6">
-          <div className="flex justify-between items-center mb-4">
+        <div className="px-4 py-4">
+          <div className="flex justify-between items-center mb-2">
             <h2 className="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
               Add to Home Screen
             </h2>
             <Button
-              variant="ghost"
+              variant="ios"
               size="sm"
-              className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
+              className="text-blue-500"
               onClick={handleCancel}
             >
-              Not Now
+              Cancel
             </Button>
           </div>
           <div className="h-px bg-gray-200 dark:bg-gray-700 mb-4"></div>
@@ -82,16 +80,13 @@ export function InstallPrompt() {
             Install this application on your home screen for quick and easy
             access when you&apos;re on the go.
           </p>
-          <div className="space-y-4 mb-6">
+          <div className="space-y-4">
             <InstallStep
               icon={<UploadIcon />}
               text="Tap the Share button in your browser's toolbar."
             />
             <InstallStep icon={<PlusIcon />} text="Tap 'Add to Home Screen'." />
           </div>
-          <Button className="w-full" variant="ios" onClick={handleShare}>
-            Open Share Menu
-          </Button>
         </div>
       </motion.div>
     </motion.div>
@@ -101,7 +96,7 @@ export function InstallPrompt() {
 function InstallStep({ icon, text }: { icon: React.ReactNode; text: string }) {
   return (
     <div className="flex items-center space-x-4">
-      <span className="text-blue-600 dark:text-blue-400">{icon}</span>
+      <span className="text-black dark:text-white">{icon}</span>
       <p className="text-sm text-gray-700 dark:text-gray-200">{text}</p>
     </div>
   );
@@ -114,7 +109,7 @@ function UploadIcon() {
       height="24"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="currentColor"
+      stroke="#3B82F6" // Azul (Tailwind blue-500)
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -136,8 +131,9 @@ function PlusIcon() {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <line x1="12" y1="5" x2="12" y2="19" />
-      <line x1="5" y1="12" x2="19" y2="12" />
+      <rect x="3" y="3" width="18" height="18" rx="4" ry="4" />
+      <line x1="12" y1="8" x2="12" y2="16" />
+      <line x1="8" y1="12" x2="16" y2="12" />
     </svg>
   );
 }
