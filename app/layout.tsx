@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Analytics } from "@vercel/analytics/react";
 import { Suspense } from "react";
 import Spinner from "@/components/ui/spinner";
+import { InstallPrompt } from "@/components/install-prompt";
 
 const satoshi = localFont({
   src: [
@@ -123,7 +124,10 @@ export default function RootLayout({
       <body className="antialiased min-h-full flex flex-col bg-gradient-to-br from-purple-700 via-indigo-800 to-blue-900 font-sans">
         <SessionProvider>
           <div className="flex-grow flex flex-col">
-            <Suspense fallback={<Spinner />}>{children}</Suspense>
+            <Suspense fallback={<Spinner />}>
+              {children}
+              <InstallPrompt />
+            </Suspense>
           </div>
           <Analytics />
         </SessionProvider>
