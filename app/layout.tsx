@@ -120,15 +120,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      className={cn(
-        "h-full bg-gradient-to-br from-purple-700 via-indigo-800 to-blue-900",
-        satoshi.variable,
-        inter.variable
-      )}
-    >
-      <body className="antialiased min-h-full flex flex-col font-sans">
+    <html lang="en" className={cn(satoshi.variable, inter.variable)}>
+      <body className="antialiased min-h-full flex flex-col font-sans bg-gradient-to-br from-purple-700 via-indigo-800 to-blue-900">
         <SessionProvider>
           <div className="flex-grow flex flex-col">
             <Suspense fallback={<Spinner />}>
