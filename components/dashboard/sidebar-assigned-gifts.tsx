@@ -40,8 +40,7 @@ export function AssignedGifts() {
             href={`/gift-list/${gift.giftListId}#${gift.id}`}
             className={cn(
               "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm lg:text-base transition-colors duration-200",
-              "hover:bg-gray-100 ",
-              "text-gray-700 "
+              "hover:bg-gray-100 text-gray-700"
             )}
           >
             <span className="truncate" title={gift.name}>

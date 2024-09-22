@@ -1,15 +1,16 @@
 import { useAssignedGifts } from "@/hooks/use-assigned-gifts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GiftItem } from "./gift-item";
 import { AuthenticatedUser } from "@/types/authenticated-user";
-import { GiftIcon } from "lucide-react";
 import {
   Table,
   TableBody,
   TableHead,
   TableHeader,
   TableRow,
+  TableCell,
 } from "@/components/ui/table";
+import Link from "next/link";
+import { GiftIcon } from "lucide-react";
 
 interface AssignedGiftsSummaryProps {
   user: AuthenticatedUser;
@@ -39,7 +40,19 @@ export function AssignedGiftsSummary({ user }: AssignedGiftsSummaryProps) {
             </TableHeader>
             <TableBody>
               {assignedGifts.map((gift) => (
-                <GiftItem key={gift.id} gift={gift} />
+                <TableRow key={gift.id}>
+                  <TableCell>
+                    <Link
+                      href={`/gifts/${gift.id}`}
+                      className="hover:underline"
+                    >
+                      {gift.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{gift.description}</TableCell>
+                  <TableCell>{gift.price}</TableCell>
+                  <TableCell>{gift.state}</TableCell>
+                </TableRow>
               ))}
             </TableBody>
           </Table>
