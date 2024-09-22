@@ -33,20 +33,21 @@ export function Sidebar() {
       )}
       <aside
         className={cn(
-          "fixed left-0 top-0 z-50 h-full flex flex-col transition-all duration-300 ease-in-out bg-background border-r border-border",
+          "fixed left-0 top-0 z-50 flex flex-col transition-all duration-300 ease-in-out bg-background border-r border-border",
           "w-64 sm:w-72 lg:w-64 xl:w-72",
-          "lg:sticky lg:top-0 lg:h-screen",
+          "h-full lg:h-[100dvh]",
+          "lg:sticky lg:top-0",
           isSidebarOpen
             ? "translate-x-0 shadow-lg"
             : "-translate-x-full lg:translate-x-0",
           isSidebarLoading ? "opacity-0" : "opacity-100"
         )}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full overflow-hidden">
+          {" "}
           <div className="flex-shrink-0 mt-2 lg:mt-4">
             <AvatarSection user={user} />
           </div>
-
           <nav className="flex-grow overflow-y-auto pt-2 pb-6 px-4">
             <div className="space-y-1">
               <DashboardButton closeSidebar={closeSidebar} />
@@ -57,23 +58,20 @@ export function Sidebar() {
 
             <div className="mt-10 space-y-6">
               <section>
-                <h3 className="flex items-center text-base font-semibold text-foreground mb-3">
-                  <Share2 className="w-5 h-5 mr-2" />
+                <h3 className="text-lg font-bold text-foreground mb-3">
                   Shared With Me
                 </h3>
                 <GuestGiftList lists={guestGiftLists} />
               </section>
               <section>
-                <h3 className="flex items-center text-base font-semibold text-foreground mb-3">
-                  <GiftIcon className="w-5 h-5 mr-2" />
+                <h3 className="text-lg font-bold text-foreground mb-3">
                   Assigned Gifts
                 </h3>
                 <AssignedGifts />
               </section>
             </div>
           </nav>
-
-          <div className="border-t border-border flex-shrink-0 mb-4">
+          <div className="flex-shrink-0 p-4 pb-safe mt-auto safe-area-bottom">
             <Button
               variant="ghost"
               className="w-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors duration-200 h-14"

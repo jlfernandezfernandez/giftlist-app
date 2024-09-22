@@ -55,6 +55,14 @@ export function GuestGiftList({ lists }: GuestGiftListProps) {
     setExpandedOwners((prev) => ({ ...prev, [ownerName]: !prev[ownerName] }));
   };
 
+  if (lists.length === 0) {
+    return (
+      <div className="text-sm lg:text-base text-muted-foreground">
+        No gift lists available yet.
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-3">
       {Object.entries(groupedLists).map(([ownerNames, ownerLists]) => (

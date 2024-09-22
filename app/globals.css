@@ -70,3 +70,9 @@
   background-size: 600% 600%;
   animation: GradientBackground 10s ease infinite;
 }
+
+@supports (padding: max(0px)) {
+  .safe-area-bottom {
+    padding-bottom: max(0.5rem, env(safe-area-inset-bottom));
+  }
+}
