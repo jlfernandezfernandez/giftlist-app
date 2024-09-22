@@ -10,8 +10,8 @@ import {
 } from "@/actions/cookies";
 
 export function InstallPrompt() {
-  const [isVisible, setIsVisible] = useState(true);
-  const [isIOS, setIsIOS] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
     async function checkPromptVisibility() {
