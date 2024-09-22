@@ -10,8 +10,8 @@ import {
 } from "@/actions/cookies";
 
 export function InstallPrompt() {
-  const [isVisible, setIsVisible] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [isIOS, setIsIOS] = useState(true);
 
   useEffect(() => {
     async function checkPromptVisibility() {
@@ -54,15 +54,15 @@ export function InstallPrompt() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-[100]"
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end justify-center p-4 z-[100]"
     >
       <motion.div
         initial={{ y: 50 }}
         animate={{ y: 0 }}
         className="w-full max-w-md bg-white/90 dark:bg-gray-800/90 rounded-2xl overflow-hidden shadow-lg backdrop-blur-md"
       >
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-4">
+        <div className="px-5 pt-5 pb-8">
+          <div className="flex justify-between items-center mb-2">
             <h2 className="font-semibold text-gray-900 dark:text-white">
               Add to Home Screen
             </h2>
@@ -75,12 +75,12 @@ export function InstallPrompt() {
               Cancel
             </Button>
           </div>
-          <div className="h-px bg-gray-200 dark:bg-gray-700 mb-5"></div>
-          <p className="text-sm text-gray-600 dark:text-gray-300 mb-6">
+          <div className="h-px bg-gray-200 dark:bg-gray-700 mb-4"></div>
+          <p className="text-sm text-center text-gray-600 dark:text-gray-300 mb-6">
             Install this application on your home screen for quick and easy
             access when you&apos;re on the go.
           </p>
-          <div className="space-y-5">
+          <div className="space-y-4">
             <InstallStep
               icon={<UploadIcon />}
               text="Tap the Share button in your browser's toolbar."
