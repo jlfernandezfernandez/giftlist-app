@@ -56,7 +56,7 @@ export function Sidebar() {
               </section>
             </div>
 
-            <div className="mt-10 space-y-6">
+            <div className="mt-6 space-y-6">
               <section>
                 <h3 className="text-lg font-bold text-foreground mb-3">
                   Shared With Me

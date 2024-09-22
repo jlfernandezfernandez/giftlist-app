@@ -61,7 +61,7 @@ export function InstallPrompt() {
         animate={{ y: 0 }}
         className="w-full max-w-md bg-white/90 dark:bg-gray-800/90 rounded-2xl overflow-hidden shadow-lg backdrop-blur-md"
       >
-        <div className="px-5 pt-5 pb-8">
+        <div className="px-6 pt-6 pb-9">
           <div className="flex justify-between items-center mb-2">
             <h2 className="font-semibold text-gray-900 dark:text-white">
               Add to Home Screen
@@ -76,9 +76,9 @@ export function InstallPrompt() {
             </Button>
           </div>
           <div className="h-px bg-gray-200 dark:bg-gray-700 mb-4"></div>
-          <p className="text-sm text-center text-gray-600 dark:text-gray-300 mb-6">
+          <p className="px-2 text-sm text-gray-600 dark:text-gray-300 mb-6">
             Install this application on your home screen for quick and easy
-            access when you&apos;re on the go.
+            access.
           </p>
           <div className="space-y-4">
             <InstallStep
