@@ -18,11 +18,10 @@ export function InstallPrompt() {
       function isIOSDevice() {
         const ua = window.navigator.userAgent.toLowerCase();
         const isIOS = /iphone|ipad|ipod/.test(ua);
-        const isWebkit = "WebkitAppearance" in document.documentElement.style;
         const isStandalone =
           "standalone" in window.navigator && window.navigator.standalone;
 
-        return isIOS || (isWebkit && !isStandalone);
+        return isIOS || !isStandalone;
       }
 
       const iosDetected = isIOSDevice();
