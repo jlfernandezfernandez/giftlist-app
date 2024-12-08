@@ -12,23 +12,17 @@ import {
 export function InstallPrompt() {
   const [isVisible, setIsVisible] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
     async function checkPromptVisibility() {
-      function isIOSDevice() {
-        const ua = window.navigator.userAgent.toLowerCase();
-        const isIOS = /iphone|ipad|ipod/.test(ua);
-        const isWebkit = "WebkitAppearance" in document.documentElement.style;
-        const isStandalone =
-          "standalone" in window.navigator && window.navigator.standalone;
+      setIsIOS(
+        /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+          !(window as any).MSStream
+      );
+      setIsStandalone(window.matchMedia("(display-mode: standalone)").matches);
 
-        return isIOS || (isWebkit && !isStandalone);
-      }
-
-      const iosDetected = isIOSDevice();
-      setIsIOS(iosDetected);
-
-      if (iosDetected) {
+      if (!isStandalone && isIOS) {
         const isDismissed = await getInstallPromptDismissed();
         if (!isDismissed) {
           const timer = setTimeout(() => setIsVisible(true), 3000);
@@ -38,7 +32,7 @@ export function InstallPrompt() {
     }
 
     checkPromptVisibility();
-  }, []);
+  }, [isIOS, isStandalone]);
 
   const handleCancel = async () => {
     setIsVisible(false);
