@@ -2,8 +2,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import {
   setInstallPromptDismissed,
   getInstallPromptDismissed,
@@ -11,18 +12,29 @@ import {
 
 export function InstallPrompt() {
   const [isVisible, setIsVisible] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [installPlatform, setInstallPlatform] = useState<
+    "ios" | "android" | null
+  >(null);
   const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
     async function checkPromptVisibility() {
-      setIsIOS(
+      const isIOS =
         /iPad|iPhone|iPod/.test(navigator.userAgent) &&
-          !(window as any).MSStream
-      );
+        !(window as any).MSStream;
+      const isAndroid = /Android/.test(navigator.userAgent);
       setIsStandalone(window.matchMedia("(display-mode: standalone)").matches);
 
-      if (!isStandalone && isIOS) {
+      if (isIOS && !isStandalone) {
+        setInstallPlatform("ios");
+      }
+
+      if (isAndroid) {
+        setInstallPlatform("android");
+      }
+
+      if (!isStandalone && (isIOS || isAndroid)) {
         const isDismissed = await getInstallPromptDismissed();
         if (!isDismissed) {
           const timer = setTimeout(() => setIsVisible(true), 3000);
@@ -32,58 +44,67 @@ export function InstallPrompt() {
     }
 
     checkPromptVisibility();
-  }, [isIOS, isStandalone]);
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    });
+  }, []);
+
+  const handleInstall = async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === "accepted") {
+        setIsVisible(false);
+      }
+    }
+  };
 
   const handleCancel = async () => {
     setIsVisible(false);
     await setInstallPromptDismissed();
   };
 
-  if (!isVisible || !isIOS) {
-    return null;
-  }
+  if (!isVisible || !installPlatform) return null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end justify-center p-4 z-[100]"
-    >
-      <motion.div
-        initial={{ y: 50 }}
-        animate={{ y: 0 }}
-        className="w-full max-w-md bg-white/90 dark:bg-gray-800/90 rounded-2xl overflow-hidden shadow-lg backdrop-blur-md"
-      >
-        <div className="px-6 pt-6 pb-9">
-          <div className="flex justify-between items-center mb-2">
-            <h2 className="font-semibold text-gray-900 dark:text-white">
-              Add to Home Screen
-            </h2>
-            <Button
-              variant="ios"
-              size="sm"
-              className="text-blue-500"
-              onClick={handleCancel}
-            >
+    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-4 z-[100]">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="flex justify-between items-center">
+            <span>Add to Home Screen</span>
+            <Button variant="ghost" size="sm" onClick={handleCancel}>
               Cancel
             </Button>
-          </div>
-          <div className="h-px bg-gray-200 dark:bg-gray-700 mb-4"></div>
-          <p className="px-2 text-sm text-gray-600 dark:text-gray-300 mb-6">
+          </CardTitle>
+        </CardHeader>
+        <Separator />
+        <CardContent className="pt-6">
+          <p className="text-sm text-muted-foreground mb-6">
             Install this application on your home screen for quick and easy
             access.
           </p>
-          <div className="space-y-4">
-            <InstallStep
-              icon={<UploadIcon />}
-              text="Tap the Share button in your browser's toolbar."
-            />
-            <InstallStep icon={<PlusIcon />} text="Tap 'Add to Home Screen'." />
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
+
+          {installPlatform === "ios" ? (
+            <div className="space-y-4">
+              <InstallStep
+                icon={<UploadIcon />}
+                text="Tap the Share button in your browser's toolbar."
+              />
+              <InstallStep
+                icon={<PlusIcon />}
+                text="Tap 'Add to Home Screen'."
+              />
+            </div>
+          ) : (
+            <Button className="w-full" size="lg" onClick={handleInstall}>
+              Install App
+            </Button>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 }
 

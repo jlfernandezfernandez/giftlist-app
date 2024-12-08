@@ -4,10 +4,9 @@ import Link from "next/link";
 import { useSidebar } from "@/context/sidebar-context";
 import { useUser } from "@/context/user-context";
 import { useAssignedGifts } from "@/hooks/use-assigned-gifts";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-export function AssignedGifts() {
+export function SidebarAssignedGifts() {
   const { closeSidebar } = useSidebar();
   const { user } = useUser();
   const { assignedGifts, isLoading } = useAssignedGifts(user?.uid || "");
@@ -22,32 +21,22 @@ export function AssignedGifts() {
     );
   }
 
-  const handleGiftClick = () => {
-    closeSidebar();
-  };
-
   return (
     <div className="space-y-1">
       {assignedGifts.map((gift) => (
-        <motion.div
+        <Link
           key={gift.id}
-          whileHover={{ scale: 1.01 }}
-          whileTap={{ scale: 0.99 }}
-          onClick={handleGiftClick}
-          className="cursor-pointer"
+          href={`/gift-list/${gift.giftListId}#${gift.id}`}
+          onClick={closeSidebar}
+          className={cn(
+            "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm lg:text-base transition-colors duration-200",
+            "hover:bg-muted text-muted-foreground"
+          )}
         >
-          <Link
-            href={`/gift-list/${gift.giftListId}#${gift.id}`}
-            className={cn(
-              "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm lg:text-base transition-colors duration-200",
-              "hover:bg-gray-100 text-gray-700"
-            )}
-          >
-            <span className="truncate" title={gift.name}>
-              {gift.name}
-            </span>
-          </Link>
-        </motion.div>
+          <span className="truncate" title={gift.name}>
+            {gift.name}
+          </span>
+        </Link>
       ))}
     </div>
   );

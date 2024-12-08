@@ -11,7 +11,6 @@ import { useDeleteGift } from "@/hooks/use-delete-gift";
 import { useDeleteGiftList } from "@/hooks/use-delete-gift-list";
 import { useUpdateGift } from "@/hooks/use-update-gift";
 import { ShareGiftListModal } from "../share-gift-list-modal";
-import { motion, AnimatePresence } from "framer-motion";
 import { useAssignUserToGift } from "@/hooks/use-assign-user-to-gift";
 import { useUnassignUserFromGift } from "@/hooks/user-unassign-user-from-gift";
 import { useFilteredGifts } from "@/hooks/use-filtered-gifts";
@@ -153,7 +152,11 @@ export function GiftTable({
   const handleUnassignGift = useCallback(
     async (gift: Gift) => {
       if (!gift.id) return;
-      return unassignUserFromGift(gift.id, authenticatedUser.uid, currentList.id);
+      return unassignUserFromGift(
+        gift.id,
+        authenticatedUser.uid,
+        currentList.id
+      );
     },
     [unassignUserFromGift, authenticatedUser.uid, currentList.id]
   );
@@ -204,56 +207,28 @@ export function GiftTable({
         <SearchGifts searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       </div>
       <div className="overflow-x-hidden">
-        <motion.div
-          ref={giftListRef}
-          className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-5"
-          layout
-          transition={{
-            duration: 0.3,
-            type: "spring",
-            stiffness: 200,
-            damping: 25,
-          }}
-        >
-          <AnimatePresence mode="popLayout">
-            {searchedGifts.map((gift) => (
-              <motion.div
-                key={`gift-${gift.id}`}
-                id={`gift-${gift.id}`}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{
-                  opacity: { duration: 0.2 },
-                  scale: { duration: 0.2 },
-                  layout: {
-                    type: "spring",
-                    stiffness: 300,
-                    damping: 30,
-                  },
-                }}
-              >
-                <GiftCard
-                  authenticatedUser={authenticatedUser}
-                  gift={gift}
-                  isOwner={isOwner}
-                  handleRemoveGift={() => handleRemoveGift(gift)}
-                  handleEditGift={handleEditGift}
-                  handleAssignGift={() => handleAssignGift(gift)}
-                  handleUnassignGift={() => handleUnassignGift(gift)}
-                  handleMarkAsBought={() => handleMarkAsBought(gift)}
-                />
-              </motion.div>
-            ))}
-          </AnimatePresence>
-          {searchedGifts.length === 0 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              className="col-span-full text-center py-8"
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-5 transition-transform duration-300">
+          {searchedGifts.map((gift) => (
+            <div
+              key={`gift-${gift.id}`}
+              id={`gift-${gift.id}`}
+              className="transition-all duration-300 opacity-100 scale-100"
             >
+              <GiftCard
+                authenticatedUser={authenticatedUser}
+                gift={gift}
+                isOwner={isOwner}
+                handleRemoveGift={() => handleRemoveGift(gift)}
+                handleEditGift={handleEditGift}
+                handleAssignGift={() => handleAssignGift(gift)}
+                handleUnassignGift={() => handleUnassignGift(gift)}
+                handleMarkAsBought={() => handleMarkAsBought(gift)}
+              />
+            </div>
+          ))}
+
+          {searchedGifts.length === 0 && (
+            <div className="col-span-full text-center py-8 transition-opacity duration-300 opacity-100">
               <p className="text-lg font-semibold text-gray-600">
                 {filter === "All Gifts" && searchTerm === ""
                   ? "There are no gifts in this list yet"
@@ -264,9 +239,9 @@ export function GiftTable({
                   Check back later to see if any gifts have been added
                 </p>
               )}
-            </motion.div>
+            </div>
           )}
-        </motion.div>
+        </div>
       </div>
       <ShareGiftListModal
         isOpen={isShareModalOpen}

@@ -5,14 +5,13 @@ import { UserIcon, ChevronDown, ChevronRight } from "lucide-react";
 import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
 import { GiftList } from "@/types/gift-list";
 import { useSidebar } from "@/context/sidebar-context";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-interface GuestGiftListProps {
+interface SidebarGuestGiftListProps {
   lists: GiftList[];
 }
 
-export function GuestGiftList({ lists }: GuestGiftListProps) {
+export function SidebarGuestGiftList({ lists }: SidebarGuestGiftListProps) {
   const currentListId = useCurrentGiftListId();
   const { closeSidebar } = useSidebar();
   const [expandedOwners, setExpandedOwners] = useState<Record<string, boolean>>(
@@ -67,14 +66,12 @@ export function GuestGiftList({ lists }: GuestGiftListProps) {
     <div className="space-y-3">
       {Object.entries(groupedLists).map(([ownerNames, ownerLists]) => (
         <div key={ownerNames} className="space-y-1">
-          <motion.div
-            className="flex items-center px-2 py-1 text-sm lg:text-base font-medium text-gray-700 cursor-pointer"
+          <button
+            className="flex w-full items-center px-2 py-1 hover:bg-muted/50 rounded-md"
             onClick={() => toggleOwnerExpansion(ownerNames)}
-            whileHover={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
-            whileTap={{ scale: 0.98 }}
           >
             <UserIcon className="h-4 w-4 mr-2" />
-            <span className="truncate flex-1" title={ownerNames}>
+            <span className="truncate flex-1 text-left" title={ownerNames}>
               {ownerNames}
             </span>
             {expandedOwners[ownerNames] ? (
@@ -82,40 +79,29 @@ export function GuestGiftList({ lists }: GuestGiftListProps) {
             ) : (
               <ChevronRight className="h-4 w-4" />
             )}
-          </motion.div>
+          </button>
+
           {expandedOwners[ownerNames] && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
-              className="pl-2"
-            >
+            <div className="pl-2 space-y-1">
               {ownerLists.map((list) => (
-                <motion.div
+                <Link
                   key={list.id}
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
-                  onClick={() => closeSidebar()}
-                  className="cursor-pointer"
+                  href={`/gift-list/${list.id}`}
+                  onClick={closeSidebar}
+                  className={cn(
+                    "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm lg:text-base transition-colors duration-200",
+                    "hover:bg-muted",
+                    list.id === currentListId
+                      ? "bg-muted font-medium"
+                      : "text-muted-foreground"
+                  )}
                 >
-                  <Link
-                    href={`/gift-list/${list.id}`}
-                    className={cn(
-                      "flex items-center gap-2 rounded-md px-2 py-1.5 text-sm lg:text-base transition-colors duration-200",
-                      "hover:bg-gray-100",
-                      list.id === currentListId
-                        ? "bg-gray-100 font-medium"
-                        : "text-gray-700"
-                    )}
-                  >
-                    <span className="truncate flex-1" title={list.name}>
-                      {list.name}
-                    </span>
-                  </Link>
-                </motion.div>
+                  <span className="truncate flex-1" title={list.name}>
+                    {list.name}
+                  </span>
+                </Link>
               ))}
-            </motion.div>
+            </div>
           )}
         </div>
       ))}

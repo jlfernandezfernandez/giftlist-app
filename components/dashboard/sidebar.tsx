@@ -8,9 +8,9 @@ import { useLogout } from "@/hooks/use-logout";
 import { useUser } from "@/context/user-context";
 import { useGiftList } from "@/context/gift-list-context";
 import { useSidebar } from "@/context/sidebar-context";
-import { OwnGiftList } from "./sidebar-own-gift-list";
-import { GuestGiftList } from "./sidebar-guest-gift-list";
-import { AssignedGifts } from "./sidebar-assigned-gifts";
+import { SidebarOwnGiftList } from "./sidebar-own-gift-list";
+import { SidebarGuestGiftList } from "./sidebar-guest-gift-list";
+import { SidebarAssignedGifts } from "./sidebar-assigned-gifts";
 import { cn } from "@/lib/utils";
 import { DashboardButton } from "./sidebar-dashboard-button";
 
@@ -20,7 +20,7 @@ export function Sidebar() {
   const { giftLists } = useGiftList();
   const handleLogout = useLogout();
 
-  const ownGiftLists = giftLists?.filter((list) => list.isOwner) ?? [];
+  const SidebarOwnGiftLists = giftLists?.filter((list) => list.isOwner) ?? [];
   const guestGiftLists = giftLists?.filter((list) => !list.isOwner) ?? [];
 
   return (
@@ -52,7 +52,7 @@ export function Sidebar() {
             <div className="space-y-1">
               <DashboardButton closeSidebar={closeSidebar} />
               <section>
-                <OwnGiftList lists={ownGiftLists} />
+                <SidebarOwnGiftList lists={SidebarOwnGiftLists} />
               </section>
             </div>
 
@@ -61,13 +61,13 @@ export function Sidebar() {
                 <h3 className="text-lg font-bold text-foreground mb-3">
                   Shared With Me
                 </h3>
-                <GuestGiftList lists={guestGiftLists} />
+                <SidebarGuestGiftList lists={guestGiftLists} />
               </section>
               <section>
                 <h3 className="text-lg font-bold text-foreground mb-3">
                   Assigned Gifts
                 </h3>
-                <AssignedGifts />
+                <SidebarAssignedGifts />
               </section>
             </div>
           </nav>
