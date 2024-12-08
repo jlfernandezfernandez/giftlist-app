@@ -1,55 +1,44 @@
 // hooks/use-update-gift-list.ts
-import { useState } from "react";
-import { useGiftList } from "@/context/gift-list-context";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { GiftList } from "@/types/gift-list";
 import { useUser } from "@/context/user-context";
 import { useToast } from "@/context/toast-context";
 
+interface UpdateGiftListParams {
+  giftListId: string;
+  name: string;
+  description: string | null;
+  date: string | null;
+}
+
 export const useUpdateGiftList = () => {
-  const { mutate } = useGiftList();
   const { user } = useUser();
-  const [isLoading, setIsLoading] = useState(false);
   const { addToast } = useToast();
+  const queryClient = useQueryClient();
 
-  const updateGiftList = async (
-    giftListId: string,
-    name: string,
-    description: string | null,
-    date: string | null
-  ) => {
-    setIsLoading(true);
-
-    try {
-      const response = await fetch(`/api/gift-lists/${giftListId}`, {
+  return useMutation<GiftList, Error, UpdateGiftListParams>({
+    mutationFn: async ({ giftListId, ...params }) => {
+      const res = await fetch(`/api/gift-lists/${giftListId}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name,
-          description,
-          date,
+          ...params,
           userId: user?.uid,
         }),
       });
 
-      if (response.ok) {
-        mutate();
-        addToast({
-          description: "Gift list updated successfully",
-          type: "success",
-        });
-      } else {
-        throw new Error("Failed to update gift list");
-      }
-    } catch (error) {
+      if (!res.ok) throw new Error("Failed to update gift list");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["giftLists"] });
       addToast({
-        description: "Failed to update gift list",
-        type: "error",
+        description: "Gift list updated successfully",
+        type: "success",
       });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  return { updateGiftList, isLoading };
+    },
+    onError: () => {
+      addToast({ description: "Failed to update gift list", type: "error" });
+    },
+  });
 };

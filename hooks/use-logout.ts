@@ -1,14 +1,23 @@
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCallback } from "react";
 
 export const useLogout = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
-  const handleLogout = async () => {
-    await fetch("/api/logout");
-    setTimeout(() => {
+  const handleLogout = useCallback(async () => {
+    try {
+      await fetch("/api/logout", { method: "POST" });
+      // Limpiar el cache de React Query
+      queryClient.clear();
       router.push("/");
-    }, 500);
-  };
+    } catch (error) {
+      console.error("Error during logout:", error);
+      // Aún así intentamos redirigir al usuario
+      router.push("/");
+    }
+  }, [router, queryClient]);
 
   return handleLogout;
 };

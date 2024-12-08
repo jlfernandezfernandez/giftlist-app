@@ -211,19 +211,25 @@ export function GiftCard({
           </div>
         </div>
       </Card>
-      <EditGiftModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        gift={gift}
-        onSubmit={handleEditGift}
-      />
-      <ConfirmBoughtModal
-        isOpen={isConfirmBoughtModalOpen}
-        onClose={() => setIsConfirmBoughtModalOpen(false)}
-        onConfirm={handleConfirmBought}
-        giftName={gift.name || ""}
-        giftLink={gift.link}
-      />
+
+      {isEditModalOpen && (
+        <EditGiftModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          gift={gift}
+          onSubmit={handleEditGift}
+        />
+      )}
+
+      {isConfirmBoughtModalOpen && (
+        <ConfirmBoughtModal
+          isOpen={isConfirmBoughtModalOpen}
+          onClose={() => setIsConfirmBoughtModalOpen(false)}
+          onConfirm={handleConfirmBought}
+          giftName={gift.name || ""}
+          giftLink={gift.link}
+        />
+      )}
     </>
   );
 }

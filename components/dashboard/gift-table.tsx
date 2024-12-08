@@ -22,12 +22,15 @@ import { SearchGifts } from "@/components/dashboard/search-gifts";
 import { useMarkGiftAsBought } from "@/hooks/use-mark-gift-as-bought";
 import { ScrollToTopButton } from "@/components/ui/scroll-to-top-button";
 import GiftListWidgets from "./gift-list-widgets";
+import { FilterOption } from "@/hooks/use-filtered-gifts";
 
 interface GiftTableProps {
   authenticatedUser: AuthenticatedUser;
   currentList: GiftList;
   gifts: Gift[];
   isOwner: boolean;
+  filter: FilterOption;
+  setFilter: (filter: FilterOption) => void;
 }
 
 export function GiftTable({
@@ -35,10 +38,11 @@ export function GiftTable({
   currentList,
   gifts,
   isOwner,
+  filter,
+  setFilter,
 }: GiftTableProps) {
   const [newGiftId, setNewGiftId] = useState<string | null>(null);
-  const [filter, setFilter] = useState("All Gifts");
-  const { isAddingGift, handleAddGift } = useAddGift(authenticatedUser);
+  const addGiftMutation = useAddGift(authenticatedUser);
   const { deleteGift } = useDeleteGift(authenticatedUser);
   const { updateGift } = useUpdateGift(authenticatedUser);
   const { assignUserToGift } = useAssignUserToGift();
@@ -91,20 +95,20 @@ export function GiftTable({
       currency?: string
     ) => {
       if (url) {
-        const newGift = await handleAddGift(
-          currentList.id,
+        const newGift = await addGiftMutation.mutateAsync({
+          listId: currentList.id,
           details,
-          url,
+          link: url,
           name,
           price,
-          currency
-        );
+          currency,
+        });
         if (newGift && newGift.id) {
           setNewGiftId(newGift.id);
         }
       }
     },
-    [currentList.id, handleAddGift]
+    [currentList.id, addGiftMutation]
   );
 
   const handleRemoveGift = useCallback(
@@ -127,18 +131,17 @@ export function GiftTable({
   const handleEditGift = useCallback(
     async (updatedGift: Gift) => {
       if (!updatedGift.id) return;
-      const success = await updateGift(
-        currentList.id,
-        updatedGift.id,
-        updatedGift
-      );
-      if (success) {
+      try {
+        await updateGift({
+          giftId: updatedGift.id,
+          updatedGift,
+        });
         console.log("Regalo actualizado con éxito");
-      } else {
+      } catch {
         console.error("No se pudo actualizar el regalo");
       }
     },
-    [currentList.id, updateGift]
+    [updateGift]
   );
 
   const handleAssignGift = useCallback(
@@ -173,14 +176,14 @@ export function GiftTable({
 
   const handleMarkAsBought = useCallback(
     async (gift: Gift) => {
-      const updatedGift = await markGiftAsBought(gift, currentList.id);
-      if (updatedGift) {
+      try {
+        await markGiftAsBought(gift);
         console.log(`Gift marked as bought successfully`);
-      } else {
+      } catch (error) {
         console.error("Failed to mark gift as bought");
       }
     },
-    [currentList.id, markGiftAsBought]
+    [markGiftAsBought]
   );
 
   return (
@@ -194,7 +197,7 @@ export function GiftTable({
       <GiftListWidgets gifts={gifts} />
       {isOwner && (
         <AddGiftCard
-          isAddingGift={isAddingGift}
+          isAddingGift={addGiftMutation.isPending}
           handleAddGift={handleAddGiftClick}
           useExtendedForm={true}
         />
@@ -230,11 +233,11 @@ export function GiftTable({
           {searchedGifts.length === 0 && (
             <div className="col-span-full text-center py-8 transition-opacity duration-300 opacity-100">
               <p className="text-lg font-semibold text-gray-600">
-                {filter === "All Gifts" && searchTerm === ""
+                {filter === "All" && searchTerm === ""
                   ? "There are no gifts in this list yet"
                   : "No gifts match the selected filter or search term"}
               </p>
-              {!isOwner && filter === "All Gifts" && searchTerm === "" && (
+              {!isOwner && filter === "All" && searchTerm === "" && (
                 <p className="mt-2 text-sm text-gray-500">
                   Check back later to see if any gifts have been added
                 </p>

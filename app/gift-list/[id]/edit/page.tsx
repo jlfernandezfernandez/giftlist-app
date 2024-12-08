@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { useUser } from "@/context/user-context";
 import { useGiftList } from "@/context/gift-list-context";
 import { useCurrentGiftListId } from "@/hooks/use-current-gift-list-id";
@@ -25,11 +24,10 @@ import { User } from "@/types/user";
 import Link from "next/link";
 
 export default function EditGiftListPage() {
-  const router = useRouter();
   const { user } = useUser();
   const currentListId = useCurrentGiftListId();
   const { currentList, setCurrentListId } = useGiftList();
-  const { updateGiftList, isLoading: isUpdating } = useUpdateGiftList();
+  const mutation = useUpdateGiftList();
   const { gifts, getGiftsForList } = useGifts();
   const { deleteGiftList } = useDeleteGiftList(user);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
@@ -84,12 +82,10 @@ export default function EditGiftListPage() {
     description: string | null;
     date: string | null;
   }) => {
-    await updateGiftList(
-      currentList.id,
-      data.name,
-      data.description,
-      data.date
-    );
+    await mutation.mutateAsync({
+      giftListId: currentList.id,
+      ...data,
+    });
   };
 
   const handleShareList = () => {
@@ -102,6 +98,10 @@ export default function EditGiftListPage() {
       return <Link href="/gift-list/dashboard" />;
     }
   };
+
+  if (!currentListId) {
+    return <div>Gift list not found</div>;
+  }
 
   return (
     <div className="container mx-auto space-y-8">
@@ -124,7 +124,7 @@ export default function EditGiftListPage() {
             date={date}
             setDate={setDate}
             onSubmit={handleSubmit}
-            isLoading={isUpdating}
+            isLoading={mutation.isPending}
             submitText="Update Gift List"
           />
         </CardContent>

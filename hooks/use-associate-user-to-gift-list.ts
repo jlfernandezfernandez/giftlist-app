@@ -1,5 +1,6 @@
 // hooks/use-associate-user-to-gift-list.ts
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@/context/user-context";
 import { useToast } from "@/context/toast-context";
 import { useRouter } from "next/navigation";
@@ -16,23 +17,12 @@ export const useAssociateUserToGiftList = (
   const { user, isLoadingUser } = useUser();
   const { addToast } = useToast();
   const router = useRouter();
-  const { mutate } = useGiftList();
+  const queryClient = useQueryClient();
 
-  const associateUser = useCallback(async () => {
-    if (!user) {
-      setError("User not authenticated");
-      setStatus("error");
-      addToast({
-        description: "User not authenticated. Please log in and try again.",
-        type: "error",
-      });
-      return;
-    }
+  const mutation = useMutation({
+    mutationFn: async () => {
+      if (!user) throw new Error("User not authenticated");
 
-    setStatus("loading");
-    setError(null);
-
-    try {
       const response = await fetch(`/api/gift-lists/${giftListId}/share`, {
         method: "POST",
         headers: {
@@ -45,32 +35,34 @@ export const useAssociateUserToGiftList = (
         throw new Error("Failed to associate user to gift list");
       }
 
+      return response.json();
+    },
+    onSuccess: () => {
       setStatus("success");
+      queryClient.invalidateQueries({ queryKey: ["giftLists"] });
       addToast({
         description: "You've been successfully associated with the gift list.",
         type: "success",
       });
-      mutate(); // Reload the gift list context
       router.push(`/gift-list/${giftListId}`);
-    } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "An unknown error occurred"
-      );
+    },
+    onError: (err) => {
+      const errorMessage = err instanceof Error ? err.message : "Unknown error";
+      setError(errorMessage);
       setStatus("error");
       addToast({
-        description: `Failed to associate with gift list: ${
-          err instanceof Error ? err.message : "Unknown error"
-        }`,
+        description: `Failed to associate with gift list: ${errorMessage}`,
         type: "error",
       });
-    }
-  }, [giftListId, user, addToast, router, role, mutate]);
+    },
+  });
 
-  useEffect(() => {
-    if (giftListId && !isLoadingUser && status === "idle") {
-      associateUser();
-    }
-  }, [giftListId, associateUser, status, isLoadingUser]);
+  const associateUser = useCallback(async () => {
+    if (!user || isLoadingUser) return;
+    setStatus("loading");
+    setError(null);
+    await mutation.mutateAsync();
+  }, [user, isLoadingUser, mutation]);
 
   const retryAssociation = () => {
     setStatus("idle");

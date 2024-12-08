@@ -1,30 +1,31 @@
 import { useMemo } from "react";
 import { Gift } from "@/types/gift";
 
+export type FilterOption =
+  | "Reserved"
+  | "Pending"
+  | "Assigned"
+  | "Unassigned"
+  | "Bought"
+  | "All";
+
+const filterMap: Record<FilterOption, (gift: Gift) => boolean> = {
+  Reserved: (gift) => gift.state === "reserved",
+  Pending: (gift) => gift.state === "pending",
+  Assigned: (gift) => Boolean(gift.assignedUsers?.length),
+  Unassigned: (gift) => !gift.assignedUsers?.length,
+  Bought: (gift) => gift.state === "bought",
+  All: () => true,
+};
+
 interface UseFilteredGiftsProps {
   gifts: Gift[];
-  filter: string;
+  filter: FilterOption;
 }
 
 export function useFilteredGifts({ gifts, filter }: UseFilteredGiftsProps) {
-  const filteredGifts = useMemo(() => {
-    return gifts.filter((gift: Gift) => {
-      switch (filter) {
-        case "Reserved":
-          return gift.state === "reserved";
-        case "Pending":
-          return gift.state === "pending";
-        case "Assigned":
-          return gift.assignedUsers && gift.assignedUsers.length > 0;
-        case "Unassigned":
-          return !gift.assignedUsers || gift.assignedUsers.length === 0;
-        case "Bought":
-          return gift.state === "bought";
-        default:
-          return true;
-      }
-    });
-  }, [gifts, filter]);
-
-  return filteredGifts;
+  return useMemo(
+    () => gifts.filter(filterMap[filter] || filterMap.All),
+    [gifts, filter]
+  );
 }

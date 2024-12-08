@@ -1,41 +1,38 @@
 // hooks/use-gifts.ts
 
-import useSWR from "swr";
+import { useQuery } from "@tanstack/react-query";
 import { Gift } from "@/types/gift";
-import { useGifts as useGiftsContext } from "@/context/gifts-context";
 import { useToast } from "@/context/toast-context";
-
-const fetcher = async (url: string) => {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("An error occurred while fetching the data.");
-  return res.json();
-};
+import { useGifts as useGiftsContext } from "@/context/gifts-context";
 
 export const useGifts = (giftListId: string | null) => {
-  const { setGiftsForList } = useGiftsContext();
   const { addToast } = useToast();
+  const { setGiftsForList } = useGiftsContext();
 
-  const { data, error, mutate } = useSWR<Gift[]>(
-    giftListId ? `/api/gift-lists/${giftListId}/gift` : null,
-    fetcher,
-    {
-      onSuccess: (data) => {
-        if (giftListId) setGiftsForList(giftListId, data);
-      },
-      onError: (err) => {
-        console.error("Error fetching gifts:", err);
+  const { data, isError, isLoading, refetch } = useQuery<Gift[]>({
+    queryKey: ["gifts", giftListId],
+    queryFn: async () => {
+      const res = await fetch(`/api/gift-lists/${giftListId}/gift`);
+      if (!res.ok) {
         addToast({
           description: "Failed to fetch gifts. Please try again later.",
           type: "error",
         });
-      },
-    }
-  );
+        throw new Error("Failed to fetch gifts");
+      }
+      const data = await res.json();
+      if (giftListId) {
+        setGiftsForList(giftListId, data);
+      }
+      return data;
+    },
+    enabled: !!giftListId,
+  });
 
   return {
     gifts: data ?? [],
-    isLoading: !error && !data,
-    isError: error,
-    mutate,
+    isLoading,
+    isError,
+    mutate: refetch,
   };
 };

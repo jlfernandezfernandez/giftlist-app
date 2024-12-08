@@ -2,7 +2,7 @@
 
 import { ReactNode, Suspense } from "react";
 import { Metadata } from "next";
-import { UserProvider } from "@/context/user-context";
+import { AuthProvider } from "@/context/user-context";
 import { GiftListProvider } from "@/context/gift-list-context";
 import { MobileHeader } from "@/components/dashboard/mobile-header";
 import { SidebarProvider } from "@/context/sidebar-context";
@@ -23,7 +23,7 @@ export default function GiftListLayout({ children }: { children: ReactNode }) {
   return (
     <ErrorBoundary>
       <ToastProvider>
-        <UserProvider>
+        <AuthProvider>
           <GiftListProvider>
             <GiftsProvider>
               <SidebarProvider>
@@ -42,7 +42,7 @@ export default function GiftListLayout({ children }: { children: ReactNode }) {
               </SidebarProvider>
             </GiftsProvider>
           </GiftListProvider>
-        </UserProvider>
+        </AuthProvider>
       </ToastProvider>
     </ErrorBoundary>
   );

@@ -1,20 +1,19 @@
 // hooks/use-delete-gift-list.ts
 
 import { useState } from "react";
-import { useGiftList } from "@/context/gift-list-context";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/context/toast-context";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 
 export function useDeleteGiftList(authenticatedUser: AuthenticatedUser | null) {
   const [isDeletingGiftList, setIsDeleting] = useState(false);
-  const { mutate } = useGiftList();
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { addToast } = useToast();
 
-  const deleteGiftList = async (listId: string) => {
-    setIsDeleting(true);
-    try {
+  const mutation = useMutation({
+    mutationFn: async (listId: string) => {
       const response = await fetch(`/api/gift-lists/${listId}`, {
         method: "DELETE",
         headers: {
@@ -26,19 +25,28 @@ export function useDeleteGiftList(authenticatedUser: AuthenticatedUser | null) {
       if (!response.ok) {
         throw new Error("Failed to delete gift list");
       }
-
-      mutate();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["giftLists"] });
       addToast({
         description: "Gift list deleted successfully",
         type: "success",
       });
       router.push("/gift-list/dashboard");
-    } catch (error) {
+    },
+    onError: (error) => {
       addToast({
         description: "Failed to delete gift list",
         type: "error",
       });
       console.error("Error deleting gift list:", error);
+    },
+  });
+
+  const deleteGiftList = async (listId: string) => {
+    setIsDeleting(true);
+    try {
+      await mutation.mutateAsync(listId);
     } finally {
       setIsDeleting(false);
     }

@@ -1,64 +1,49 @@
 // hooks/use-mark-gift-as-bought.ts
 
-import { useCallback } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Gift } from "@/types/gift";
 import { AuthenticatedUser } from "@/types/authenticated-user";
-import { useGifts } from "@/context/gifts-context";
 import { useToast } from "@/context/toast-context";
-import { mutate } from "swr";
 
 export function useMarkGiftAsBought(
   authenticatedUser: AuthenticatedUser | null
 ) {
-  const { updateGift: updateGiftInContext } = useGifts();
+  const queryClient = useQueryClient();
   const { addToast } = useToast();
 
-  const markGiftAsBought = useCallback(
-    async (gift: Gift, giftListId: string) => {
-      if (!gift.id) return null;
+  const mutation = useMutation<Gift, Error, Gift>({
+    mutationFn: async (gift) => {
+      if (!gift.id) throw new Error("Gift ID is required");
 
-      try {
-        const response = await fetch(`/api/gifts/${gift.id}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...gift,
-            state: "bought",
-            userId: authenticatedUser?.uid,
-          }),
-        });
+      const response = await fetch(`/api/gifts/${gift.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...gift,
+          state: "bought",
+          userId: authenticatedUser?.uid,
+        }),
+      });
 
-        if (!response.ok) {
-          throw new Error("Failed to mark gift as bought");
-        }
-
-        const updatedGift: Gift = await response.json();
-
-        // Update the context
-        updateGiftInContext(giftListId, updatedGift);
-
-        // Update the SWR cache for the gift list
-        mutate(`/api/gift-lists/${giftListId}/gift`);
-
-        addToast({
-          description: "Gift marked as bought successfully",
-          type: "success",
-        });
-
-        return updatedGift;
-      } catch (error) {
-        addToast({
-          description: "Failed to mark gift as bought",
-          type: "error",
-        });
-        console.error("Error marking gift as bought:", error);
-        throw error;
-      }
+      if (!response.ok) throw new Error("Failed to mark gift as bought");
+      return response.json();
     },
-    [authenticatedUser, addToast, updateGiftInContext]
-  );
+    onSuccess: (updatedGift) => {
+      queryClient.invalidateQueries({
+        queryKey: ["gifts", updatedGift.giftListId],
+      });
+      addToast({
+        description: "Gift marked as bought successfully",
+        type: "success",
+      });
+    },
+    onError: () => {
+      addToast({ description: "Failed to mark gift as bought", type: "error" });
+    },
+  });
 
-  return { markGiftAsBought };
+  return {
+    markGiftAsBought: mutation.mutateAsync,
+    isMarking: mutation.isPending,
+  };
 }

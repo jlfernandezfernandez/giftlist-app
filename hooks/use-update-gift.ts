@@ -1,63 +1,52 @@
 // hooks/use-update-gift.ts
 
-import { useState, useCallback } from "react";
-import { mutate } from "swr";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Gift } from "@/types/gift";
 import { useToast } from "@/context/toast-context";
 import { AuthenticatedUser } from "@/types/authenticated-user";
-import { useGifts } from "@/context/gifts-context";
+
+interface UpdateGiftParams {
+  giftId: string;
+  updatedGift: Partial<Gift>;
+}
 
 export function useUpdateGift(authenticatedUser: AuthenticatedUser | null) {
-  const [isUpdatingGift, setIsUpdatingGift] = useState(false);
   const { addToast } = useToast();
-  const { updateGift: updateGiftInContext } = useGifts();
+  const queryClient = useQueryClient();
 
-  const updateGift = useCallback(
-    async (giftListId: string, giftId: string, updatedGift: Partial<Gift>) => {
-      setIsUpdatingGift(true);
-      try {
-        const response = await fetch(`/api/gifts/${giftId}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            ...updatedGift,
-            userId: authenticatedUser?.uid,
-          }),
-        });
+  const mutation = useMutation<Gift, Error, UpdateGiftParams>({
+    mutationFn: async ({ giftId, updatedGift }) => {
+      const response = await fetch(`/api/gifts/${giftId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...updatedGift,
+          userId: authenticatedUser?.uid,
+        }),
+      });
 
-        if (!response.ok) {
-          throw new Error("Failed to update gift");
-        }
-
-        const updatedGiftData: Gift = await response.json();
-
-        // Update the context
-        updateGiftInContext(giftListId, updatedGiftData);
-
-        // Update the SWR cache for the gift list
-        mutate(`/api/gift-lists/${giftListId}/gift`);
-
-        addToast({
-          description: "Gift updated successfully",
-          type: "success",
-        });
-
-        return updatedGiftData;
-      } catch (error) {
-        addToast({
-          description: "Failed to update gift",
-          type: "error",
-        });
-        console.error("Error updating gift:", error);
-        throw error;
-      } finally {
-        setIsUpdatingGift(false);
-      }
+      if (!response.ok) throw new Error("Failed to update gift");
+      return response.json();
     },
-    [authenticatedUser, addToast, updateGiftInContext]
-  );
+    onSuccess: (updatedGiftData) => {
+      queryClient.invalidateQueries({
+        queryKey: ["gifts", updatedGiftData.giftListId],
+      });
+      addToast({
+        description: "Gift updated successfully",
+        type: "success",
+      });
+    },
+    onError: () => {
+      addToast({
+        description: "Failed to update gift",
+        type: "error",
+      });
+    },
+  });
 
-  return { updateGift, isUpdatingGift };
+  return {
+    updateGift: mutation.mutateAsync,
+    isUpdating: mutation.isPending,
+  };
 }

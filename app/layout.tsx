@@ -8,6 +8,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { Suspense } from "react";
 import Spinner from "@/components/ui/spinner";
 import { InstallPrompt } from "@/components/install-prompt";
+import { Providers } from "@/app/providers";
 
 const satoshi = localFont({
   src: [
@@ -124,12 +125,14 @@ export default function RootLayout({
     <html lang="en" className={cn(satoshi.variable, inter.variable)}>
       <body className="antialiased flex flex-col font-sans bg-white">
         <SessionProvider>
-          <div className="flex-grow flex flex-col">
-            <Suspense fallback={<Spinner />}>
-              {children}
-              <InstallPrompt />
-            </Suspense>
-          </div>
+          <Providers>
+            <div className="flex-grow flex flex-col">
+              <Suspense fallback={<Spinner />}>
+                {children}
+                <InstallPrompt />
+              </Suspense>
+            </div>
+          </Providers>
           <Analytics />
         </SessionProvider>
       </body>

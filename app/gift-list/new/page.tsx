@@ -6,17 +6,17 @@ import { GiftListForm } from "@/components/gift-list-form";
 import { useCreateGiftList } from "@/hooks/use-create-gift-list";
 
 export default function CreateGiftListPage() {
-  const { createGiftList, isLoading } = useCreateGiftList();
+  const mutation = useCreateGiftList();
   const [name, setName] = useState("");
   const [description, setDescription] = useState<string | null>(null);
   const [date, setDate] = useState<string | null>(null);
 
-  const handleSubmit = async (data: {
-    name: string;
-    description: string | null;
-    date: string | null;
-  }) => {
-    await createGiftList(data.name, data.description, data.date);
+  const handleSubmit = async () => {
+    await mutation.mutateAsync({
+      name,
+      description,
+      date,
+    });
   };
 
   return (
@@ -34,11 +34,11 @@ export default function CreateGiftListPage() {
           name={name}
           setName={setName}
           description={description}
-          setDescription={(value) => setDescription(value)}
-          date={date || ""}
-          setDate={(value) => setDate(value)}
+          setDescription={setDescription}
+          date={date}
+          setDate={setDate}
           onSubmit={handleSubmit}
-          isLoading={isLoading}
+          isLoading={mutation.isPending}
           submitText="Create Gift List"
         />
       </main>

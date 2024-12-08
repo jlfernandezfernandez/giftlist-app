@@ -6,13 +6,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { FilterOption } from "@/hooks/use-filtered-gifts";
 
 interface GiftFilterProps {
-  filter: string;
-  setFilter: (filter: string) => void;
+  filter: FilterOption;
+  setFilter: (filter: FilterOption) => void;
 }
 
-const GiftFilter: React.FC<GiftFilterProps> = ({ filter, setFilter }) => {
+export default function GiftFilter({ filter, setFilter }: GiftFilterProps) {
   const filterOptions = [
     "All Gifts",
     "Reserved",
@@ -38,6 +39,4 @@ const GiftFilter: React.FC<GiftFilterProps> = ({ filter, setFilter }) => {
       </Select>
     </div>
   );
-};
-
-export default GiftFilter;
+}

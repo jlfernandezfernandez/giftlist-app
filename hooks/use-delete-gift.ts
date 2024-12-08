@@ -1,7 +1,7 @@
 // hooks/use-delete-gift.ts
 
 import { useState } from "react";
-import { mutate } from "swr";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/context/toast-context";
 import { AuthenticatedUser } from "@/types/authenticated-user";
 import { useGifts as useGiftsContext } from "@/context/gifts-context";
@@ -10,10 +10,16 @@ export function useDeleteGift(authenticatedUser: AuthenticatedUser | null) {
   const [isDeletingGift, setIsDeleting] = useState(false);
   const { addToast } = useToast();
   const { removeGift: removeGiftFromContext } = useGiftsContext();
+  const queryClient = useQueryClient();
 
-  const deleteGift = async (giftListId: string, giftId: string) => {
-    setIsDeleting(true);
-    try {
+  const mutation = useMutation({
+    mutationFn: async ({
+      giftListId,
+      giftId,
+    }: {
+      giftListId: string;
+      giftId: string;
+    }) => {
       const response = await fetch(`/api/gifts/${giftId}`, {
         method: "DELETE",
         headers: {
@@ -26,22 +32,32 @@ export function useDeleteGift(authenticatedUser: AuthenticatedUser | null) {
         throw new Error("Failed to delete gift");
       }
 
+      return { giftId, giftListId };
+    },
+    onSuccess: ({ giftId, giftListId }) => {
       removeGiftFromContext(giftListId, giftId);
-      mutate(`/api/gift-lists/${giftListId}/gift`);
-
+      queryClient.invalidateQueries({ queryKey: ["gifts", giftListId] });
       addToast({
         description: "Gift deleted successfully",
         type: "success",
       });
-
-      return true; // Indicate success
-    } catch (error) {
+    },
+    onError: (error) => {
       addToast({
         description: "Failed to delete gift",
         type: "error",
       });
       console.error("Error deleting gift:", error);
-      return false; // Indicate failure
+    },
+  });
+
+  const deleteGift = async (giftListId: string, giftId: string) => {
+    setIsDeleting(true);
+    try {
+      await mutation.mutateAsync({ giftListId, giftId });
+      return true;
+    } catch {
+      return false;
     } finally {
       setIsDeleting(false);
     }

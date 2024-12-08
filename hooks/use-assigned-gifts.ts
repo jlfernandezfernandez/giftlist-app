@@ -1,18 +1,23 @@
 // hooks/use-assigned-gifts.ts
 
-import useSWR from "swr";
+import { useQuery } from "@tanstack/react-query";
 import { Gift } from "@/types/gift";
 
 export const useAssignedGifts = (userId: string) => {
-  const { data, error, mutate } = useSWR<Gift[]>(
-    userId ? `/api/gifts/user/${userId}` : null,
-    (url: string) => fetch(url).then((res) => res.json())
-  );
+  const { data, isLoading, isError, refetch } = useQuery<Gift[]>({
+    queryKey: ["assignedGifts", userId],
+    queryFn: () =>
+      fetch(`/api/gifts/user/${userId}`).then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch assigned gifts");
+        return res.json();
+      }),
+    enabled: !!userId,
+  });
 
   return {
-    assignedGifts: data || [],
-    isLoading: !error && !data,
-    isError: error,
-    mutate,
+    assignedGifts: data ?? [],
+    isLoading,
+    isError,
+    mutate: refetch,
   };
 };
